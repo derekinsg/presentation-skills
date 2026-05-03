@@ -50,13 +50,13 @@
 
     body[data-aspect="9-16"] {
       --aspect-ratio: 9 / 16;
-      --controls-reserve: 126px;
-      --slide-pad-x: clamp(22px, 5vw, 48px);
-      --slide-pad-y: clamp(24px, 4vh, 54px);
-      --content-gap: clamp(12px, 2.6vw, 22px);
-      --h1-size: clamp(2.5rem, 8.5vw, 5rem);
-      --h2-size: clamp(1.9rem, 6.8vw, 3.7rem);
-      --lead-size: clamp(1rem, 3.2vw, 1.35rem);
+      --controls-reserve: 138px;
+      --slide-pad-x: clamp(20px, 5.4vw, 34px);
+      --slide-pad-y: clamp(22px, 4.2vh, 42px);
+      --content-gap: clamp(10px, 2.8vw, 18px);
+      --h1-size: clamp(2rem, 8vw, 3.25rem);
+      --h2-size: clamp(1.55rem, 6.3vw, 2.55rem);
+      --lead-size: clamp(.9rem, 3.2vw, 1.12rem);
     }
 
     body[data-template="apple"] {
@@ -187,6 +187,8 @@
 
     .deck {
       min-height: 100%;
+      width: 100vw;
+      overflow: hidden;
       display: grid;
       place-items: center;
       padding: 18px 18px var(--controls-reserve);
@@ -204,7 +206,39 @@
     }
 
     body[data-aspect="9-16"] .slides {
-      width: min(calc(100vw - 36px), calc((100vh - var(--controls-reserve) - 36px) * (9 / 16)));
+      width: min(calc(100vw - 36px), 420px);
+      max-height: calc(100vh - var(--controls-reserve) - 56px);
+    }
+
+    body[data-aspect="9-16"] .slide {
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    body[data-aspect="9-16"] .slide-body {
+      align-content: start;
+      gap: var(--content-gap);
+    }
+
+    body[data-aspect="9-16"] h1,
+    body[data-aspect="9-16"] h2,
+    body[data-aspect="9-16"] h3,
+    body[data-aspect="9-16"] p,
+    body[data-aspect="9-16"] li,
+    body[data-aspect="9-16"] span {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    body[data-aspect="9-16"] h1,
+    body[data-aspect="9-16"] h2 {
+      line-height: 1.04;
+    }
+
+    body[data-aspect="9-16"] .lead {
+      max-width: 100%;
+      line-height: 1.38;
     }
 
     .slide {
@@ -334,6 +368,10 @@
       align-content: center;
       gap: var(--content-gap);
       min-height: 0;
+    }
+
+    .slide-body > * {
+      min-width: 0;
     }
 
     .slide-body.top {
@@ -1063,6 +1101,36 @@
       user-select: none;
     }
 
+    body:not(.editing) .editable-node {
+      cursor: default;
+      user-select: auto;
+    }
+
+    body[data-aspect="9-16"] .grid,
+    body[data-aspect="9-16"] .grid.two,
+    body[data-aspect="9-16"] .split,
+    body[data-aspect="9-16"] .media-split,
+    body[data-aspect="9-16"] .process,
+    body[data-aspect="9-16"] .comparison,
+    body[data-aspect="9-16"] .timeline {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+
+    body[data-aspect="9-16"] .panel,
+    body[data-aspect="9-16"] .step,
+    body[data-aspect="9-16"] .callout {
+      min-height: auto;
+      padding: clamp(14px, 3.4vw, 20px);
+    }
+
+    body[data-aspect="9-16"] .media-frame,
+    body[data-aspect="9-16"] .media-bleed {
+      width: 100%;
+      min-height: 180px;
+    }
+
     @media (max-width: 760px) {
       .deck {
         padding: 10px 10px var(--controls-reserve);
@@ -1070,7 +1138,8 @@
 
       .slides,
       body[data-aspect="9-16"] .slides {
-        width: min(calc(100vw - 20px), calc((100vh - var(--controls-reserve) - 20px) * var(--aspect-ratio)));
+        width: min(calc(100vw - 20px), 380px);
+        max-height: calc(100vh - var(--controls-reserve) - 56px);
       }
 
       .slide {
@@ -1856,7 +1925,11 @@
             node.dataset.editBound = 'true';
             node.addEventListener('pointerdown', startEditablePointer);
             node.addEventListener('focus', () => {
-              if (isEditing) selectEditable(node);
+              if (isEditing) {
+                selectEditable(node);
+              } else {
+                node.blur();
+              }
             });
           }
         });
@@ -1922,7 +1995,29 @@
         node.setPointerCapture && node.setPointerCapture(event.pointerId);
       }
 
+      function setCursorMode() {
+        isEditing = false;
+        document.body.classList.remove('editing');
+        if (dragState && dragState.node) {
+          dragState.node.classList.remove('is-dragging');
+        }
+        dragState = null;
+        collectEditableNodes().forEach(node => {
+          node.contentEditable = 'false';
+          node.classList.remove('is-selected', 'is-dragging');
+          node.blur();
+        });
+        selectedEditable = null;
+        const selection = window.getSelection && window.getSelection();
+        if (selection && selection.removeAllRanges) selection.removeAllRanges();
+        updateEditControls();
+      }
+
       function setEditing(enabled) {
+        if (!enabled) {
+          setCursorMode();
+          return;
+        }
         isEditing = enabled;
         document.body.classList.toggle('editing', isEditing);
         collectEditableNodes().forEach(node => {
@@ -2101,7 +2196,7 @@
       next.addEventListener('click', forward);
       modeToggle.addEventListener('click', cycleMode);
       templateToggle.addEventListener('click', cycleTemplate);
-      cursorToggle.addEventListener('click', () => setEditing(false));
+      cursorToggle.addEventListener('click', setCursorMode);
       editToggle.addEventListener('click', () => setEditing(!isEditing));
       fontIncrease.addEventListener('click', () => changeSelectedFontSize(4));
       fontDecrease.addEventListener('click', () => changeSelectedFontSize(-4));

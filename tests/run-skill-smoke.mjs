@@ -590,6 +590,12 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.match(html, /@page deck-phone/, 'template should include 9:16 print page support');
   assert.match(html, /Publish\/IP/, 'template should include an IP publish control');
   assert.match(html, /Copy command/, 'template should include a copyable publish command');
+  assert.match(html, /function setCursorMode\(\)/, 'template should include an explicit cursor mode reset function');
+  assert.match(html, /cursorToggle\.addEventListener\('click',\s*setCursorMode\)/, 'Cursor should call the reset function directly');
+  assert.match(html, /selection\.removeAllRanges/, 'Cursor mode should clear text selection ranges');
+  assert.match(html, /body:not\(\.editing\)\s+\.editable-node/, 'template should define non-editing cursor behavior for editable nodes');
+  assert.match(html, /body\[data-aspect="9-16"\]\s+\.slide-body/, 'template should include dedicated 9:16 slide body layout');
+  assert.match(html, /body\[data-aspect="9-16"\]\s+\.grid,[\s\S]*?\.media-split/, 'template should include dedicated 9:16 component reflow');
   assert.match(html, /nextSlidePreviewHtml:\s*slidePreviewHtml\(nextSlide\)/, 'template should send next-slide preview HTML to the phone presenter');
   assert.match(html, /\.slide::before\s*\{[\s\S]*?display:\s*none;/, 'template should disable the decorative slide glow layer by default');
   assert.match(html, /body\[data-template="consulting"\]\s+\.slide\s*\{\s*background:\s*var\(--bg\);/m, 'consulting template should use a flat slide background');
