@@ -393,6 +393,38 @@ test('launcher payload normalization handles realistic briefs', async () => {
   assert.equal(empty.normalized.slide_count.value, 8);
 });
 
+test('launcher payload normalization asks for brief intake on vague deck requests', async () => {
+  const vague = parseJsonOutput(runNode(
+    'animated-html-deck/scripts/normalize-launcher-payload.mjs',
+    [],
+    {
+      input: JSON.stringify({
+        raw_input: '帮我做个 PPT'
+      })
+    }
+  ), 'vague deck normalization');
+  assert.equal(vague.needs_clarification, true, 'vague deck requests should require clarification');
+  assert.ok(vague.high_risk_warnings.some(warning => warning.includes('too vague')), 'vague requests should warn about insufficient brief');
+  assert.ok(vague.clarification_questions.length >= 6, 'vague requests should include brief intake questions');
+  assert.ok(vague.clarification_questions.some(question => question.includes('主题')), 'brief intake should ask for topic');
+  assert.ok(vague.clarification_questions.some(question => question.includes('演讲稿') || question.includes('speaker notes')), 'brief intake should ask for speaker notes');
+
+  const keynote = parseJsonOutput(runNode(
+    'animated-html-deck/scripts/normalize-launcher-payload.mjs',
+    [],
+    {
+      input: JSON.stringify({
+        raw_input: '做一个发布会 PPT，要我上台讲，主题是新产品发布'
+      })
+    }
+  ), 'keynote normalization');
+  assert.equal(keynote.needs_clarification, false, 'topic-bearing keynote request should not be treated as empty brief');
+  assert.equal(keynote.normalized.is_speaking_deck.value, true, 'speaking context should infer speaking deck');
+  assert.equal(keynote.speaker_script_guidance.needs_guidance, true, 'speaking deck should include speaker script guidance');
+  assert.equal(keynote.speaker_script_guidance.requires_followup, true, 'speaking deck should ask for script style/detail if unspecified');
+  assert.ok(keynote.high_risk_warnings.some(warning => warning.includes('Speaking context')), 'speaking deck should warn to confirm script guidance');
+});
+
 test('style resolver returns deterministic theme packages', async () => {
   const vercel = parseJsonOutput(runNode('style-polish/scripts/resolve-style-theme.mjs', [
     '--style', 'vercel',
@@ -560,7 +592,7 @@ test('public release risk scan has no obvious secrets or local machine paths', a
 
 test('agent simulation prompt fixture covers positive, edge, and negative cases', async () => {
   const fixture = JSON.parse(await readFile(repoPath('tests/fixtures/agent-simulation-prompts.json'), 'utf8'));
-  assert.equal(fixture.version, '0.1.0-beta');
+  assert.equal(fixture.version, '0.1.1-beta');
   assert.ok(Array.isArray(fixture.prompts));
   assert.ok(fixture.prompts.length >= 10, 'fixture should include at least 10 prompts');
 

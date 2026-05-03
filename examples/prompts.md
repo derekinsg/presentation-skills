@@ -4,6 +4,18 @@ Use these prompts when manually forward-testing a fresh install. They are intent
 
 ## Animated HTML Deck
 
+Low-information prompt that should trigger brief intake instead of immediate generation:
+
+```text
+使用 $animated-html-deck 帮我做个 PPT
+```
+
+Complete brief that can proceed directly to planning/generation:
+
+```text
+使用 $animated-html-deck 生成一个 8 页中文融资路演 HTML PPT，主题是 AI 客服产品，听众是早期投资人，用于 10 分钟演讲，严肃度 9/10，风格像 Vercel，需要每页 speaker notes、转场提示和 memory point，不要远程图片。
+```
+
 ```text
 Use $animated-html-deck to create an 8-slide Chinese investor pitch HTML deck about an AI customer service product. Seriousness 9/10. Style like Vercel. Include speaker notes.
 ```

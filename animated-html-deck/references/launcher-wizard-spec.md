@@ -53,13 +53,35 @@ Actions:
 - Skip
 - Let the system decide
 
-### Step 5: Inference Preview
+### Step 5: Speaker Script Guidance
+
+- `needs_speaker_script`
+- `talk_duration_minutes`
+- `speaker_script_style`
+- `notes_detail`
+- `include_delivery_cues`
+
+Suggested Chinese style options:
+- 正式汇报
+- 路演说服
+- 产品发布
+- 培训讲解
+- 轻松幽默
+
+Actions:
+- Next
+- Back
+- Skip
+- Let the system decide
+
+### Step 6: Inference Preview
 
 Show:
 - User-provided fields
 - Inferred fields
 - Defaulted fields
 - Any high-risk warnings
+- Whether the request still needs clarification before planning
 
 Actions:
 - Generate now
@@ -75,18 +97,25 @@ Actions:
 - `visual_style`: abstract style phrase or source-style hint
 - `is_speaking_deck`: whether the deck is optimized for spoken delivery and richer notes
 - `is_branded`: whether the deck should assume company / product branding follow-up
+- `needs_speaker_script`: whether to write per-slide 演讲稿 / 口播稿 / speaker notes
+- `talk_duration_minutes`: intended talk length when slide count is not enough
+- `speaker_script_style`: `formal-briefing | roadshow-persuasion | product-launch | training-explanation | warm-humor | balanced-presentation`
+- `notes_detail`: `concise | standard | detailed`
+- `include_delivery_cues`: whether notes include pause, emphasis, pacing, gesture, and transition cues
 
 ## Inference Rules
 
 Use `scripts/normalize-launcher-payload.mjs` as the deterministic fallback layer.
 
 - If the user leaves a field blank, the launcher may send it empty; the normalizer will infer or default it.
+- If the raw input is a low-information request such as "帮我做个 PPT", the normalizer should mark `needs_clarification: true`; the host should show the brief questions instead of moving straight to generation.
 - Language defaults to the language of the user's latest text.
 - Slide count defaults to 8 unless context strongly implies another value.
 - Purpose defaults to `explainer` when no clearer intent is detectable.
 - Seriousness defaults to `6`.
 - Visual style defaults to `modern, clear, presentation-ready`.
 - Speaking mode defaults to `true` for speech/pitch/roadshow/recording-like requests and `false` otherwise.
+- Speaker script guidance defaults to on for speaking decks, with 60-90 seconds of notes per content slide, transitions, memory points, and delivery cues unless the user asks for concise notes.
 - Branding defaults to `true` only when company/brand/logo signals are present; otherwise `false`.
 
 ## High-Risk Cases
@@ -94,8 +123,10 @@ Use `scripts/normalize-launcher-payload.mjs` as the deterministic fallback layer
 The launcher should allow generation even when fields are empty, but it should surface a warning when:
 
 - No topic and no contextual text exist
+- The user asked only for a generic PPT/deck/presentation without a real topic, purpose, audience, or source material
 - Branding is inferred but there is no company or logo detail
 - Exact slide-count sensitivity is implied but no slide count is given
+- A speaking context is detected but speaker script style, talk duration, notes detail, or delivery cue needs are not specified
 
 ## Payload Contract
 
@@ -119,4 +150,6 @@ The host UI should pass:
 - trust launcher payload values first
 - avoid re-asking about fields already marked `user_provided`
 - usually avoid re-asking fields marked `inferred/defaulted`, unless there is a high-risk warning that materially affects output quality
+- ask brief intake questions before planning when `needs_clarification` is true
+- surface speaker script defaults or ask one follow-up when `speaker_script_guidance.requires_followup` is true
 - call `style-polish` when `visual_style` is abstract or when a website-inspired look is requested

@@ -63,7 +63,35 @@ Use $speaker-polish to rewrite these slide notes in a Steve Jobs inspired produc
 
 更多测试 prompt 见 [`examples/prompts.md`](../examples/prompts.md)。
 
-## 5. 检查生成的 PPT
+## 5. 第一次使用时怎么回答 Brief 问题
+
+如果你只说：
+
+```text
+帮我做个 PPT
+```
+
+`$animated-html-deck` 应该先问 brief，而不是直接生成。你可以这样回答：
+
+```text
+主题：AI 客服产品融资介绍
+用途：路演
+听众：早期投资人
+长度：8 页，10 分钟
+风格：正式、科技感、偏 Vercel，严肃度 9/10
+讲稿：需要，每页写 speaker notes、转场提示和记忆点
+素材：暂时没有 logo 和图片，可以用 HTML/CSS 图表和占位示意
+```
+
+完整 brief 也可以一次性写进 prompt：
+
+```text
+使用 $animated-html-deck 生成一个 8 页中文融资路演 HTML PPT，主题是 AI 客服产品，听众是早期投资人，用于 10 分钟演讲，严肃度 9/10，风格像 Vercel，需要每页 speaker notes、转场提示和 memory point，不要远程图片。
+```
+
+如果你要复刻已有 PPT/PDF，把源文件放在项目根目录，或直接告诉 Codex 文件路径；这种情况下页数会跟源文件锁定，不需要重新回答主题和页数。
+
+## 6. 检查生成的 PPT
 
 对于 `$animated-html-deck` 生成的 HTML PPT，至少检查：
 
@@ -73,9 +101,10 @@ Use $speaker-polish to rewrite these slide notes in a Steve Jobs inspired produc
 - Notes、Phone、Full、Template 等控件是否存在。
 - 默认是否静态，除非 prompt 明确要求动画。
 - 是否没有远程图片、CDN、远程字体依赖。
+- 如果要求演讲稿，每页 notes 是否包含口播稿、转场提示、delivery cue 和 memory point。
 - 如果要求手机口播同步，局域网 URL 和 QR 是否可用。
 
-## 6. ChatGPT Skills 使用方式
+## 7. ChatGPT Skills 使用方式
 
 如果要给 ChatGPT Skills 用户使用：
 

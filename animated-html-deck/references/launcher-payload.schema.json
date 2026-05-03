@@ -40,6 +40,21 @@
     },
     "is_branded": {
       "$ref": "#/$defs/valueWithSource"
+    },
+    "needs_speaker_script": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "talk_duration_minutes": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "speaker_script_style": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "notes_detail": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "include_delivery_cues": {
+      "$ref": "#/$defs/valueWithSource"
     }
   },
   "$defs": {

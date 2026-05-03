@@ -52,6 +52,10 @@ function containsAny(text, terms) {
   return terms.some(term => lower.includes(term.toLowerCase()));
 }
 
+function textHasAny(text, patterns) {
+  return patterns.some(pattern => pattern.test(text || ''));
+}
+
 function coerceBoolean(value) {
   if (typeof value === 'boolean') return value;
   if (typeof value === 'string') {
@@ -99,6 +103,63 @@ function inferPurpose(text) {
   return 'explanation';
 }
 
+function hasDeckRequest(text) {
+  return containsAny(text, [
+    'ppt',
+    'deck',
+    'slides',
+    'slide deck',
+    'presentation',
+    '演示稿',
+    '幻灯片',
+    '汇报'
+  ]);
+}
+
+function hasGenericMakeIntent(text) {
+  return containsAny(text, [
+    '帮我做',
+    '做个',
+    '做一个',
+    '来个',
+    '生成',
+    'create',
+    'make',
+    'build'
+  ]);
+}
+
+function hasConcreteTopicSignal(text) {
+  if (!text || !text.trim()) return false;
+  if (textHasAny(text, [
+    /主题\s*(?:是|为|:|：)/,
+    /about\s+[\w\u4e00-\u9fff]/i,
+    /关于[\w\u4e00-\u9fff]/,
+    /内容\s*(?:是|为|:|：)/,
+    /topic\s*(?:is|:)/i
+  ])) return true;
+
+  const cleaned = text
+    .replace(/\$?animated-html-deck/gi, '')
+    .replace(/use\s+/gi, '')
+    .replace(/帮我|请|麻烦|做一个|做个|来个|生成|create|make|build/gi, '')
+    .replace(/ppt|deck|slides?|presentation|演示稿|幻灯片/gi, '')
+    .replace(/[，。,.!！?？:：]/g, ' ')
+    .trim();
+
+  return cleaned.length >= 12 && !/^(great|nice|good|漂亮|好看|高级|专业)$/i.test(cleaned);
+}
+
+function isLowInformationDeckRequest(text, payload) {
+  if (!text || !text.trim()) return false;
+  const hasStructuredTopic = payload.topic && typeof payload.topic === 'object'
+    ? Boolean(payload.topic.value)
+    : Boolean(payload.topic);
+  if (hasStructuredTopic) return false;
+  if (!hasDeckRequest(text) || !hasGenericMakeIntent(text)) return false;
+  return !hasConcreteTopicSignal(text);
+}
+
 function inferSeriousness(text, purpose) {
   if (!text || !text.trim()) return null;
   const parsed = parseSeriousness(text);
@@ -128,7 +189,22 @@ function inferStyle(text, purpose) {
 
 function inferSpeaking(text, purpose) {
   if (!text || !text.trim()) return null;
-  if (containsAny(text, ['演讲', '口播', 'presenter', 'notes', '录屏', 'keynote', 'speech'])) return true;
+  if (containsAny(text, [
+    '演讲',
+    '口播',
+    '讲稿',
+    '演讲稿',
+    'speaker notes',
+    'presenter',
+    'notes',
+    '录屏',
+    'keynote',
+    'speech',
+    '上台讲',
+    '汇报',
+    '发布会',
+    '路演'
+  ])) return true;
   if (purpose === 'speech' || purpose === 'pitch') return true;
   return false;
 }
@@ -154,6 +230,28 @@ function inferSlideCount(text, purpose, isSpeakingDeck) {
   if (purpose === 'report') return 8;
   if (isSpeakingDeck) return 8;
   return 8;
+}
+
+function inferSpeakerScriptGuidance(text, purpose, isSpeakingDeck) {
+  const explicitScript = containsAny(text, ['讲稿', '演讲稿', '口播稿', 'speaker notes', 'notes', 'delivery cues']);
+  const needsGuidance = Boolean(isSpeakingDeck) || explicitScript;
+  const style = purpose === 'pitch'
+    ? 'roadshow-persuasion'
+    : purpose === 'speech'
+      ? 'product-launch-or-keynote'
+      : purpose === 'teaching'
+        ? 'training-explanation'
+        : purpose === 'report'
+          ? 'formal-briefing'
+          : 'balanced-presentation';
+
+  return {
+    needs_guidance: needsGuidance,
+    requires_followup: needsGuidance && !explicitScript,
+    default_per_slide_seconds: 75,
+    notes_detail: needsGuidance ? 'speaker-notes-with-transitions-memory-point-and-delivery-cues' : 'concise-speaker-notes',
+    style
+  };
 }
 
 function withSource(existing, inferredValue, defaultValue = null) {
@@ -185,6 +283,7 @@ async function main() {
   const raw = await readInput(arg);
   const payload = JSON.parse(raw || '{}');
   const text = briefText(payload);
+  const lowInformationDeckRequest = isLowInformationDeckRequest(text, payload);
 
   const topic = normalizeField(payload.topic);
   const language = normalizeField(payload.language);
@@ -212,10 +311,27 @@ async function main() {
     is_speaking_deck: resolvedSpeaking,
     is_branded: withSource(branded, coerceBoolean(branded.value) ?? inferBranded(text), false)
   };
+  const speakerScriptGuidance = inferSpeakerScriptGuidance(
+    text,
+    normalized.purpose.value,
+    normalized.is_speaking_deck.value
+  );
 
   const highRiskWarnings = [];
+  const clarificationQuestions = [];
   if (!text.trim()) {
     highRiskWarnings.push('No topic or contextual text was provided; topic is only a placeholder.');
+  }
+  if (lowInformationDeckRequest) {
+    highRiskWarnings.push('Open deck request is too vague; ask for topic, purpose, audience, slide count or duration, style, and speaker script needs before planning.');
+    clarificationQuestions.push(
+      '主题是什么，是否有已有材料或源文件？',
+      '用途是汇报、路演、培训、发布会、教学，还是说明？',
+      '听众是谁？',
+      '需要几页，或演讲几分钟？',
+      '风格偏正式、科技感、咨询报告、产品发布，还是轻松讲解？',
+      '需要我同时写每页演讲稿 / speaker notes 吗？'
+    );
   }
   if (normalized.is_branded.value === true && !containsAny(text, ['logo', '品牌', '公司', '企业', 'brand', 'corporate'])) {
     highRiskWarnings.push('Branding was inferred but no company or logo detail is present.');
@@ -223,12 +339,18 @@ async function main() {
   if (!parseSlideCount(text) && containsAny(text, ['严格', 'exact', 'precisely', '必须']) && !slideCount.value) {
     highRiskWarnings.push('Slide count may be sensitive, but no exact count was provided.');
   }
+  if (speakerScriptGuidance.requires_followup) {
+    highRiskWarnings.push('Speaking context was detected; confirm speaker script style, talk duration, notes detail, and delivery cues before final generation if not already obvious.');
+  }
 
   const summary = {
     raw_input: payload.raw_input || '',
     context_title: payload.context_title || '',
     context_summary: payload.context_summary || '',
     normalized,
+    needs_clarification: lowInformationDeckRequest,
+    clarification_questions: clarificationQuestions,
+    speaker_script_guidance: speakerScriptGuidance,
     high_risk_warnings: highRiskWarnings
   };
 

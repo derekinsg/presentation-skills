@@ -9,7 +9,36 @@ description: Generate polished, single-file HTML presentations from a user brief
 
 Create self-contained HTML presentation decks that feel like refined PPTs but run directly in a browser. The default deliverable is one clean, offline-ready `.html` file with embedded CSS and JavaScript, embedded local images, keyboard controls, progress UI, speaker notes, fullscreen support, print-friendly styles, lightweight editing, built-in template styles, and optional same-Wi-Fi phone presenter sync that opens through a local IP URL when requested. Default decks are static: use the bundled motion presets only when the user explicitly requests animation or a launch-style demo. Website-inspired styles should be resolved through the sibling `style-polish` skill, then injected into the template as one resolved theme payload.
 
-If the host UI launches this skill through a structured wizard, prefer the launcher's payload over re-asking basic setup questions. Launcher fields are allowed to be empty; missing values should be inferred or defaulted through `scripts/normalize-launcher-payload.mjs`. The launcher is intentionally low-friction and inference-friendly; see `references/launcher-design-rationale.md` for the design principles behind that intake model.
+If the host UI launches this skill through a structured wizard, prefer the launcher's payload over re-asking basic setup questions. Launcher fields are allowed to be empty; missing values should be inferred or defaulted through `scripts/normalize-launcher-payload.mjs`. The launcher is intentionally low-friction and inference-friendly for real briefs; see `references/launcher-design-rationale.md` for the design principles behind that intake model. Low-information requests are different: when the user only asks for "a PPT" without a real subject or use case, run the open brief intake before planning.
+
+## Open Brief Intake Protocol
+
+When the user asks for a deck with a low-information prompt such as "帮我做个 PPT", "做个汇报", "来个演示稿", "make a great deck", or "create a presentation" without a concrete topic/source, do not browse, plan, outline, or generate yet. First ask for a compact PPT brief.
+
+Ask these six items together:
+
+1. Topic or source material: what is the deck about, and is there a PPT/PDF/document/image to use?
+2. Purpose: report, pitch, training, product launch, teaching, speech, explanation, or workshop.
+3. Audience: who will watch it and what do they already know?
+4. Length: exact slide count, or talk duration if slide count is unknown.
+5. Style and seriousness: formal, technical, consulting report, product launch, warm teaching, relaxed explanation, or another style; ask for 1-10 seriousness if useful.
+6. Speaker script: whether to write per-slide speaker notes / 演讲稿 / 口播稿, and whether delivery cues are needed.
+
+Use this Chinese intake phrasing by default for Chinese low-information requests:
+
+```text
+可以，我先把 PPT brief 定清楚。请给我这 6 个信息：
+1. 主题是什么，是否有已有材料或源文件？
+2. 用途是汇报、路演、培训、发布会，还是教学？
+3. 听众是谁？
+4. 需要几页，或演讲几分钟？
+5. 风格偏正式、科技感、咨询报告、产品发布，还是轻松讲解？
+6. 需要我同时写每页演讲稿 / speaker notes 吗？
+```
+
+If only some answers are provided, continue with a visible "confirmed / defaulted" brief before planning. Do not silently turn a vague request into an unrelated topic. If the user explicitly says "just decide for me" after the intake, default to 8 slides, balanced seriousness 6/10, modern clear style, concise speaker notes, and label the assumptions.
+
+When speaking context is detected (演讲, 口播, 讲稿, 上台讲, 发布会, 路演, speaker notes, keynote, presenter notes), surface speaker script guidance before generation unless already specified. Default speaker notes should include per-slide narration, transition cue, delivery cue, and one memory point, at roughly 60-90 seconds per content slide.
 
 ## Required Inputs
 
@@ -56,6 +85,8 @@ When the user asks to复刻, recreate, convert, or rebuild an existing PPT/PDF i
 4. Start from `assets/single-file-deck-template.html` unless the user explicitly requests a different framework.
 5. Plan the deck before writing HTML:
    - If a host launcher payload is present, normalize it first with `scripts/normalize-launcher-payload.mjs`.
+   - If normalization returns `needs_clarification: true`, ask the brief intake questions and wait for the user's answers before planning.
+   - If normalization returns `speaker_script_guidance.requires_followup: true`, confirm or state speaker-note defaults before generation.
    - Lock the exact slide count and create a slide-by-slide outline with one job per slide.
    - For source deck replication, make each slide job correspond to the same-numbered source page and preserve page order exactly.
    - Pick a structure that matches the purpose.

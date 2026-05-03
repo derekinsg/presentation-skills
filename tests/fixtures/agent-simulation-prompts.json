@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0-beta",
+  "version": "0.1.1-beta",
   "prompts": [
     {
       "id": "deck-zh-pitch-vercel",
@@ -76,7 +76,21 @@
       "skill": "animated-html-deck",
       "type": "edge",
       "prompt": "Use $animated-html-deck to make a great deck.",
-      "expectedChecks": ["asksOrDefaultsWithAssumptions"]
+      "expectedChecks": ["asksBriefQuestionsBeforePlan"]
+    },
+    {
+      "id": "edge-zh-vague-ppt",
+      "skill": "animated-html-deck",
+      "type": "edge",
+      "prompt": "使用 $animated-html-deck 帮我做个 PPT",
+      "expectedChecks": ["asksBriefQuestionsBeforePlan", "asksSpeakerScriptNeed"]
+    },
+    {
+      "id": "deck-zh-product-launch-speaking",
+      "skill": "animated-html-deck",
+      "type": "positive",
+      "prompt": "使用 $animated-html-deck 做一个发布会 PPT，要我上台讲，主题是新产品发布",
+      "expectedChecks": ["infersSpeakingDeck", "asksOrDefaultsSpeakerScriptGuidance"]
     },
     {
       "id": "negative-remote-image",
