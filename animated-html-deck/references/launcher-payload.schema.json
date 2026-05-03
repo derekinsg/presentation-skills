@@ -69,6 +69,13 @@
         "null"
       ],
       "description": "Suggested request_user_input modal structure for low-information deck requests."
+    },
+    "tool_contract": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Required tool contract for clarification, including whether request_user_input must be called and whether plain-text questions are allowed."
     }
   },
   "$defs": {

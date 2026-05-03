@@ -13,7 +13,16 @@ If the host UI launches this skill through a structured wizard, prefer the launc
 
 ## Open Brief Intake Protocol
 
-When the user asks for a deck with a low-information prompt such as "帮我做个 PPT", "做个汇报", "来个演示稿", "make a great deck", or "create a presentation" without a concrete topic/source, do not browse, plan, outline, or generate yet. First call `request_user_input` once with a single modal brief intake. Do not send a plain-text list of brief questions.
+When the user asks for a deck with a low-information prompt such as "帮我做个 PPT", "做个汇报", "来个演示稿", "make a great deck", or "create a presentation" without a concrete topic/source, do not browse, plan, outline, or generate yet. First call `request_user_input` once with a single modal brief intake. This is a required tool contract, not prose to summarize.
+
+Tool contract:
+- `tool_name`: `request_user_input`
+- `call_required`: `true`
+- `plain_text_questions_allowed`: `false`
+- `max_questions`: `10`
+- `default_question_count`: `8`
+
+If `request_user_input` is not available in the current runtime, do not write the 8 questions as text. Reply only: `当前环境没有 brief 弹窗工具，我需要可点击弹窗来收集 PPT brief；请在支持 request_user_input 的模式下重试，或直接粘贴完整 brief。`
 
 The first modal must ask up to 10 questions at once. Use these 8 questions by default, with 2-3 common options each and the modal's built-in `Other` field for free-form answers:
 

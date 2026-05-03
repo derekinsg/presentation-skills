@@ -260,6 +260,14 @@ function singleModalBriefIntake(language = 'zh-CN') {
     mode: 'single_modal_brief_intake',
     max_questions: 10,
     recommended_question_count: 8,
+    tool_contract: {
+      tool_name: 'request_user_input',
+      call_required: true,
+      plain_text_questions_allowed: false,
+      unavailable_fallback: zh
+        ? '当前环境没有 brief 弹窗工具，我需要可点击弹窗来收集 PPT brief；请在支持 request_user_input 的模式下重试，或直接粘贴完整 brief。'
+        : 'The current runtime does not expose the brief modal tool. I need clickable brief intake via request_user_input; please retry in a compatible mode or paste the full brief directly.'
+    },
     use_request_user_input: true,
     freeform_other: true,
     questions: zh ? [
@@ -456,6 +464,7 @@ async function main() {
     normalized,
     needs_clarification: lowInformationDeckRequest,
     clarification_mode: lowInformationDeckRequest ? 'single_modal_brief_intake' : null,
+    tool_contract: lowInformationDeckRequest ? singleModalBriefIntake(normalized.language.value).tool_contract : null,
     clarification_questions: clarificationQuestions,
     single_modal_brief_intake: lowInformationDeckRequest ? singleModalBriefIntake(normalized.language.value) : null,
     speaker_script_guidance: speakerScriptGuidance,

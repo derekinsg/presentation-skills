@@ -406,7 +406,12 @@ test('launcher payload normalization asks for brief intake on vague deck request
   assert.equal(vague.needs_clarification, true, 'vague deck requests should require clarification');
   assert.equal(vague.clarification_mode, 'single_modal_brief_intake', 'vague requests should use single modal intake');
   assert.ok(vague.high_risk_warnings.some(warning => warning.includes('single_modal_brief_intake')), 'vague requests should warn with the structured intake mode');
+  assert.equal(vague.tool_contract.tool_name, 'request_user_input', 'vague requests should specify the modal tool contract');
+  assert.equal(vague.tool_contract.call_required, true, 'vague requests should require the modal tool call');
+  assert.equal(vague.tool_contract.plain_text_questions_allowed, false, 'vague requests should forbid plain-text question lists');
   assert.equal(vague.single_modal_brief_intake.mode, 'single_modal_brief_intake');
+  assert.equal(vague.single_modal_brief_intake.tool_contract.call_required, true, 'modal intake should carry the required tool contract');
+  assert.equal(vague.single_modal_brief_intake.tool_contract.plain_text_questions_allowed, false, 'modal intake should forbid plain-text fallback questions');
   assert.ok(vague.single_modal_brief_intake.use_request_user_input, 'brief intake should require request_user_input');
   assert.equal(vague.single_modal_brief_intake.max_questions, 10, 'brief intake should respect the 10 question modal limit');
   assert.equal(vague.single_modal_brief_intake.questions.length, 8, 'brief intake should ask 8 structured questions');
@@ -414,6 +419,11 @@ test('launcher payload normalization asks for brief intake on vague deck request
   assert.ok(vague.single_modal_brief_intake.questions.some(question => question.id === 'speaker_notes'), 'brief intake should ask for speaker notes');
   assert.ok(vague.single_modal_brief_intake.questions.some(question => question.id === 'output_mode'), 'brief intake should ask for aspect/phone output');
   assert.ok(vague.clarification_questions.every(question => typeof question === 'object' && Array.isArray(question.options)), 'clarification questions should be structured modal questions, not plain text prompts');
+
+  const skillText = await readFile(repoPath('animated-html-deck', 'SKILL.md'), 'utf8');
+  assert.match(skillText, /call_required`:\s*`true`/, 'skill should state request_user_input is required');
+  assert.match(skillText, /plain_text_questions_allowed`:\s*`false`/, 'skill should forbid plain-text brief question lists');
+  assert.match(skillText, /当前环境没有 brief 弹窗工具/, 'skill should define a no-tool fallback that does not list questions');
 
   const keynote = parseJsonOutput(runNode(
     'animated-html-deck/scripts/normalize-launcher-payload.mjs',
