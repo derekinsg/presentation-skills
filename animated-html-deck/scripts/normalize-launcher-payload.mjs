@@ -254,6 +254,119 @@ function inferSpeakerScriptGuidance(text, purpose, isSpeakingDeck) {
   };
 }
 
+function singleModalBriefIntake(language = 'zh-CN') {
+  const zh = language.startsWith('zh');
+  return {
+    mode: 'single_modal_brief_intake',
+    max_questions: 10,
+    recommended_question_count: 8,
+    use_request_user_input: true,
+    freeform_other: true,
+    questions: zh ? [
+      {
+        id: 'topic_source',
+        header: '主题材料',
+        question: '这份 PPT 的主题或材料是什么？',
+        options: ['我会输入主题', '使用已有文件', '根据上下文推断']
+      },
+      {
+        id: 'source_status',
+        header: '源文件',
+        question: '有没有 PPT/PDF/文档/图片等源文件？',
+        options: ['没有文件', '有 PPT/PDF', '有文档/图片']
+      },
+      {
+        id: 'purpose',
+        header: '用途',
+        question: '这份 PPT 主要用于什么场景？',
+        options: ['汇报/报告', '路演/发布会', '培训/教学']
+      },
+      {
+        id: 'audience',
+        header: '听众',
+        question: '主要听众是谁？',
+        options: ['领导/客户', '投资人/合作方', '内部团队/学生']
+      },
+      {
+        id: 'length',
+        header: '长度',
+        question: '需要多少页或讲多久？',
+        options: ['8 页左右', '6 页以内', '10 分钟左右']
+      },
+      {
+        id: 'style_seriousness',
+        header: '风格',
+        question: '偏什么视觉风格和严肃度？',
+        options: ['咨询报告 8/10', '科技产品 7/10', '轻松教学 4/10']
+      },
+      {
+        id: 'speaker_notes',
+        header: '讲稿',
+        question: '需要 speaker notes / 演讲稿吗？',
+        options: ['标准 speaker notes', '详细口播稿', '不要讲稿']
+      },
+      {
+        id: 'output_mode',
+        header: '输出',
+        question: '输出比例和 Phone 模式怎么选？',
+        options: ['16:9 普通演示', '9:16 Phone-ready', '16:9 + Phone 同屏']
+      }
+    ] : [
+      {
+        id: 'topic_source',
+        header: 'Topic',
+        question: 'What is the topic or source material?',
+        options: ['I will enter a topic', 'Use an existing file', 'Infer from context']
+      },
+      {
+        id: 'source_status',
+        header: 'Source',
+        question: 'Do you have PPT/PDF/docs/images to use?',
+        options: ['No files', 'PPT/PDF available', 'Docs/images available']
+      },
+      {
+        id: 'purpose',
+        header: 'Purpose',
+        question: 'What is the deck for?',
+        options: ['Report/briefing', 'Pitch/launch', 'Training/teaching']
+      },
+      {
+        id: 'audience',
+        header: 'Audience',
+        question: 'Who will watch it?',
+        options: ['Leaders/customers', 'Investors/partners', 'Team/students']
+      },
+      {
+        id: 'length',
+        header: 'Length',
+        question: 'How long should it be?',
+        options: ['About 8 slides', 'Up to 6 slides', 'About 10 minutes']
+      },
+      {
+        id: 'style_seriousness',
+        header: 'Style',
+        question: 'What style and seriousness?',
+        options: ['Consulting 8/10', 'Tech product 7/10', 'Friendly teaching 4/10']
+      },
+      {
+        id: 'speaker_notes',
+        header: 'Notes',
+        question: 'Do you need speaker notes?',
+        options: ['Standard notes', 'Detailed script', 'No notes']
+      },
+      {
+        id: 'output_mode',
+        header: 'Output',
+        question: 'What aspect and phone mode?',
+        options: ['16:9 presentation', '9:16 phone-ready', '16:9 + phone presenter']
+      }
+    ],
+    fallback_followup: zh
+      ? '主题是什么，或要基于哪个文件制作？'
+      : 'What is the topic, or which file should the deck use?'
+  };
+}
+
 function withSource(existing, inferredValue, defaultValue = null) {
   if (existing.source && existing.value !== null && existing.value !== undefined && existing.value !== '') {
     return existing;
@@ -323,15 +436,8 @@ async function main() {
     highRiskWarnings.push('No topic or contextual text was provided; topic is only a placeholder.');
   }
   if (lowInformationDeckRequest) {
-    highRiskWarnings.push('Open deck request is too vague; ask for topic, purpose, audience, slide count or duration, style, and speaker script needs before planning.');
-    clarificationQuestions.push(
-      '主题是什么，是否有已有材料或源文件？',
-      '用途是汇报、路演、培训、发布会、教学，还是说明？',
-      '听众是谁？',
-      '需要几页，或演讲几分钟？',
-      '风格偏正式、科技感、咨询报告、产品发布，还是轻松讲解？',
-      '需要我同时写每页演讲稿 / speaker notes 吗？'
-    );
+    highRiskWarnings.push('Open deck request is too vague; use single_modal_brief_intake with request_user_input before planning.');
+    clarificationQuestions.push(...singleModalBriefIntake(normalized.language.value).questions);
   }
   if (normalized.is_branded.value === true && !containsAny(text, ['logo', '品牌', '公司', '企业', 'brand', 'corporate'])) {
     highRiskWarnings.push('Branding was inferred but no company or logo detail is present.');
@@ -349,7 +455,9 @@ async function main() {
     context_summary: payload.context_summary || '',
     normalized,
     needs_clarification: lowInformationDeckRequest,
+    clarification_mode: lowInformationDeckRequest ? 'single_modal_brief_intake' : null,
     clarification_questions: clarificationQuestions,
+    single_modal_brief_intake: lowInformationDeckRequest ? singleModalBriefIntake(normalized.language.value) : null,
     speaker_script_guidance: speakerScriptGuidance,
     high_risk_warnings: highRiskWarnings
   };

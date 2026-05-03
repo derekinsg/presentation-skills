@@ -63,7 +63,7 @@ Use $speaker-polish to rewrite these slide notes in a Steve Jobs inspired produc
 
 更多测试 prompt 见 [`examples/prompts.md`](../examples/prompts.md)。
 
-## 5. 第一次使用时怎么回答 Brief 问题
+## 5. 第一次使用时怎么回答 Brief 弹窗
 
 如果你只说：
 
@@ -71,7 +71,9 @@ Use $speaker-polish to rewrite these slide notes in a Steve Jobs inspired produc
 帮我做个 PPT
 ```
 
-`$animated-html-deck` 应该先问 brief，而不是直接生成。你可以这样回答：
+`$animated-html-deck` 应该先弹出一个可点击 brief 弹窗，而不是直接生成，也不是发一长串文字问题。这个弹窗会在第一轮一次性覆盖主题/材料、源文件、用途、听众、长度、风格、讲稿和输出比例/Phone 模式；每个问题都可以选常用项，也可以用 Other 自由输入。
+
+如果你不想点弹窗，也可以一次性写完整 brief：
 
 ```text
 主题：AI 客服产品融资介绍
@@ -83,7 +85,7 @@ Use $speaker-polish to rewrite these slide notes in a Steve Jobs inspired produc
 素材：暂时没有 logo 和图片，可以用 HTML/CSS 图表和占位示意
 ```
 
-完整 brief 也可以一次性写进 prompt：
+也可以直接写进 prompt：
 
 ```text
 使用 $animated-html-deck 生成一个 8 页中文融资路演 HTML PPT，主题是 AI 客服产品，听众是早期投资人，用于 10 分钟演讲，严肃度 9/10，风格像 Vercel，需要每页 speaker notes、转场提示和 memory point，不要远程图片。

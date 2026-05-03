@@ -13,28 +13,20 @@ If the host UI launches this skill through a structured wizard, prefer the launc
 
 ## Open Brief Intake Protocol
 
-When the user asks for a deck with a low-information prompt such as "帮我做个 PPT", "做个汇报", "来个演示稿", "make a great deck", or "create a presentation" without a concrete topic/source, do not browse, plan, outline, or generate yet. First ask for a compact PPT brief.
+When the user asks for a deck with a low-information prompt such as "帮我做个 PPT", "做个汇报", "来个演示稿", "make a great deck", or "create a presentation" without a concrete topic/source, do not browse, plan, outline, or generate yet. First call `request_user_input` once with a single modal brief intake. Do not send a plain-text list of brief questions.
 
-Ask these six items together:
+The first modal must ask up to 10 questions at once. Use these 8 questions by default, with 2-3 common options each and the modal's built-in `Other` field for free-form answers:
 
-1. Topic or source material: what is the deck about, and is there a PPT/PDF/document/image to use?
-2. Purpose: report, pitch, training, product launch, teaching, speech, explanation, or workshop.
-3. Audience: who will watch it and what do they already know?
-4. Length: exact slide count, or talk duration if slide count is unknown.
-5. Style and seriousness: formal, technical, consulting report, product launch, warm teaching, relaxed explanation, or another style; ask for 1-10 seriousness if useful.
-6. Speaker script: whether to write per-slide speaker notes / 演讲稿 / 口播稿, and whether delivery cues are needed.
+1. Topic/source: ask for the topic or source material. Options: "我会输入主题", "使用已有文件", "根据上下文推断".
+2. Source file status: ask whether there is a PPT/PDF/document/image. Options: "没有文件", "有 PPT/PDF", "有文档/图片".
+3. Purpose: ask the deck purpose. Options: "汇报/报告", "路演/发布会", "培训/教学".
+4. Audience: ask who will watch. Options: "领导/客户", "投资人/合作方", "内部团队/学生".
+5. Length: ask slide count or talk duration. Options: "8 页左右", "6 页以内", "10 分钟左右".
+6. Style/seriousness: ask visual style and seriousness. Options: "咨询报告 8/10", "科技产品 7/10", "轻松教学 4/10".
+7. Speaker notes: ask whether to write speaker notes / 演讲稿. Options: "标准 speaker notes", "详细口播稿", "不要讲稿".
+8. Output mode: ask aspect and phone needs. Options: "16:9 普通演示", "9:16 Phone-ready", "16:9 + Phone 同屏".
 
-Use this Chinese intake phrasing by default for Chinese low-information requests:
-
-```text
-可以，我先把 PPT brief 定清楚。请给我这 6 个信息：
-1. 主题是什么，是否有已有材料或源文件？
-2. 用途是汇报、路演、培训、发布会，还是教学？
-3. 听众是谁？
-4. 需要几页，或演讲几分钟？
-5. 风格偏正式、科技感、咨询报告、产品发布，还是轻松讲解？
-6. 需要我同时写每页演讲稿 / speaker notes 吗？
-```
+After the modal response, produce a visible confirmed brief and continue planning. Only if the topic/source remains completely empty should you ask one short free-form follow-up: "主题是什么，或要基于哪个文件制作？"
 
 If only some answers are provided, continue with a visible "confirmed / defaulted" brief before planning. Do not silently turn a vague request into an unrelated topic. If the user explicitly says "just decide for me" after the intake, default to 8 slides, balanced seriousness 6/10, modern clear style, concise speaker notes, and label the assumptions.
 
@@ -85,7 +77,7 @@ When the user asks to复刻, recreate, convert, or rebuild an existing PPT/PDF i
 4. Start from `assets/single-file-deck-template.html` unless the user explicitly requests a different framework.
 5. Plan the deck before writing HTML:
    - If a host launcher payload is present, normalize it first with `scripts/normalize-launcher-payload.mjs`.
-   - If normalization returns `needs_clarification: true`, ask the brief intake questions and wait for the user's answers before planning.
+   - If normalization returns `needs_clarification: true`, use one `request_user_input` modal for the single-modal brief intake and wait for the user's answers before planning.
    - If normalization returns `speaker_script_guidance.requires_followup: true`, confirm or state speaker-note defaults before generation.
    - Lock the exact slide count and create a slide-by-slide outline with one job per slide.
    - For source deck replication, make each slide job correspond to the same-numbered source page and preserve page order exactly.

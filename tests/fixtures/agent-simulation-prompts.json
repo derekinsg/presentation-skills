@@ -76,14 +76,14 @@
       "skill": "animated-html-deck",
       "type": "edge",
       "prompt": "Use $animated-html-deck to make a great deck.",
-      "expectedChecks": ["asksBriefQuestionsBeforePlan"]
+      "expectedChecks": ["usesSingleModalBriefIntakeBeforePlan"]
     },
     {
       "id": "edge-zh-vague-ppt",
       "skill": "animated-html-deck",
       "type": "edge",
       "prompt": "使用 $animated-html-deck 帮我做个 PPT",
-      "expectedChecks": ["asksBriefQuestionsBeforePlan", "asksSpeakerScriptNeed"]
+      "expectedChecks": ["usesSingleModalBriefIntakeBeforePlan", "asksSpeakerScriptNeed"]
     },
     {
       "id": "deck-zh-product-launch-speaking",

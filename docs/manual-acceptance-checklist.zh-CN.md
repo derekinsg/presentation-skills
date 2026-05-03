@@ -11,6 +11,7 @@
 - 每页 visible text 不溢出、不重叠。
 - 每页都有 `<aside class="notes">` speaker notes。
 - 默认 `data-motion-mode="static"`，除非 prompt 明确要求动画。
+- 低信息请求（如“帮我做个 PPT”）首轮出现一个可点击 brief 弹窗，一次性覆盖核心字段；不应发送“请给我这 6 个信息”的纯文字列表。
 - 左右方向键、空格键、Home/End 可用。
 - Prev、Next、Cursor、Edit、A+/A-、Reset、Color、Mode、Template、Ratio、Publish/IP、Phone、Notes、Full 控件存在，底排不会被裁掉。
 - Ratio 能在 16:9 和 9:16 真实画布之间切换。

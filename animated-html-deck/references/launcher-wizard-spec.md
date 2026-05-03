@@ -108,7 +108,8 @@ Actions:
 Use `scripts/normalize-launcher-payload.mjs` as the deterministic fallback layer.
 
 - If the user leaves a field blank, the launcher may send it empty; the normalizer will infer or default it.
-- If the raw input is a low-information request such as "帮我做个 PPT", the normalizer should mark `needs_clarification: true`; the host should show the brief questions instead of moving straight to generation.
+- If the raw input is a low-information request such as "帮我做个 PPT", the normalizer should mark `needs_clarification: true` and `clarification_mode: single_modal_brief_intake`; the host or agent should show one clickable brief modal before generation.
+- The single-modal intake may contain up to 10 questions. The default uses 8 questions: topic/source, source file status, purpose, audience, length, style/seriousness, speaker notes, and output mode.
 - Language defaults to the language of the user's latest text.
 - Slide count defaults to 8 unless context strongly implies another value.
 - Purpose defaults to `explainer` when no clearer intent is detectable.
@@ -150,6 +151,6 @@ The host UI should pass:
 - trust launcher payload values first
 - avoid re-asking about fields already marked `user_provided`
 - usually avoid re-asking fields marked `inferred/defaulted`, unless there is a high-risk warning that materially affects output quality
-- ask brief intake questions before planning when `needs_clarification` is true
+- ask the single-modal brief intake before planning when `needs_clarification` is true
 - surface speaker script defaults or ask one follow-up when `speaker_script_guidance.requires_followup` is true
 - call `style-polish` when `visual_style` is abstract or when a website-inspired look is requested

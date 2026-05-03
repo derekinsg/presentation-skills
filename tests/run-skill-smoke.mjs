@@ -404,10 +404,16 @@ test('launcher payload normalization asks for brief intake on vague deck request
     }
   ), 'vague deck normalization');
   assert.equal(vague.needs_clarification, true, 'vague deck requests should require clarification');
-  assert.ok(vague.high_risk_warnings.some(warning => warning.includes('too vague')), 'vague requests should warn about insufficient brief');
-  assert.ok(vague.clarification_questions.length >= 6, 'vague requests should include brief intake questions');
-  assert.ok(vague.clarification_questions.some(question => question.includes('主题')), 'brief intake should ask for topic');
-  assert.ok(vague.clarification_questions.some(question => question.includes('演讲稿') || question.includes('speaker notes')), 'brief intake should ask for speaker notes');
+  assert.equal(vague.clarification_mode, 'single_modal_brief_intake', 'vague requests should use single modal intake');
+  assert.ok(vague.high_risk_warnings.some(warning => warning.includes('single_modal_brief_intake')), 'vague requests should warn with the structured intake mode');
+  assert.equal(vague.single_modal_brief_intake.mode, 'single_modal_brief_intake');
+  assert.ok(vague.single_modal_brief_intake.use_request_user_input, 'brief intake should require request_user_input');
+  assert.equal(vague.single_modal_brief_intake.max_questions, 10, 'brief intake should respect the 10 question modal limit');
+  assert.equal(vague.single_modal_brief_intake.questions.length, 8, 'brief intake should ask 8 structured questions');
+  assert.ok(vague.single_modal_brief_intake.questions.some(question => question.id === 'topic_source'), 'brief intake should ask for topic/source');
+  assert.ok(vague.single_modal_brief_intake.questions.some(question => question.id === 'speaker_notes'), 'brief intake should ask for speaker notes');
+  assert.ok(vague.single_modal_brief_intake.questions.some(question => question.id === 'output_mode'), 'brief intake should ask for aspect/phone output');
+  assert.ok(vague.clarification_questions.every(question => typeof question === 'object' && Array.isArray(question.options)), 'clarification questions should be structured modal questions, not plain text prompts');
 
   const keynote = parseJsonOutput(runNode(
     'animated-html-deck/scripts/normalize-launcher-payload.mjs',

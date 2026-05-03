@@ -55,6 +55,20 @@
     },
     "include_delivery_cues": {
       "$ref": "#/$defs/valueWithSource"
+    },
+    "clarification_mode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "When clarification is required, the recommended intake mode such as single_modal_brief_intake."
+    },
+    "single_modal_brief_intake": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Suggested request_user_input modal structure for low-information deck requests."
     }
   },
   "$defs": {
