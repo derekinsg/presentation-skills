@@ -104,10 +104,11 @@ If the user names a brand-inspired style, map it to the closest built-in templat
 - Keyboard controls work: Arrow keys, space, Home, End.
 - Progress indicator reflects the current slide.
 - Notes exist on every slide and are hidden by default.
-- Default controls include Mode, Template, Edit, A+/A-, Reset, Color, Phone, Notes, Full, previous, and next.
+- Default controls include previous, next, Cursor, Edit, A+/A-, Reset, Color, Mode, Template, Ratio, Publish/IP, Phone, Notes, and Full.
 - Template switching changes layout feel and density, not only the accent color.
 - Default static decks contain no `data-motion` or `.fragment`; animated decks use multiple presets sequenced by narrative priority, not a single generic fade.
-- Edit mode can modify slide text, adjust size, drag selected text, reset edits, and change accent color.
+- Edit mode can modify slide text, adjust size, drag selected text, reset edits, and change accent color; Cursor exits editing and clears selected text.
+- Ratio mode can switch between true 16:9 and 9:16 slide canvases, with matching print page sizing.
 - If phone presenter support is included, it is optional: the deck still works from `file://`, and same-Wi-Fi sync is activated only by the local presenter server.
 - Phone presenter QR codes must point to the computer's LAN IP, not `localhost` or `127.0.0.1`.
 - If a source website style is used, the final deck must still contain only one resolved style, not the full 70-style catalog.

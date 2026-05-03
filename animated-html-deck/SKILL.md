@@ -129,8 +129,8 @@ Adapt these patterns to the requested slide count. If there are fewer slides tha
 - Use native CSS and JavaScript for navigation. Use native motion presets only when explicitly requested.
 - Include print support with one slide per page.
 - Include speaker notes on every slide; notes are hidden by default.
-- Include Mode, Template, Edit, A+/A-, Reset, Color, Phone, Notes, Full, previous, and next controls by default.
-- Include editable slide text, theme accent color editing, drag-to-move selected text, and reset for local presentation polishing.
+- Include previous, next, Cursor, Edit, A+/A-, Reset, Color, Mode, Template, Ratio, Publish/IP, Phone, Notes, and Full controls by default.
+- Include editable slide text, theme accent color editing, drag-to-move selected text, reset for local presentation polishing, explicit 16:9/9:16 aspect control, and a copyable LAN/IP publish command for raw file mode.
 - Include optional phone presenter support when using the bundled template. The deck must still open as a standalone file; cross-device sync only works after running the local presenter server, which is the default publish path for phone-ready sessions and should open a LAN IP deck URL.
 - Avoid visible instructions about how to use the deck. The presentation content should be the first-screen experience.
 

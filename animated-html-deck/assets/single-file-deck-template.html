@@ -28,6 +28,8 @@
       --motion-distance: 34px;
       --motion-depth: 72px;
       --stagger-step: 78ms;
+      --aspect-ratio: 16 / 9;
+      --controls-reserve: 108px;
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
@@ -44,6 +46,17 @@
       overflow: hidden;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+    }
+
+    body[data-aspect="9-16"] {
+      --aspect-ratio: 9 / 16;
+      --controls-reserve: 126px;
+      --slide-pad-x: clamp(22px, 5vw, 48px);
+      --slide-pad-y: clamp(24px, 4vh, 54px);
+      --content-gap: clamp(12px, 2.6vw, 22px);
+      --h1-size: clamp(2.5rem, 8.5vw, 5rem);
+      --h2-size: clamp(1.9rem, 6.8vw, 3.7rem);
+      --lead-size: clamp(1rem, 3.2vw, 1.35rem);
     }
 
     body[data-template="apple"] {
@@ -175,15 +188,23 @@
     .deck {
       min-height: 100%;
       display: grid;
-      grid-template-rows: 1fr auto;
+      place-items: center;
+      padding: 18px 18px var(--controls-reserve);
     }
 
     .slides {
       position: relative;
-      width: 100vw;
-      height: 100vh;
+      width: min(calc(100vw - 36px), calc((100vh - var(--controls-reserve) - 36px) * (16 / 9)));
+      height: auto;
+      aspect-ratio: var(--aspect-ratio);
       overflow: hidden;
       perspective: 1600px;
+      box-shadow: var(--shadow);
+      background: var(--bg);
+    }
+
+    body[data-aspect="9-16"] .slides {
+      width: min(calc(100vw - 36px), calc((100vh - var(--controls-reserve) - 36px) * (9 / 16)));
     }
 
     .slide {
@@ -192,7 +213,7 @@
       display: grid;
       grid-template-rows: minmax(0, 1fr);
       gap: clamp(14px, 2vw, 24px);
-      padding: var(--slide-pad-y) var(--slide-pad-x) clamp(76px, 9vh, 112px);
+      padding: var(--slide-pad-y) var(--slide-pad-x);
       overflow: hidden;
       opacity: 0;
       pointer-events: none;
@@ -801,25 +822,46 @@
       position: fixed;
       left: 18px;
       right: 18px;
-      bottom: 16px;
+      bottom: 18px;
       z-index: 10;
       display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 14px;
-      align-items: center;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "left right"
+        "progress progress";
+      gap: 10px 14px;
+      align-items: end;
       pointer-events: none;
     }
 
-    .button-row {
+    .button-row,
+    .control-group {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 8px;
       pointer-events: auto;
     }
 
+    .control-group {
+      min-width: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 2px 8px;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .control-group.primary { grid-area: left; }
+    .control-group.secondary {
+      grid-area: right;
+      justify-content: flex-end;
+    }
+
     button {
+      flex: 0 0 auto;
       min-width: 42px;
       height: 38px;
+      padding: 0 13px;
       border: 1px solid var(--line);
       border-radius: 999px;
       background: rgba(255, 255, 255, .92);
@@ -837,6 +879,7 @@
     }
 
     .mode-button.recording,
+    .cursor-button.active,
     .edit-button.active {
       border-color: var(--accent);
       background: color-mix(in srgb, var(--accent) 14%, #ffffff);
@@ -844,6 +887,7 @@
     }
 
     .progress {
+      grid-area: progress;
       height: 6px;
       overflow: hidden;
       border-radius: 999px;
@@ -861,6 +905,7 @@
 
     .counter {
       min-width: 72px;
+      align-self: center;
       color: var(--muted);
       font-size: .92rem;
       font-weight: 720;
@@ -951,6 +996,31 @@
       padding: 0;
     }
 
+    .publish-command {
+      display: grid;
+      gap: 8px;
+    }
+
+    .publish-command code {
+      display: block;
+      max-height: 124px;
+      overflow: auto;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel-soft);
+      color: var(--ink);
+      font: 700 .78rem/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .publish-command button {
+      justify-self: start;
+      height: 34px;
+      font-size: .85rem;
+    }
+
     .edit-hint {
       position: fixed;
       left: 18px;
@@ -1002,6 +1072,15 @@
     }
 
     @media (max-width: 760px) {
+      .deck {
+        padding: 10px 10px var(--controls-reserve);
+      }
+
+      .slides,
+      body[data-aspect="9-16"] .slides {
+        width: min(calc(100vw - 20px), calc((100vh - var(--controls-reserve) - 20px) * var(--aspect-ratio)));
+      }
+
       .slide {
         padding: 24px 20px 92px;
         overflow-y: auto;
@@ -1039,12 +1118,21 @@
         left: 10px;
         right: 10px;
         bottom: 10px;
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+          "left"
+          "right"
+          "progress";
+        gap: 4px;
       }
 
-      .progress,
+      .control-group.secondary {
+        justify-content: flex-start;
+      }
+
       .counter {
-        display: none;
+        min-width: auto;
+        padding-right: 4px;
       }
 
       .edit-hint {
@@ -1075,25 +1163,49 @@
       }
     }
 
+    @page deck-wide {
+      size: 16in 9in;
+      margin: 0;
+    }
+
+    @page deck-phone {
+      size: 9in 16in;
+      margin: 0;
+    }
+
     @media print {
       body {
         overflow: visible;
         background: white;
       }
 
+      body[data-aspect="9-16"] {
+        --aspect-ratio: 9 / 16;
+      }
+
       .deck, .slides {
         display: block;
         height: auto;
         width: auto;
+        padding: 0;
+        box-shadow: none;
       }
 
       .slide {
+        page: deck-wide;
         position: relative;
         page-break-after: always;
-        min-height: 100vh;
+        width: 16in;
+        min-height: 9in;
         opacity: 1 !important;
         transform: none !important;
         pointer-events: auto;
+      }
+
+      body[data-aspect="9-16"] .slide {
+        page: deck-phone;
+        width: 9in;
+        min-height: 16in;
       }
 
       .fragment {
@@ -1118,7 +1230,7 @@
     }
   </style>
 </head>
-<body data-template="apple" data-style-source="apple" data-style-family="product-launch" data-motion-mode="static">
+<body data-template="apple" data-style-source="apple" data-style-family="product-launch" data-motion-mode="static" data-aspect="16-9" data-presenter-server="animated-html-deck/scripts/presenter-server.mjs">
   <main class="deck" aria-live="polite">
     <div class="slides" id="slides">
       <section class="slide active" data-title="Opening">
@@ -1238,22 +1350,27 @@
     </div>
 
     <nav class="controls" aria-label="Presentation controls">
-      <div class="button-row">
+      <div class="control-group primary">
         <button type="button" id="prev" aria-label="Previous slide">&lt;</button>
         <button type="button" id="next" aria-label="Next slide">&gt;</button>
-        <button type="button" id="modeToggle" class="mode-button" aria-label="Toggle presentation or recording mode">Mode: Talk</button>
-        <button type="button" id="templateToggle" class="template-button" aria-label="Switch template style">Template: Apple</button>
+        <button type="button" id="cursorToggle" class="cursor-button active" aria-label="Use cursor mode">Cursor</button>
         <button type="button" id="editToggle" class="edit-button" aria-label="Toggle edit mode">Edit</button>
         <button type="button" id="fontIncrease" aria-label="Increase selected text size" disabled>A+</button>
         <button type="button" id="fontDecrease" aria-label="Decrease selected text size" disabled>A-</button>
         <button type="button" id="resetEdit" aria-label="Reset selected text edits" disabled>Reset</button>
         <button type="button" id="colorButton" aria-label="Change accent color">Color</button>
+      </div>
+      <div class="control-group secondary">
+        <button type="button" id="modeToggle" class="mode-button" aria-label="Toggle presentation or recording mode">Mode: Talk</button>
+        <button type="button" id="templateToggle" class="template-button" aria-label="Switch template style">Template: Apple</button>
+        <button type="button" id="ratioToggle" aria-label="Toggle slide aspect ratio">Ratio: 16:9</button>
+        <button type="button" id="publishToggle" aria-label="Show IP publish command">Publish/IP</button>
         <button type="button" id="phoneToggle" aria-label="Show phone presenter QR code">Phone</button>
         <button type="button" id="notesToggle" aria-label="Toggle speaker notes">Notes</button>
         <button type="button" id="fullscreen" aria-label="Toggle fullscreen">Full</button>
+        <span class="counter" id="counter">1 / 6</span>
       </div>
       <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
-      <div class="counter" id="counter">1 / 6</div>
     </nav>
 
     <aside class="notes-panel" id="notesPanel" aria-label="Speaker notes"></aside>
@@ -1265,6 +1382,10 @@
       <img id="phoneQr" alt="Phone presenter QR code">
       <p id="phoneStatus">Start the local presenter server, then scan this QR code from your phone.</p>
       <p><a href="#" id="phoneUrl" target="_blank" rel="noreferrer">Waiting for sync server</a></p>
+      <div class="publish-command" id="publishCommand" hidden>
+        <code id="publishCommandText"></code>
+        <button type="button" id="copyPublishCommand">Copy command</button>
+      </div>
     </aside>
     <script id="resolvedTheme" type="application/json">
       {
@@ -1289,6 +1410,7 @@
       const next = document.getElementById('next');
       const modeToggle = document.getElementById('modeToggle');
       const templateToggle = document.getElementById('templateToggle');
+      const cursorToggle = document.getElementById('cursorToggle');
       const editToggle = document.getElementById('editToggle');
       const fontIncrease = document.getElementById('fontIncrease');
       const fontDecrease = document.getElementById('fontDecrease');
@@ -1302,6 +1424,11 @@
       const phoneQr = document.getElementById('phoneQr');
       const phoneStatus = document.getElementById('phoneStatus');
       const phoneUrl = document.getElementById('phoneUrl');
+      const publishToggle = document.getElementById('publishToggle');
+      const publishCommand = document.getElementById('publishCommand');
+      const publishCommandText = document.getElementById('publishCommandText');
+      const copyPublishCommand = document.getElementById('copyPublishCommand');
+      const ratioToggle = document.getElementById('ratioToggle');
       const notesToggle = document.getElementById('notesToggle');
       const fullscreen = document.getElementById('fullscreen');
 
@@ -1327,6 +1454,57 @@
       let commandEvents = null;
       const handledCommandIds = new Set();
       const resolvedThemeNode = document.getElementById('resolvedTheme');
+      const aspectStorageKey = 'animated-html-deck-aspect:' + window.location.pathname;
+
+      function shellQuote(value) {
+        return '"' + String(value).replace(/(["\\$`])/g, '\\$1') + '"';
+      }
+
+      function currentDeckPath() {
+        if (window.location.protocol === 'file:') {
+          return decodeURIComponent(window.location.pathname);
+        }
+        return document.title ? document.title.replace(/[^\w.-]+/g, '-').replace(/^-|-$/g, '') + '.html' : 'deck.html';
+      }
+
+      function buildPublishCommand() {
+        const serverPath = document.body.dataset.presenterServer || 'animated-html-deck/scripts/presenter-server.mjs';
+        return 'node ' + shellQuote(serverPath) + ' ' + shellQuote(currentDeckPath()) + ' --port 4173 --deck-host lan';
+      }
+
+      function updatePublishCommand() {
+        publishCommandText.textContent = buildPublishCommand();
+      }
+
+      function showPublishHelp() {
+        phonePanel.classList.add('open');
+        phoneQr.hidden = true;
+        publishCommand.hidden = false;
+        phoneUrl.removeAttribute('href');
+        phoneUrl.textContent = 'Run this command to open the IP/LAN deck';
+        phoneStatus.textContent = 'This file is open in offline mode. Start the local presenter server, then use the Computer PPT URL and scan the Phone QR from the LAN page.';
+        updatePublishCommand();
+      }
+
+      function setAspect(nextAspect, persist = true) {
+        const aspect = nextAspect === '9-16' ? '9-16' : '16-9';
+        document.body.dataset.aspect = aspect;
+        ratioToggle.textContent = aspect === '9-16' ? 'Ratio: 9:16' : 'Ratio: 16:9';
+        ratioToggle.setAttribute('aria-pressed', String(aspect === '9-16'));
+        if (persist) {
+          try { localStorage.setItem(aspectStorageKey, aspect); } catch (error) {}
+        }
+      }
+
+      function cycleAspect() {
+        setAspect(document.body.dataset.aspect === '9-16' ? '16-9' : '9-16');
+      }
+
+      function restoreAspect() {
+        let saved = null;
+        try { saved = localStorage.getItem(aspectStorageKey); } catch (error) {}
+        setAspect(saved || document.body.dataset.aspect || '16-9', false);
+      }
 
       function parseResolvedTheme() {
         if (!resolvedThemeNode) return null;
@@ -1519,13 +1697,11 @@
       function showPhonePanel() {
         phonePanel.classList.add('open');
         if (!syncEnabled) {
-          phoneQr.hidden = true;
-          phoneUrl.removeAttribute('href');
-          phoneUrl.textContent = 'Codex LAN publish required';
-          phoneStatus.textContent = 'This standalone HTML still works offline on this computer. For phone notes or QR sync, let Codex open the LAN deck URL through the local presenter server.';
+          showPublishHelp();
           return;
         }
 
+        publishCommand.hidden = true;
         phoneQr.hidden = false;
         phoneQr.removeAttribute('src');
         phoneUrl.removeAttribute('href');
@@ -1698,6 +1874,8 @@
         resetEdit.disabled = !isEditing || !hasSelection;
         editToggle.classList.toggle('active', isEditing);
         editToggle.setAttribute('aria-pressed', String(isEditing));
+        cursorToggle.classList.toggle('active', !isEditing);
+        cursorToggle.setAttribute('aria-pressed', String(!isEditing));
         updateEditHint();
       }
 
@@ -1710,6 +1888,13 @@
           selectedEditable.classList.add('is-selected');
           selectedEditable.focus({ preventScroll: true });
         }
+        updateEditControls();
+      }
+
+      function clearEditableSelection() {
+        if (selectedEditable) selectedEditable.classList.remove('is-selected');
+        selectedEditable = null;
+        dragState = null;
         updateEditControls();
       }
 
@@ -1740,10 +1925,8 @@
           node.contentEditable = isEditing ? 'true' : 'false';
           if (!isEditing) node.classList.remove('is-dragging');
         });
-        if (!isEditing && selectedEditable) {
-          selectedEditable.classList.remove('is-selected');
-          selectedEditable = null;
-        }
+        if (!isEditing && selectedEditable) selectedEditable.classList.remove('is-selected');
+        if (!isEditing) selectedEditable = null;
         if (!isEditing) dragState = null;
         updateEditControls();
       }
@@ -1907,21 +2090,32 @@
       document.addEventListener('pointerdown', (event) => {
         if (!isEditing) return;
         if (event.target.closest('.editable-node') || event.target.closest('.controls')) return;
-        if (selectedEditable) selectedEditable.classList.remove('is-selected');
-        selectedEditable = null;
-        updateEditControls();
+        clearEditableSelection();
       });
 
       prev.addEventListener('click', backward);
       next.addEventListener('click', forward);
       modeToggle.addEventListener('click', cycleMode);
       templateToggle.addEventListener('click', cycleTemplate);
+      cursorToggle.addEventListener('click', () => setEditing(false));
       editToggle.addEventListener('click', () => setEditing(!isEditing));
       fontIncrease.addEventListener('click', () => changeSelectedFontSize(4));
       fontDecrease.addEventListener('click', () => changeSelectedFontSize(-4));
       resetEdit.addEventListener('click', resetSelectedEdit);
       colorButton.addEventListener('click', () => accentColorPicker.click());
       accentColorPicker.addEventListener('input', event => setAccentColor(event.target.value));
+      ratioToggle.addEventListener('click', cycleAspect);
+      publishToggle.addEventListener('click', showPublishHelp);
+      copyPublishCommand.addEventListener('click', () => {
+        updatePublishCommand();
+        const command = publishCommandText.textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(command).then(() => {
+            copyPublishCommand.textContent = 'Copied';
+            setTimeout(() => { copyPublishCommand.textContent = 'Copy command'; }, 1300);
+          }).catch(() => {});
+        }
+      });
       phoneToggle.addEventListener('click', togglePhonePanel);
       phoneClose.addEventListener('click', () => phonePanel.classList.remove('open'));
       notesToggle.addEventListener('click', () => {
@@ -1941,6 +2135,7 @@
       collectEditableNodes();
       applyMotionOrders();
       startCommandSync();
+      restoreAspect();
       const initialTheme = parseResolvedTheme();
       if (initialTheme) {
         applyResolvedTheme(initialTheme);

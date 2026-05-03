@@ -12,7 +12,8 @@
 - 每页都有 `<aside class="notes">` speaker notes。
 - 默认 `data-motion-mode="static"`，除非 prompt 明确要求动画。
 - 左右方向键、空格键、Home/End 可用。
-- Notes、Phone、Full、Template、Mode、Edit、Reset 控件存在。
+- Prev、Next、Cursor、Edit、A+/A-、Reset、Color、Mode、Template、Ratio、Publish/IP、Phone、Notes、Full 控件存在，底排不会被裁掉。
+- Ratio 能在 16:9 和 9:16 真实画布之间切换。
 - 打印预览是一页一 slide。
 - 没有远程图片、CDN、远程字体、analytics。
 - 手机 presenter URL 不使用 `localhost` 或 `127.0.0.1` 作为手机入口。

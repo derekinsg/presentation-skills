@@ -550,9 +550,30 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.equal(notes.length, slides.length, 'every sample slide should contain notes');
   assert.match(html, /<body[^>]+data-motion-mode="static"/, 'template should default to static motion mode');
   assert.match(html, /@media print/, 'template should include print styles');
-  for (const id of ['modeToggle', 'templateToggle', 'phoneToggle', 'notesToggle', 'fullscreen', 'prev', 'next']) {
+  for (const id of [
+    'prev',
+    'next',
+    'cursorToggle',
+    'editToggle',
+    'fontIncrease',
+    'fontDecrease',
+    'resetEdit',
+    'colorButton',
+    'modeToggle',
+    'templateToggle',
+    'ratioToggle',
+    'publishToggle',
+    'phoneToggle',
+    'notesToggle',
+    'fullscreen'
+  ]) {
     assert.ok(html.includes(`id="${id}"`), `template should include ${id}`);
   }
+  assert.match(html, /data-aspect="16-9"/, 'template should default to 16:9 aspect mode');
+  assert.match(html, /body\[data-aspect="9-16"\]/, 'template should include 9:16 aspect styling');
+  assert.match(html, /@page deck-phone/, 'template should include 9:16 print page support');
+  assert.match(html, /Publish\/IP/, 'template should include an IP publish control');
+  assert.match(html, /Copy command/, 'template should include a copyable publish command');
   assert.ok(html.includes('addEventListener(\'keydown\''), 'template should include keyboard controls');
   assert.doesNotMatch(html, /\b(?:src|href)=["']https?:\/\//i, 'template should not link remote runtime assets');
   assert.doesNotMatch(html, /(?:unpkg|jsdelivr|fonts\.googleapis|cdn\.)/i, 'template should not depend on public CDNs');
