@@ -1,0 +1,13 @@
+{
+  "name": "presentation-skills",
+  "version": "0.1.0-beta.0",
+  "description": "GitHub-distributed presentation skills for HTML decks, visual style resolution, and speaker-note polishing.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node tests/run-skill-smoke.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

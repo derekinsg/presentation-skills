@@ -1,0 +1,4 @@
+interface:
+  display_name: "Speaker Polish"
+  short_description: "Polish PPT speaker notes with master-inspired speech styles"
+  default_prompt: "Use $speaker-polish to rewrite my PPT speaker notes in a selected master-inspired presentation style, with per-slide narration, rhythm cues, transitions, and memorable takeaways."

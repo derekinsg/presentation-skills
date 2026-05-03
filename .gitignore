@@ -1,0 +1,36 @@
+.DS_Store
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Generated decks and local presentation artifacts at the repository root.
+/*.html
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+/*.webp
+/*.mp4
+/*.mov
+/*.pdf
+/*.pptx
+/*.zip
+
+# Local test and release scratch space.
+.cache/
+.tmp/
+tmp/
+dist/
+coverage/
+screenshots/
+generated-decks/
+.animated-html-deck-extractions/
+presentation-skills-*.zip
+
+# Environment and editor files.
+.env
+.env.*
+.idea/
+.vscode/

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "animated-html-deck.launcher-payload.schema.json",
+  "title": "Animated HTML Deck Launcher Payload",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "raw_input": {
+      "type": "string",
+      "description": "The user's original freeform request or the text gathered by the launcher."
+    },
+    "context_title": {
+      "type": "string",
+      "description": "Optional current task title or inferred subject line from the host UI."
+    },
+    "context_summary": {
+      "type": "string",
+      "description": "Optional attachment or context summary used for inference."
+    },
+    "topic": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "language": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "slide_count": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "purpose": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "seriousness": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "visual_style": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "is_speaking_deck": {
+      "$ref": "#/$defs/valueWithSource"
+    },
+    "is_branded": {
+      "$ref": "#/$defs/valueWithSource"
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "string",
+      "enum": [
+        "user_provided",
+        "inferred",
+        "defaulted"
+      ]
+    },
+    "valueWithSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {},
+        "source": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "value",
+        "source"
+      ]
+    }
+  }
+}

@@ -1,0 +1,1954 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Animated HTML Deck</title>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --ink: #1d1d1f;
+      --muted: #626b7a;
+      --panel: #ffffff;
+      --panel-soft: #f0f2f5;
+      --line: #d9dde6;
+      --accent: #0066cc;
+      --accent-2: #2997ff;
+      --shadow: 0 20px 70px rgba(29, 29, 31, .12);
+      --radius: 12px;
+      --slide-pad-x: clamp(32px, 6vw, 86px);
+      --slide-pad-y: clamp(28px, 5vw, 64px);
+      --content-gap: clamp(18px, 3vw, 34px);
+      --h1-size: clamp(3.2rem, 7.8vw, 7.4rem);
+      --h2-size: clamp(2.2rem, 5vw, 5.2rem);
+      --lead-size: clamp(1.08rem, 2vw, 1.65rem);
+      --duration: 360ms;
+      --ease: cubic-bezier(.22, .61, .36, 1);
+      --motion-duration: 760ms;
+      --motion-distance: 34px;
+      --motion-depth: 72px;
+      --stagger-step: 78ms;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    body {
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body[data-template="apple"] {
+      --bg: #f5f5f7;
+      --ink: #1d1d1f;
+      --muted: #6e6e73;
+      --panel: #ffffff;
+      --panel-soft: #eceef2;
+      --line: #d7d9df;
+      --accent: #0066cc;
+      --accent-2: #2997ff;
+      --shadow: 0 18px 56px rgba(29, 29, 31, .1);
+      --radius: 18px;
+      --content-gap: clamp(20px, 3vw, 38px);
+      --h1-size: clamp(3.8rem, 8.4vw, 8.2rem);
+      --h2-size: clamp(2.7rem, 5.8vw, 5.8rem);
+      --lead-size: clamp(1.18rem, 2vw, 1.75rem);
+      --duration: 420ms;
+    }
+
+    body[data-template="airbnb"] {
+      --bg: #fff8f6;
+      --ink: #222222;
+      --muted: #6a5f5c;
+      --panel: #ffffff;
+      --panel-soft: #fff0ed;
+      --line: #f0d8d2;
+      --accent: #ff385c;
+      --accent-2: #92174d;
+      --shadow: 0 14px 24px rgba(34, 34, 34, .08), 0 28px 70px rgba(255, 56, 92, .1);
+      --radius: 28px;
+      --content-gap: clamp(18px, 3vw, 32px);
+      --h1-size: clamp(3.25rem, 7.2vw, 7rem);
+      --h2-size: clamp(2.25rem, 5vw, 5.1rem);
+      --lead-size: clamp(1.08rem, 2vw, 1.7rem);
+      --duration: 380ms;
+    }
+
+    body[data-template="executive"] {
+      --bg: #f4f5f7;
+      --ink: #121826;
+      --muted: #515b6d;
+      --panel: #ffffff;
+      --panel-soft: #eef1f5;
+      --line: #cfd5df;
+      --accent: #174ea6;
+      --accent-2: #0b7a75;
+      --shadow: 0 16px 52px rgba(18, 24, 38, .12);
+      --radius: 8px;
+      --content-gap: clamp(14px, 2.4vw, 28px);
+      --h1-size: clamp(3rem, 6.4vw, 6.5rem);
+      --h2-size: clamp(2.05rem, 4.5vw, 4.8rem);
+      --lead-size: clamp(1.02rem, 1.7vw, 1.45rem);
+      --duration: 300ms;
+    }
+
+    body[data-template="consulting"] {
+      --bg: #fbfbfa;
+      --ink: #171717;
+      --muted: #555b65;
+      --panel: #ffffff;
+      --panel-soft: #f2f1ee;
+      --line: #d8d4cc;
+      --accent: #7a4d00;
+      --accent-2: #245b73;
+      --shadow: 0 10px 34px rgba(23, 23, 23, .1);
+      --radius: 6px;
+      --content-gap: clamp(12px, 2.2vw, 26px);
+      --h1-size: clamp(2.8rem, 6vw, 6.1rem);
+      --h2-size: clamp(2rem, 4.2vw, 4.4rem);
+      --lead-size: clamp(1rem, 1.6vw, 1.36rem);
+      --duration: 280ms;
+    }
+
+    body[data-style-family="product-launch"] {
+      --content-gap: clamp(20px, 3vw, 38px);
+      --h1-size: clamp(3.55rem, 8vw, 7.8rem);
+      --h2-size: clamp(2.55rem, 5.4vw, 5.6rem);
+    }
+
+    body[data-style-family="warm-editorial"] {
+      --radius: 22px;
+      --content-gap: clamp(18px, 3vw, 34px);
+      --h1-size: clamp(3.2rem, 7.3vw, 7.1rem);
+    }
+
+    body[data-style-family="executive-report"],
+    body[data-style-family="consulting-report"] {
+      --radius: 8px;
+      --content-gap: clamp(14px, 2.5vw, 28px);
+      --h1-size: clamp(3rem, 6.5vw, 6.6rem);
+      --h2-size: clamp(2.1rem, 4.6vw, 4.9rem);
+      --lead-size: clamp(1rem, 1.7vw, 1.42rem);
+    }
+
+    body[data-style-family="dark-tooling"],
+    body[data-style-family="cinematic-dark"] {
+      --bg: #0f1115;
+      --ink: #f5f7fb;
+      --muted: #a1adbf;
+      --panel: #141922;
+      --panel-soft: #1a2130;
+      --line: #2a3343;
+      --shadow: 0 18px 52px rgba(0, 0, 0, .34);
+    }
+
+    body[data-style-family="minimal-monochrome"] {
+      --radius: 10px;
+      --shadow: 0 0 0 1px rgba(23, 23, 23, .08);
+    }
+
+    body[data-style-family="luxury-brand"] {
+      --content-gap: clamp(20px, 3vw, 38px);
+      --h1-size: clamp(3.45rem, 7.8vw, 7.5rem);
+      --shadow: 0 26px 80px rgba(17, 17, 19, .16);
+    }
+
+    body[data-style-family="playful-consumer"] {
+      --radius: 26px;
+      --content-gap: clamp(18px, 3vw, 32px);
+      --h1-size: clamp(3.3rem, 7.4vw, 7.2rem);
+    }
+
+    body.has-custom-accent {
+      --accent: var(--user-accent);
+      --accent-2: var(--user-accent-2);
+    }
+
+    .deck {
+      min-height: 100%;
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+
+    .slides {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      perspective: 1600px;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr);
+      gap: clamp(14px, 2vw, 24px);
+      padding: var(--slide-pad-y) var(--slide-pad-x) clamp(76px, 9vh, 112px);
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate3d(5%, 0, calc(-1 * var(--motion-depth))) rotateY(-2deg) scale(.982);
+      transform-style: preserve-3d;
+      transition:
+        opacity var(--duration) var(--ease),
+        transform calc(var(--duration) + 160ms) var(--ease),
+        filter var(--duration) var(--ease);
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 34%),
+        linear-gradient(315deg, color-mix(in srgb, var(--accent-2) 10%, transparent), transparent 32%),
+        var(--bg);
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: clamp(18px, 3vw, 44px);
+      z-index: 0;
+      border-radius: calc(var(--radius) + 18px);
+      background:
+        linear-gradient(120deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 44%),
+        linear-gradient(300deg, color-mix(in srgb, var(--accent-2) 10%, transparent), transparent 48%);
+      opacity: 0;
+      transform: translate3d(0, 22px, -120px) scale(1.04);
+      transition: opacity 820ms var(--ease), transform 960ms var(--ease);
+      pointer-events: none;
+    }
+
+    .slide > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    body[data-template="apple"] .slide:nth-of-type(3n) {
+      background: #111318;
+      color: #f5f5f7;
+      --muted: #b7bdc7;
+      --panel: #1a1d24;
+      --panel-soft: #20242d;
+      --line: #343a46;
+      --accent: #2997ff;
+      --accent-2: #8ecbff;
+    }
+
+    body.has-custom-accent[data-template="apple"] .slide:nth-of-type(3n) {
+      --accent: var(--user-accent);
+      --accent-2: var(--user-accent-2);
+    }
+
+    body[data-template="executive"] .slide {
+      background:
+        linear-gradient(90deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 28%),
+        var(--bg);
+    }
+
+    body[data-template="consulting"] .slide {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.58), transparent),
+        repeating-linear-gradient(90deg, rgba(23,23,23,.025), rgba(23,23,23,.025) 1px, transparent 1px, transparent 96px),
+        var(--bg);
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate3d(0, 0, 0) rotateY(0deg) scale(1);
+      z-index: 2;
+    }
+
+    .slide.active::before {
+      opacity: .74;
+      transform: translate3d(0, 0, -80px) scale(1);
+    }
+
+    .slide.leaving {
+      opacity: 0;
+      transform: translate3d(-3%, 0, calc(-1 * var(--motion-depth))) rotateY(1.5deg) scale(.99);
+      filter: saturate(.92) blur(1px);
+      z-index: 1;
+    }
+
+    body[data-motion-mode="static"] .slide,
+    body[data-motion-mode="static"] .slide::before,
+    body[data-motion-mode="static"] .slide.leaving,
+    body[data-motion-mode="static"] .media-frame img,
+    body[data-motion-mode="static"] .media-bleed img {
+      transition: none;
+      transform: none;
+      filter: none;
+      clip-path: none;
+    }
+
+    .brand-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 850;
+    }
+
+    .brand-logo {
+      max-width: 120px;
+      max-height: 34px;
+      object-fit: contain;
+    }
+
+    body[data-template="airbnb"] .brand-mark {
+      border-radius: 999px;
+    }
+
+    body[data-template="executive"] .brand-mark,
+    body[data-template="consulting"] .brand-mark {
+      border-radius: 4px;
+    }
+
+    .slide-body {
+      display: grid;
+      align-content: center;
+      gap: var(--content-gap);
+      min-height: 0;
+    }
+
+    .slide-body.top {
+      align-content: start;
+    }
+
+    .kicker {
+      margin: 0;
+      color: var(--accent);
+      font-size: clamp(.75rem, 1vw, .98rem);
+      font-weight: 820;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 1080px;
+      font-size: var(--h1-size);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      max-width: 960px;
+      font-size: var(--h2-size);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      font-size: clamp(1.1rem, 2vw, 1.65rem);
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: var(--lead-size);
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      width: min(1080px, 100%);
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .panel {
+      min-height: 160px;
+      padding: clamp(18px, 2.4vw, 28px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
+      box-shadow: 0 12px 38px rgba(23, 32, 51, .07);
+    }
+
+    body[data-template="apple"] .panel {
+      border-color: transparent;
+      background: var(--panel);
+      box-shadow: none;
+    }
+
+    body[data-template="airbnb"] .panel {
+      box-shadow: var(--shadow);
+    }
+
+    body[data-template="executive"] .panel {
+      border-radius: 8px;
+      box-shadow: 0 10px 26px rgba(18, 24, 38, .06);
+    }
+
+    body[data-template="consulting"] .panel {
+      border-radius: 6px;
+      box-shadow: none;
+    }
+
+    .metric {
+      font-size: clamp(2rem, 4vw, 4.2rem);
+      line-height: 1;
+      font-weight: 850;
+      color: var(--accent);
+    }
+
+    .metric-number {
+      display: inline-block;
+      min-width: 1.2ch;
+      font: inherit;
+    }
+
+    .metric small {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: clamp(.86rem, 1.2vw, 1rem);
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .stack {
+      display: grid;
+      gap: 14px;
+      max-width: 920px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 20px;
+      align-items: start;
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .tag {
+      color: var(--accent);
+      font-weight: 820;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: clamp(20px, 4vw, 54px);
+      align-items: center;
+      width: min(1120px, 100%);
+    }
+
+    .callout {
+      padding: clamp(22px, 4vw, 40px);
+      border-left: 6px solid var(--accent);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--panel) 88%, transparent);
+      box-shadow: 0 18px 60px rgba(23, 32, 51, .08);
+    }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      width: min(1120px, 100%);
+    }
+
+    .step {
+      position: relative;
+      min-height: 184px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+    }
+
+    .step::before {
+      content: attr(data-step);
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 850;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      width: min(1040px, 100%);
+    }
+
+    .comparison .panel {
+      min-height: 250px;
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .list li {
+      padding-left: 18px;
+      border-left: 3px solid var(--accent-2);
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .quote {
+      max-width: 980px;
+      font-size: clamp(2rem, 4.2vw, 4.8rem);
+      line-height: 1.05;
+      font-weight: 850;
+    }
+
+    .prompt {
+      max-width: 960px;
+      padding: clamp(18px, 3vw, 30px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--ink);
+      font-size: clamp(1rem, 1.6vw, 1.35rem);
+      line-height: 1.5;
+      box-shadow: var(--shadow);
+      white-space: pre-wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 34px;
+      padding: 7px 12px;
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+      border-radius: 999px;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 9%, var(--panel));
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .media-split {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(320px, 1.1fr);
+      gap: clamp(22px, 4vw, 58px);
+      align-items: center;
+      width: min(1160px, 100%);
+    }
+
+    .media-stack {
+      display: grid;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .media-frame,
+    .media-bleed {
+      position: relative;
+      overflow: hidden;
+      margin: 0;
+      border: 1px solid color-mix(in srgb, var(--line) 76%, transparent);
+      border-radius: calc(var(--radius) + 12px);
+      background:
+        linear-gradient(145deg, color-mix(in srgb, var(--panel) 82%, transparent), color-mix(in srgb, var(--accent) 9%, var(--panel-soft))),
+        var(--panel);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .media-frame {
+      aspect-ratio: 16 / 10;
+      width: min(620px, 100%);
+    }
+
+    .media-bleed {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      min-height: 260px;
+    }
+
+    .media-frame::before,
+    .media-bleed::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(135deg, rgba(255,255,255,.22), transparent 36%, rgba(255,255,255,.12));
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+
+    .media-frame img,
+    .media-bleed img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.035);
+      transition: transform 960ms var(--ease), filter 760ms var(--ease);
+    }
+
+    .slide.active .media-frame.motion-in img,
+    .slide.active .media-bleed.motion-in img,
+    .slide.active .fragment.visible.media-frame img,
+    .slide.active .fragment.visible.media-bleed img {
+      transform: scale(1);
+      filter: saturate(1.04) contrast(1.02);
+    }
+
+    .image-caption,
+    figcaption {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 14px;
+      z-index: 2;
+      width: fit-content;
+      max-width: calc(100% - 32px);
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.34);
+      border-radius: 999px;
+      background: rgba(15, 23, 36, .62);
+      color: #fff;
+      font-size: .78rem;
+      font-weight: 760;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+      padding: 10px 14px 10px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--panel) 86%, transparent);
+      box-shadow: 0 12px 34px rgba(23, 32, 51, .08);
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .chart {
+      display: grid;
+      gap: 12px;
+      width: min(820px, 100%);
+    }
+
+    .bar {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-weight: 720;
+    }
+
+    .bar span:nth-child(2) {
+      height: 14px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(23, 32, 51, .12);
+    }
+
+    .bar span:nth-child(2)::before {
+      content: "";
+      display: block;
+      width: var(--value);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: none;
+    }
+
+    body[data-motion-mode="animated"] .bar span:nth-child(2)::before {
+      width: 0;
+      transition: width 880ms var(--ease);
+      transition-delay: calc(var(--motion-order, 0) * 90ms + 160ms);
+    }
+
+    body[data-motion-mode="animated"] .chart.motion-in .bar span:nth-child(2)::before,
+    body[data-motion-mode="animated"] .chart.visible .bar span:nth-child(2)::before,
+    body[data-motion-mode="animated"] .slide.active .chart:not(.fragment) .bar span:nth-child(2)::before {
+      width: var(--value);
+    }
+
+    body[data-motion-mode="animated"] .fragment {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 320ms var(--ease), transform 320ms var(--ease);
+    }
+
+    body[data-motion-mode="animated"] .fragment.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body[data-motion-mode="animated"] [data-motion] {
+      --motion-order: 0;
+      opacity: 0;
+      transform: translate3d(0, var(--motion-distance), 0) scale(.985);
+      filter: blur(12px);
+      clip-path: inset(0 0 14% 0 round 12px);
+      transition:
+        opacity var(--motion-duration) var(--ease),
+        transform calc(var(--motion-duration) + 120ms) var(--ease),
+        filter var(--motion-duration) var(--ease),
+        clip-path calc(var(--motion-duration) + 120ms) var(--ease);
+      transition-delay: calc(var(--motion-order) * var(--stagger-step));
+      will-change: opacity, transform, filter, clip-path;
+    }
+
+    body[data-motion-mode="animated"] .slide.active [data-motion]:not(.fragment),
+    body[data-motion-mode="animated"] .slide.active .fragment.visible[data-motion],
+    body[data-motion-mode="animated"] .motion-in {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      filter: blur(0);
+      clip-path: inset(0 0 0 0 round 0);
+    }
+
+    body[data-motion-mode="animated"] [data-motion="hero-reveal"] {
+      transform: translate3d(0, 42px, 0) scale(.965);
+      clip-path: inset(0 0 24% 0 round 18px);
+      transition-duration: 940ms, 1040ms, 900ms, 1040ms;
+    }
+
+    body[data-motion-mode="animated"] [data-motion="mask-wipe"] {
+      transform: translate3d(0, 0, 0);
+      clip-path: inset(0 100% 0 0 round 6px);
+      filter: blur(0);
+    }
+
+    body[data-motion-mode="animated"] [data-motion="media-parallax"] {
+      transform: translate3d(0, 36px, -80px) rotateX(4deg) scale(1.04);
+      transform-origin: 50% 64%;
+      clip-path: inset(8% 0 0 0 round calc(var(--radius) + 12px));
+      transition-duration: 880ms, 1120ms, 820ms, 960ms;
+    }
+
+    body[data-motion-mode="animated"] [data-motion="card-stack"] {
+      transform: translate3d(0, 38px, -60px) rotateX(7deg) scale(.96);
+      transform-origin: 50% 0;
+    }
+
+    body[data-motion-mode="animated"] [data-motion="metric-count"] {
+      transform: translate3d(0, 28px, 0) scale(.94);
+      filter: blur(8px);
+    }
+
+    body[data-motion-mode="animated"] [data-motion="chart-draw"] {
+      transform: translate3d(0, 26px, 0) scale(.99);
+      clip-path: inset(0 0 0 0 round 0);
+    }
+
+    body[data-motion-mode="animated"] .process[data-motion="process-trace"] {
+      position: relative;
+    }
+
+    body[data-motion-mode="animated"] .process[data-motion="process-trace"]::after {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 37px;
+      height: 2px;
+      z-index: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 960ms var(--ease) 180ms;
+    }
+
+    body[data-motion-mode="animated"] .process[data-motion="process-trace"].motion-in::after,
+    body[data-motion-mode="animated"] .process[data-motion="process-trace"].visible::after {
+      transform: scaleX(1);
+    }
+
+    body[data-motion-mode="animated"] .process[data-motion="process-trace"] .step {
+      z-index: 1;
+    }
+
+    body[data-motion-mode="animated"] [data-motion="stagger-rise"] {
+      transform: translate3d(0, 24px, 0);
+      clip-path: inset(0 0 8% 0 round 8px);
+    }
+
+    .controls {
+      position: fixed;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    button {
+      min-width: 42px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .92);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 760;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(23, 32, 51, .1);
+    }
+
+    button:hover { border-color: var(--accent); }
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+    }
+
+    .mode-button.recording,
+    .edit-button.active {
+      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 14%, #ffffff);
+      color: var(--accent);
+    }
+
+    .progress {
+      height: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(23, 32, 51, .12);
+    }
+
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width 260ms var(--ease);
+    }
+
+    .counter {
+      min-width: 72px;
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 720;
+      text-align: right;
+      pointer-events: auto;
+    }
+
+    .notes-panel,
+    .phone-panel {
+      position: fixed;
+      z-index: 22;
+      display: none;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .98);
+      box-shadow: var(--shadow);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    .notes-panel {
+      top: 18px;
+      right: 18px;
+      width: min(390px, calc(100vw - 36px));
+      max-height: calc(100vh - 96px);
+      overflow: auto;
+    }
+
+    .notes-panel.open { display: block; }
+
+    .notes-panel strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .notes { display: none; }
+
+    .phone-panel {
+      left: 18px;
+      bottom: 92px;
+      width: min(370px, calc(100vw - 36px));
+      gap: 14px;
+    }
+
+    .phone-panel.open { display: grid; }
+
+    .phone-panel header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .phone-panel h2 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .phone-panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.45;
+    }
+
+    .phone-panel a {
+      color: var(--accent);
+      font-weight: 760;
+      overflow-wrap: anywhere;
+    }
+
+    .phone-panel img {
+      width: min(220px, 100%);
+      aspect-ratio: 1;
+      justify-self: center;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #ffffff;
+      padding: 10px;
+    }
+
+    .phone-panel .close-panel {
+      min-width: 34px;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+    }
+
+    .edit-hint {
+      position: fixed;
+      left: 18px;
+      bottom: 64px;
+      z-index: 12;
+      display: none;
+      max-width: min(560px, calc(100vw - 36px));
+      padding: 9px 12px;
+      border: 1px dashed color-mix(in srgb, var(--accent) 35%, var(--line));
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent) 10%, #ffffff);
+      color: var(--ink);
+      font-size: .88rem;
+      font-weight: 700;
+      pointer-events: none;
+    }
+
+    body.editing .edit-hint { display: block; }
+    body.recording .edit-hint { display: none; }
+
+    .color-input {
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    body.editing .editable-node {
+      outline: 1px dashed color-mix(in srgb, var(--accent) 34%, transparent);
+      outline-offset: 5px;
+      border-radius: 6px;
+    }
+
+    body.editing .editable-node.is-selected {
+      outline: 2px solid var(--accent);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+      box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 13%, transparent);
+      cursor: grab;
+    }
+
+    body.editing .editable-node.is-selected:hover { cursor: grab; }
+
+    body.editing .editable-node.is-dragging {
+      cursor: grabbing;
+      outline-color: var(--accent);
+      box-shadow: 0 0 0 9px color-mix(in srgb, var(--accent) 15%, transparent);
+      user-select: none;
+    }
+
+    @media (max-width: 760px) {
+      .slide {
+        padding: 24px 20px 92px;
+        overflow-y: auto;
+      }
+
+      .slide-body {
+        align-content: start;
+      }
+
+      .grid,
+      .grid.two,
+      .split,
+      .media-split,
+      .process,
+      .comparison {
+        grid-template-columns: 1fr;
+      }
+
+      .media-frame,
+      .media-bleed {
+        width: 100%;
+        min-height: 220px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .bar {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        grid-template-columns: 1fr;
+      }
+
+      .progress,
+      .counter {
+        display: none;
+      }
+
+      .edit-hint {
+        left: 10px;
+        right: 10px;
+        bottom: 104px;
+        border-radius: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+      }
+
+      .slide,
+      .slide.leaving,
+      [data-motion],
+      .fragment {
+        transform: none !important;
+        filter: none !important;
+        clip-path: none !important;
+      }
+    }
+
+    @media print {
+      body {
+        overflow: visible;
+        background: white;
+      }
+
+      .deck, .slides {
+        display: block;
+        height: auto;
+        width: auto;
+      }
+
+      .slide {
+        position: relative;
+        page-break-after: always;
+        min-height: 100vh;
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto;
+      }
+
+      .fragment {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      [data-motion] {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        clip-path: none !important;
+      }
+
+      .bar span:nth-child(2)::before {
+        width: var(--value) !important;
+      }
+
+      .controls, .notes-panel, .phone-panel, .edit-hint {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body data-template="apple" data-style-source="apple" data-style-family="product-launch" data-motion-mode="static">
+  <main class="deck" aria-live="polite">
+    <div class="slides" id="slides">
+      <section class="slide active" data-title="Opening">
+        <div class="slide-body">
+          <div class="logo-lockup"><span class="brand-mark">AD</span><span>Animated HTML Deck</span></div>
+          <p class="kicker">Template slide: opening</p>
+          <h1>Replace this with the deck title</h1>
+          <p class="lead">Use this first slide for the core promise, thesis, or opening contrast.</p>
+        </div>
+        <aside class="notes">Open with the audience problem, then state the deck's promise in one sentence.</aside>
+      </section>
+
+      <section class="slide" data-title="Metrics">
+        <div class="slide-body">
+          <p class="kicker">Template slide: metrics</p>
+          <h2>Turn proof into visible signal</h2>
+          <div class="grid">
+            <article class="panel">
+              <p class="metric"><span class="metric-number">3x</span><small>Replace with a user-supplied or clearly labeled illustrative metric.</small></p>
+            </article>
+            <article class="panel">
+              <p class="metric"><span class="metric-number">42%</span><small>Use concise labels so the number remains the hero.</small></p>
+            </article>
+            <article class="panel">
+              <p class="metric"><span class="metric-number">12 wk</span><small>Anchor time, cost, quality, or adoption claims carefully.</small></p>
+            </article>
+          </div>
+        </div>
+        <aside class="notes">Use metrics only when the user provides data or when values are clearly labeled as illustrative.</aside>
+      </section>
+
+      <section class="slide" data-title="Comparison">
+        <div class="slide-body">
+          <p class="kicker">Template slide: comparison</p>
+          <h2>Show the before and after</h2>
+          <div class="comparison">
+            <article class="panel">
+              <h3>Current state</h3>
+              <ul class="list">
+                <li>Replace with the audience's present friction.</li>
+                <li>Keep each point short enough to scan.</li>
+                <li>Use sober language for serious decks.</li>
+              </ul>
+            </article>
+            <article class="panel">
+              <h3>Future state</h3>
+              <ul class="list">
+                <li>Describe the improved workflow or decision.</li>
+                <li>Connect benefits to the stated purpose.</li>
+                <li>Let the layout carry the contrast.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+        <aside class="notes">Frame the contrast in one sentence before walking through the two panels.</aside>
+      </section>
+
+      <section class="slide" data-title="Process">
+        <div class="slide-body">
+          <p class="kicker">Template slide: process</p>
+          <h2>Make the system legible</h2>
+          <div class="process">
+            <article class="step" data-step="1">
+              <h3>Input</h3>
+              <p>What enters the process?</p>
+            </article>
+            <article class="step" data-step="2">
+              <h3>Transform</h3>
+              <p>What changes or gets decided?</p>
+            </article>
+            <article class="step" data-step="3">
+              <h3>Output</h3>
+              <p>What artifact, action, or insight appears?</p>
+            </article>
+            <article class="step" data-step="4">
+              <h3>Impact</h3>
+              <p>Why does that output matter?</p>
+            </article>
+          </div>
+        </div>
+        <aside class="notes">Use this layout for product walkthroughs, teaching sequences, operating models, and implementation plans.</aside>
+      </section>
+
+      <section class="slide" data-title="Evidence">
+        <div class="slide-body">
+          <p class="kicker">Template slide: evidence</p>
+          <div class="media-split">
+            <div class="media-stack">
+              <h2>Use media as proof, not decoration</h2>
+              <p class="lead">Screenshots, diagrams, and charts should answer one question and keep the story moving.</p>
+              <div class="chart">
+                <div class="bar"><span>Signal A</span><span style="--value: 82%"></span><strong>82</strong></div>
+                <div class="bar"><span>Signal B</span><span style="--value: 64%"></span><strong>64</strong></div>
+                <div class="bar"><span>Signal C</span><span style="--value: 46%"></span><strong>46</strong></div>
+              </div>
+            </div>
+            <figure class="media-frame">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDc2MCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeDI9IjEiIHkxPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZjdmYmZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZGNlY2ZmIi8+PC9saW5lYXJHcmFkaWVudD48bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwIiB4Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMDA2NmNjIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMjdkMGExIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNzYwIiByeD0iNDQiIGZpbGw9InVybCgjZykiLz48cmVjdCB4PSI4NCIgeT0iODIiIHdpZHRoPSIxMDMyIiBoZWlnaHQ9IjU5NiIgcng9IjMyIiBmaWxsPSIjZmZmIiBzdHJva2U9IiNkNmRmZWMiIHN0cm9rZS13aWR0aD0iNCIvPjxyZWN0IHg9IjEyNiIgeT0iMTMwIiB3aWR0aD0iOTQ4IiBoZWlnaHQ9IjcyIiByeD0iMjAiIGZpbGw9IiMxMTE4MjciLz48Y2lyY2xlIGN4PSIxNzAiIGN5PSIxNjYiIHI9IjEyIiBmaWxsPSIjZmY1ZjU3Ii8+PGNpcmNsZSBjeD0iMjA4IiBjeT0iMTY2IiByPSIxMiIgZmlsbD0iI2ZmYmQyZSIvPjxjaXJjbGUgY3g9IjI0NiIgY3k9IjE2NiIgcj0iMTIiIGZpbGw9IiMyOGM4NDAiLz48cmVjdCB4PSIxNTIiIHk9IjI1NCIgd2lkdGg9IjM0NCIgaGVpZ2h0PSIyMzYiIHJ4PSIyOCIgZmlsbD0iI2VlZjVmZiIvPjxyZWN0IHg9IjU0OCIgeT0iMjU0IiB3aWR0aD0iNTAwIiBoZWlnaHQ9IjU0IiByeD0iMTgiIGZpbGw9IiNkYmVhZmUiLz48cmVjdCB4PSI1NDgiIHk9IjM0MCIgd2lkdGg9IjQyMCIgaGVpZ2h0PSIzMiIgcng9IjE2IiBmaWxsPSIjYjhkN2ZmIi8+PHJlY3QgeD0iNTQ4IiB5PSI0MDAiIHdpZHRoPSI0NzAiIGhlaWdodD0iMzIiIHJ4PSIxNiIgZmlsbD0iI2UyZThmMCIvPjxyZWN0IHg9IjU0OCIgeT0iNDYwIiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjMyIiByeD0iMTYiIGZpbGw9IiNlMmU4ZjAiLz48cGF0aCBkPSJNMTkyIDQyMmM3Mi05OCAxMzYtMTI4IDIxNi02MiAyNCAyMCA0MiAyNCA2MiAxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2EpIiBzdHJva2Utd2lkdGg9IjIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cmVjdCB4PSIxNTIiIHk9IjUzOCIgd2lkdGg9Ijg5NiIgaGVpZ2h0PSI2NCIgcng9IjIyIiBmaWxsPSJ1cmwoI2EpIiBvcGFjaXR5PSIuOTIiLz48L3N2Zz4=" alt="Illustrative product screenshot placeholder">
+              <figcaption>Inline image placeholder</figcaption>
+            </figure>
+          </div>
+        </div>
+        <aside class="notes">Explain the implication of the visual proof. Do not invent exact values unless provided by the user.</aside>
+      </section>
+
+      <section class="slide" data-title="Close">
+        <div class="slide-body">
+          <p class="kicker">Template slide: close</p>
+          <p class="quote">End with one decision, one memory, or one next move.</p>
+          <div class="callout">
+            <h3>Recommended close</h3>
+            <p>Replace this with the action, takeaway, or commitment the audience should leave with.</p>
+          </div>
+        </div>
+        <aside class="notes">Close with a sentence the audience can repeat. Avoid adding new evidence on the final slide.</aside>
+      </section>
+    </div>
+
+    <nav class="controls" aria-label="Presentation controls">
+      <div class="button-row">
+        <button type="button" id="prev" aria-label="Previous slide">&lt;</button>
+        <button type="button" id="next" aria-label="Next slide">&gt;</button>
+        <button type="button" id="modeToggle" class="mode-button" aria-label="Toggle presentation or recording mode">Mode: Talk</button>
+        <button type="button" id="templateToggle" class="template-button" aria-label="Switch template style">Template: Apple</button>
+        <button type="button" id="editToggle" class="edit-button" aria-label="Toggle edit mode">Edit</button>
+        <button type="button" id="fontIncrease" aria-label="Increase selected text size" disabled>A+</button>
+        <button type="button" id="fontDecrease" aria-label="Decrease selected text size" disabled>A-</button>
+        <button type="button" id="resetEdit" aria-label="Reset selected text edits" disabled>Reset</button>
+        <button type="button" id="colorButton" aria-label="Change accent color">Color</button>
+        <button type="button" id="phoneToggle" aria-label="Show phone presenter QR code">Phone</button>
+        <button type="button" id="notesToggle" aria-label="Toggle speaker notes">Notes</button>
+        <button type="button" id="fullscreen" aria-label="Toggle fullscreen">Full</button>
+      </div>
+      <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+      <div class="counter" id="counter">1 / 6</div>
+    </nav>
+
+    <aside class="notes-panel" id="notesPanel" aria-label="Speaker notes"></aside>
+    <aside class="phone-panel" id="phonePanel" aria-label="Phone presenter setup">
+      <header>
+        <h2>Phone presenter</h2>
+        <button type="button" class="close-panel" id="phoneClose" aria-label="Close phone presenter panel">x</button>
+      </header>
+      <img id="phoneQr" alt="Phone presenter QR code">
+      <p id="phoneStatus">Start the local presenter server, then scan this QR code from your phone.</p>
+      <p><a href="#" id="phoneUrl" target="_blank" rel="noreferrer">Waiting for sync server</a></p>
+    </aside>
+    <script id="resolvedTheme" type="application/json">
+      {
+        "styleId": "apple",
+        "displayName": "Apple",
+        "family": "product-launch",
+        "runtimeTemplateFallback": "apple",
+        "tokens": {}
+      }
+    </script>
+    <div class="edit-hint" id="editHint">Click text to edit. Drag selected text to move it.</div>
+    <input class="color-input" id="accentColorPicker" type="color" value="#0066cc" aria-label="Accent color">
+  </main>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progressBar = document.getElementById('progressBar');
+      const counter = document.getElementById('counter');
+      const notesPanel = document.getElementById('notesPanel');
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      const modeToggle = document.getElementById('modeToggle');
+      const templateToggle = document.getElementById('templateToggle');
+      const editToggle = document.getElementById('editToggle');
+      const fontIncrease = document.getElementById('fontIncrease');
+      const fontDecrease = document.getElementById('fontDecrease');
+      const resetEdit = document.getElementById('resetEdit');
+      const colorButton = document.getElementById('colorButton');
+      const accentColorPicker = document.getElementById('accentColorPicker');
+      const editHint = document.getElementById('editHint');
+      const phoneToggle = document.getElementById('phoneToggle');
+      const phonePanel = document.getElementById('phonePanel');
+      const phoneClose = document.getElementById('phoneClose');
+      const phoneQr = document.getElementById('phoneQr');
+      const phoneStatus = document.getElementById('phoneStatus');
+      const phoneUrl = document.getElementById('phoneUrl');
+      const notesToggle = document.getElementById('notesToggle');
+      const fullscreen = document.getElementById('fullscreen');
+
+      const templates = [
+        { id: 'apple', label: 'Apple', accent: '#0066cc', family: 'product-launch', source: 'apple' },
+        { id: 'airbnb', label: 'Airbnb', accent: '#ff385c', family: 'warm-editorial', source: 'airbnb' },
+        { id: 'executive', label: 'Executive', accent: '#174ea6', family: 'executive-report', source: 'executive-corporate' },
+        { id: 'consulting', label: 'Consulting', accent: '#7a4d00', family: 'consulting-report', source: 'consulting-report' }
+      ];
+
+      let index = 0;
+      let fragmentIndex = 0;
+      let templateIndex = 0;
+      let mode = 'presentation';
+      let presenterWindow = null;
+      let isEditing = false;
+      let selectedEditable = null;
+      let dragState = null;
+      const startedAt = Date.now();
+      const syncSession = new URLSearchParams(window.location.search).get('session');
+      const syncEnabled = Boolean(syncSession && /^https?:$/.test(window.location.protocol));
+      let syncConfigPromise = null;
+      let commandEvents = null;
+      const handledCommandIds = new Set();
+      const resolvedThemeNode = document.getElementById('resolvedTheme');
+
+      function parseResolvedTheme() {
+        if (!resolvedThemeNode) return null;
+        try {
+          return JSON.parse(resolvedThemeNode.textContent);
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function clearResolvedThemeTokens() {
+        [
+          '--bg',
+          '--ink',
+          '--muted',
+          '--panel',
+          '--panel-soft',
+          '--line',
+          '--accent',
+          '--accent-2',
+          '--shadow',
+          '--radius',
+          '--content-gap',
+          '--h1-size',
+          '--h2-size',
+          '--lead-size'
+        ].forEach(name => document.documentElement.style.removeProperty(name));
+      }
+
+      function applyResolvedTokens(tokens) {
+        if (!tokens) return;
+        const mapping = {
+          bg: '--bg',
+          ink: '--ink',
+          muted: '--muted',
+          panel: '--panel',
+          panelSoft: '--panel-soft',
+          line: '--line',
+          accent: '--accent',
+          accent2: '--accent-2',
+          shadow: '--shadow',
+          radius: '--radius',
+          contentGap: '--content-gap',
+          h1Size: '--h1-size',
+          h2Size: '--h2-size',
+          leadSize: '--lead-size'
+        };
+        Object.entries(mapping).forEach(([key, cssVar]) => {
+          if (tokens[key]) document.documentElement.style.setProperty(cssVar, tokens[key]);
+        });
+      }
+
+      function templateIndexForStyle(styleTheme) {
+        if (!styleTheme) return 0;
+        const templateId = styleTheme.runtimeTemplateFallback || styleTheme.templateFallback;
+        const templateMatch = templates.findIndex(template => template.id === templateId);
+        if (templateMatch >= 0) return templateMatch;
+        const familyMatch = templates.findIndex(template => template.family === styleTheme.family);
+        return familyMatch >= 0 ? familyMatch : 0;
+      }
+
+      function motionEnabled() {
+        return document.body.dataset.motionMode === 'animated';
+      }
+
+      function fragmentsFor(slideIndex) {
+        if (!motionEnabled()) return [];
+        return Array.from(slides[slideIndex].querySelectorAll('.fragment'));
+      }
+
+      function applyMotionOrders() {
+        if (!motionEnabled()) return;
+        slides.forEach(slide => {
+          Array.from(slide.querySelectorAll('[data-motion]')).forEach((node, motionIndex) => {
+            if (!node.style.getPropertyValue('--motion-order')) {
+              node.style.setProperty('--motion-order', String(motionIndex));
+            }
+          });
+          Array.from(slide.querySelectorAll('.bar')).forEach((bar, barIndex) => {
+            bar.style.setProperty('--motion-order', String(barIndex));
+          });
+        });
+      }
+
+      function resetMetricNumbers(scope) {
+        scope.querySelectorAll('.metric-number[data-count-to]').forEach(node => {
+          delete node.dataset.counted;
+          const suffix = node.dataset.suffix || '';
+          node.textContent = '0' + suffix;
+        });
+      }
+
+      function animateMetricNumber(node) {
+        if (node.dataset.counted) return;
+        node.dataset.counted = 'true';
+        const target = Number(node.dataset.countTo || 0);
+        const suffix = node.dataset.suffix || '';
+        const duration = 760;
+        const started = performance.now();
+        const easeOut = progress => 1 - Math.pow(1 - progress, 3);
+
+        function tick(now) {
+          const progress = Math.min(1, (now - started) / duration);
+          node.textContent = Math.round(target * easeOut(progress)) + suffix;
+          if (progress < 1 && node.isConnected) {
+            requestAnimationFrame(tick);
+          }
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+      function updateMotionState() {
+        if (!motionEnabled()) return;
+        slides.forEach((slide, slideIndex) => {
+          const active = slideIndex === index;
+          slide.querySelectorAll('[data-motion]').forEach(node => {
+            const visible = active && (!node.classList.contains('fragment') || node.classList.contains('visible'));
+            node.classList.toggle('motion-in', visible);
+            if (!visible) resetMetricNumbers(node);
+          });
+        });
+
+        slides[index].querySelectorAll('.metric-number[data-count-to]').forEach(node => {
+          const motionParent = node.closest('[data-motion]');
+          if (!motionParent || motionParent.classList.contains('motion-in') || motionParent.classList.contains('visible')) {
+            animateMetricNumber(node);
+          }
+        });
+      }
+
+      function currentTitle() {
+        return slides[index].dataset.title || 'Current slide';
+      }
+
+      function updateNotes() {
+        const notes = slides[index].querySelector('.notes');
+        notesPanel.innerHTML = '<strong>' + currentTitle() + '</strong><div>' + (notes ? notes.innerHTML : 'No notes for this slide.') + '</div>';
+      }
+
+      function elapsedText() {
+        const elapsed = Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
+        const minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        const seconds = String(elapsed % 60).padStart(2, '0');
+        return minutes + ':' + seconds;
+      }
+
+      function buildSyncState() {
+        const notes = slides[index].querySelector('.notes');
+        const nextSlide = slides[index + 1];
+        return {
+          slideIndex: index,
+          slideCount: slides.length,
+          fragmentIndex,
+          fragmentCount: fragmentsFor(index).length,
+          title: currentTitle(),
+          notesHtml: notes ? notes.innerHTML : 'No notes for this slide.',
+          nextTitle: nextSlide ? (nextSlide.dataset.title || 'Next slide') : 'Final slide',
+          startedAt,
+          updatedAt: Date.now()
+        };
+      }
+
+      function syncConfig() {
+        if (!syncEnabled) return Promise.resolve(null);
+        if (!syncConfigPromise) {
+          syncConfigPromise = fetch('/sync/config?session=' + encodeURIComponent(syncSession))
+            .then(response => response.ok ? response.json() : null)
+            .catch(() => null);
+        }
+        return syncConfigPromise;
+      }
+
+      function publishSyncState() {
+        if (!syncEnabled) return;
+        fetch('/sync/state?session=' + encodeURIComponent(syncSession), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(buildSyncState())
+        }).catch(() => {});
+      }
+
+      function rememberCommand(commandId) {
+        handledCommandIds.add(commandId);
+        if (handledCommandIds.size > 80) {
+          handledCommandIds.delete(handledCommandIds.values().next().value);
+        }
+      }
+
+      function showPhonePanel() {
+        phonePanel.classList.add('open');
+        if (!syncEnabled) {
+          phoneQr.hidden = true;
+          phoneUrl.removeAttribute('href');
+          phoneUrl.textContent = 'Codex LAN publish required';
+          phoneStatus.textContent = 'This standalone HTML still works offline on this computer. For phone notes or QR sync, let Codex open the LAN deck URL through the local presenter server.';
+          return;
+        }
+
+        phoneQr.hidden = false;
+        phoneQr.removeAttribute('src');
+        phoneUrl.removeAttribute('href');
+        phoneUrl.textContent = 'Getting same-Wi-Fi QR code...';
+        phoneStatus.textContent = 'Scan from a phone on the same Wi-Fi.';
+        syncConfig().then(config => {
+          if (!config || !config.presenterUrl || !config.qrUrl) {
+            phoneQr.hidden = true;
+            phoneUrl.removeAttribute('href');
+            phoneUrl.textContent = 'Unable to generate phone link';
+            phoneStatus.textContent = 'The deck could not get the computer LAN address. Make sure the local sync server is running and the phone is on the same Wi-Fi.';
+            return;
+          }
+
+          phoneUrl.href = config.presenterUrl;
+          phoneUrl.textContent = config.presenterUrl;
+          phoneQr.src = config.qrUrl;
+        });
+      }
+
+      function togglePhonePanel() {
+        if (phonePanel.classList.contains('open')) {
+          phonePanel.classList.remove('open');
+        } else {
+          showPhonePanel();
+        }
+      }
+
+      function buildPresenterHtml() {
+        return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Presenter View</title><style>body{margin:0;background:#0f1724;color:#eef4ff;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{min-height:100vh;padding:28px;display:grid;gap:20px;align-content:start}.top{display:flex;justify-content:space-between;gap:12px;align-items:center}.pill{border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 12px;color:#b9c5d6;font-weight:800}.muted{color:#aab6c8}.notes,.next,.reminder{border:1px solid rgba(255,255,255,.14);border-radius:18px;background:rgba(255,255,255,.06);padding:20px}.label{color:#28d3a2;font-weight:850}h1{font-size:clamp(2.2rem,8vw,4rem);line-height:1;margin:0}.notes{font-size:clamp(1.25rem,4.5vw,2rem);line-height:1.45}.next-title{font-size:clamp(1.4rem,5vw,2.4rem);font-weight:850}</style></head><body><main id="presenterRoot"><div class="top"><span class="pill">Recording presenter</span><span class="pill" id="presenterTimer">00:00</span></div><div><p class="muted" id="presenterCounter">1 / 1</p><h1 id="presenterTitle">Slide</h1></div><section class="notes"><p class="label">Current notes</p><div id="presenterNotes"></div></section><section class="next"><p class="label">Next slide</p><div class="next-title" id="presenterNext">Next</div></section><section class="reminder muted">Capture only the main PPT window when recording. This presenter window is for the speaker.</section></main></body></html>';
+      }
+
+      function openPresenter() {
+        if (!presenterWindow || presenterWindow.closed) {
+          presenterWindow = window.open('', 'animated-html-deck-presenter', 'width=540,height=740');
+        }
+        if (!presenterWindow) return false;
+        const presenterDoc = presenterWindow.document;
+        if (!presenterDoc.getElementById('presenterRoot')) {
+          presenterDoc.open();
+          presenterDoc.write(buildPresenterHtml());
+          presenterDoc.close();
+        }
+        presenterWindow.focus();
+        syncPresenter();
+        return true;
+      }
+
+      function syncPresenter() {
+        if (!presenterWindow || presenterWindow.closed) return;
+        const presenterDoc = presenterWindow.document;
+        if (!presenterDoc || !presenterDoc.getElementById('presenterRoot')) return;
+        const state = buildSyncState();
+        const fragmentLabel = state.fragmentCount ? ' - animation ' + state.fragmentIndex + '/' + state.fragmentCount : '';
+        presenterDoc.getElementById('presenterTimer').textContent = elapsedText();
+        presenterDoc.getElementById('presenterCounter').textContent = (state.slideIndex + 1) + ' / ' + state.slideCount + fragmentLabel;
+        presenterDoc.getElementById('presenterTitle').textContent = state.title;
+        presenterDoc.getElementById('presenterNotes').innerHTML = state.notesHtml;
+        presenterDoc.getElementById('presenterNext').textContent = state.nextTitle;
+      }
+
+      function setMode(nextMode) {
+        mode = nextMode;
+        const recording = mode === 'recording';
+        document.body.classList.toggle('recording', recording);
+        modeToggle.textContent = recording ? 'Mode: Record' : 'Mode: Talk';
+        modeToggle.classList.toggle('recording', recording);
+        if (recording) {
+          notesPanel.classList.remove('open');
+          openPresenter();
+        }
+      }
+
+      function cycleMode() {
+        setMode(mode === 'presentation' ? 'recording' : 'presentation');
+      }
+
+      function deriveAccentPair(hex) {
+        const clean = hex.replace('#', '');
+        const value = parseInt(clean.length === 3 ? clean.split('').map(char => char + char).join('') : clean, 16);
+        const r = (value >> 16) & 255;
+        const g = (value >> 8) & 255;
+        const b = value & 255;
+        const mix = (channel, target, amount) => Math.round(channel + (target - channel) * amount);
+        const light = '#' + [mix(r, 255, .42), mix(g, 255, .42), mix(b, 255, .42)].map(v => v.toString(16).padStart(2, '0')).join('');
+        return { accent: hex, accent2: light };
+      }
+
+      function setAccentColor(hex) {
+        const pair = deriveAccentPair(hex);
+        document.body.classList.add('has-custom-accent');
+        document.documentElement.style.setProperty('--user-accent', pair.accent);
+        document.documentElement.style.setProperty('--user-accent-2', pair.accent2);
+        accentColorPicker.value = pair.accent;
+      }
+
+      function applyTemplate(nextIndex) {
+        templateIndex = (nextIndex + templates.length) % templates.length;
+        const template = templates[templateIndex];
+        clearResolvedThemeTokens();
+        document.body.dataset.template = template.id;
+        document.body.dataset.styleFamily = template.family;
+        document.body.dataset.styleSource = template.source || template.id;
+        document.body.classList.remove('has-custom-accent');
+        document.documentElement.style.removeProperty('--user-accent');
+        document.documentElement.style.removeProperty('--user-accent-2');
+        accentColorPicker.value = template.accent;
+        templateToggle.textContent = 'Template: ' + template.label;
+      }
+
+      function cycleTemplate() {
+        applyTemplate(templateIndex + 1);
+      }
+
+      function applyResolvedTheme(theme) {
+        if (!theme) return;
+        applyTemplate(templateIndexForStyle(theme));
+        if (theme.family) document.body.dataset.styleFamily = theme.family;
+        if (theme.styleId || theme.id) document.body.dataset.styleSource = theme.styleId || theme.id;
+        applyResolvedTokens(theme.tokens || {});
+        if ((theme.tokens && theme.tokens.accent) || theme.accent) {
+          accentColorPicker.value = (theme.tokens && theme.tokens.accent) || theme.accent;
+        }
+      }
+
+      function editableSelector() {
+        return [
+          '.slide h1',
+          '.slide h2',
+          '.slide h3',
+          '.slide p:not(.metric):not(.notes)',
+          '.slide li',
+          '.slide .prompt',
+          '.slide .badge',
+          '.slide figcaption',
+          '.slide .image-caption',
+          '.slide .logo-lockup span',
+        ].join(',');
+      }
+
+      function collectEditableNodes() {
+        const nodes = Array.from(document.querySelectorAll(editableSelector()))
+          .filter(node => !node.closest('.notes') && !node.closest('.controls') && !node.closest('.notes-panel') && !node.closest('.phone-panel'));
+        nodes.forEach(node => {
+          node.classList.add('editable-node');
+          node.contentEditable = isEditing ? 'true' : 'false';
+          if (!node.dataset.editBound) {
+            node.dataset.editBound = 'true';
+            node.addEventListener('pointerdown', startEditablePointer);
+            node.addEventListener('focus', () => {
+              if (isEditing) selectEditable(node);
+            });
+          }
+        });
+        return nodes;
+      }
+
+      function updateEditHint(text) {
+        if (!isEditing) {
+          editHint.textContent = '';
+          return;
+        }
+        editHint.textContent = text || (selectedEditable ? 'Selected. Drag this text to move it; type to edit.' : 'Click text to edit. Drag selected text to move it.');
+      }
+
+      function updateEditControls() {
+        const hasSelection = Boolean(selectedEditable);
+        fontIncrease.disabled = !isEditing || !hasSelection;
+        fontDecrease.disabled = !isEditing || !hasSelection;
+        resetEdit.disabled = !isEditing || !hasSelection;
+        editToggle.classList.toggle('active', isEditing);
+        editToggle.setAttribute('aria-pressed', String(isEditing));
+        updateEditHint();
+      }
+
+      function selectEditable(node) {
+        if (selectedEditable && selectedEditable !== node) {
+          selectedEditable.classList.remove('is-selected');
+        }
+        selectedEditable = node;
+        if (selectedEditable) {
+          selectedEditable.classList.add('is-selected');
+          selectedEditable.focus({ preventScroll: true });
+        }
+        updateEditControls();
+      }
+
+      function startEditablePointer(event) {
+        if (!isEditing || event.button !== 0) return;
+        const node = event.currentTarget;
+        const alreadySelected = selectedEditable === node;
+        selectEditable(node);
+        if (!alreadySelected || event.detail > 1) return;
+        const rect = node.getBoundingClientRect();
+        dragState = {
+          node,
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          baseLeft: Number(node.dataset.editLeft || 0),
+          baseTop: Number(node.dataset.editTop || 0),
+          moved: false,
+          width: rect.width
+        };
+        node.setPointerCapture && node.setPointerCapture(event.pointerId);
+      }
+
+      function setEditing(enabled) {
+        isEditing = enabled;
+        document.body.classList.toggle('editing', isEditing);
+        collectEditableNodes().forEach(node => {
+          node.contentEditable = isEditing ? 'true' : 'false';
+          if (!isEditing) node.classList.remove('is-dragging');
+        });
+        if (!isEditing && selectedEditable) {
+          selectedEditable.classList.remove('is-selected');
+          selectedEditable = null;
+        }
+        if (!isEditing) dragState = null;
+        updateEditControls();
+      }
+
+      function changeSelectedFontSize(delta) {
+        if (!isEditing || !selectedEditable) return;
+        const computed = window.getComputedStyle(selectedEditable);
+        const current = parseFloat(computed.fontSize) || 18;
+        const nextSize = Math.max(10, Math.min(140, current + delta));
+        selectedEditable.style.fontSize = nextSize.toFixed(1) + 'px';
+      }
+
+      function resetSelectedEdit() {
+        if (!isEditing || !selectedEditable) return;
+        selectedEditable.style.removeProperty('font-size');
+        selectedEditable.style.removeProperty('position');
+        selectedEditable.style.removeProperty('left');
+        selectedEditable.style.removeProperty('top');
+        selectedEditable.style.removeProperty('transform');
+        delete selectedEditable.dataset.editLeft;
+        delete selectedEditable.dataset.editTop;
+      }
+
+      function render(previousIndex) {
+        slides.forEach((slide, slideIndex) => {
+          slide.classList.toggle('active', slideIndex === index);
+          slide.classList.toggle('leaving', slideIndex === previousIndex);
+          if (slideIndex !== index) {
+            slide.querySelectorAll('.fragment').forEach(fragment => fragment.classList.remove('visible'));
+          }
+        });
+
+        fragmentsFor(index).forEach((fragment, i) => {
+          fragment.classList.toggle('visible', i < fragmentIndex);
+        });
+        updateMotionState();
+
+        progressBar.style.width = ((index + 1) / slides.length * 100) + '%';
+        counter.textContent = (index + 1) + ' / ' + slides.length;
+        prev.disabled = index === 0 && fragmentIndex === 0;
+        next.disabled = index === slides.length - 1 && fragmentIndex >= fragmentsFor(index).length;
+        updateNotes();
+        syncPresenter();
+        publishSyncState();
+      }
+
+      function goTo(nextIndex) {
+        const bounded = Math.max(0, Math.min(slides.length - 1, nextIndex));
+        if (bounded === index) return;
+        const previousIndex = index;
+        index = bounded;
+        fragmentIndex = 0;
+        render(previousIndex);
+      }
+
+      function forward() {
+        const fragments = fragmentsFor(index);
+        if (fragmentIndex < fragments.length) {
+          fragmentIndex += 1;
+          render();
+          return;
+        }
+        goTo(index + 1);
+      }
+
+      function backward() {
+        if (fragmentIndex > 0) {
+          fragmentIndex -= 1;
+          render();
+          return;
+        }
+        goTo(index - 1);
+      }
+
+      function handleRemoteCommand(command) {
+        if (!command || typeof command.commandId !== 'string' || handledCommandIds.has(command.commandId)) return;
+        rememberCommand(command.commandId);
+        if (command.action === 'next') forward();
+        if (command.action === 'prev') backward();
+      }
+
+      function startCommandSync() {
+        if (!syncEnabled || !window.EventSource || commandEvents) return;
+        commandEvents = new EventSource('/sync/commands?session=' + encodeURIComponent(syncSession));
+        commandEvents.addEventListener('command', event => {
+          try {
+            handleRemoteCommand(JSON.parse(event.data));
+          } catch (error) {
+            // Ignore malformed remote commands and keep the deck live.
+          }
+        });
+      }
+
+      document.addEventListener('keydown', (event) => {
+        const activeEditable = event.target && event.target.closest && event.target.closest('.editable-node');
+        if (event.key === 'Escape' && isEditing) {
+          event.preventDefault();
+          setEditing(false);
+          return;
+        }
+        if (isEditing && activeEditable && !event.metaKey && !event.ctrlKey && !event.altKey) {
+          return;
+        }
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === ' ') {
+          event.preventDefault();
+          forward();
+        }
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          backward();
+        }
+        if (event.key === 'Home') {
+          event.preventDefault();
+          goTo(0);
+        }
+        if (event.key === 'End') {
+          event.preventDefault();
+          goTo(slides.length - 1);
+        }
+        if (event.key.toLowerCase() === 'm') {
+          event.preventDefault();
+          cycleMode();
+        }
+        if (event.key.toLowerCase() === 'p') {
+          event.preventDefault();
+          openPresenter();
+        }
+        if (event.key.toLowerCase() === 's') {
+          event.preventDefault();
+          cycleTemplate();
+        }
+        if (event.key.toLowerCase() === 'n' && mode === 'presentation') {
+          event.preventDefault();
+          notesPanel.classList.toggle('open');
+        }
+      });
+
+      document.addEventListener('pointermove', (event) => {
+        if (!dragState || !isEditing) return;
+        const dx = event.clientX - dragState.startX;
+        const dy = event.clientY - dragState.startY;
+        if (!dragState.moved && Math.hypot(dx, dy) < 5) return;
+        dragState.moved = true;
+        const node = dragState.node;
+        node.classList.add('is-dragging');
+        node.style.position = 'relative';
+        node.style.left = (dragState.baseLeft + dx).toFixed(1) + 'px';
+        node.style.top = (dragState.baseTop + dy).toFixed(1) + 'px';
+        node.dataset.editLeft = String(dragState.baseLeft + dx);
+        node.dataset.editTop = String(dragState.baseTop + dy);
+        updateEditHint('Dragging selected text. Use Reset to restore its position.');
+      });
+
+      document.addEventListener('pointerup', () => {
+        if (!dragState) return;
+        dragState.node.classList.remove('is-dragging');
+        dragState = null;
+        updateEditHint();
+      });
+
+      document.addEventListener('pointerdown', (event) => {
+        if (!isEditing) return;
+        if (event.target.closest('.editable-node') || event.target.closest('.controls')) return;
+        if (selectedEditable) selectedEditable.classList.remove('is-selected');
+        selectedEditable = null;
+        updateEditControls();
+      });
+
+      prev.addEventListener('click', backward);
+      next.addEventListener('click', forward);
+      modeToggle.addEventListener('click', cycleMode);
+      templateToggle.addEventListener('click', cycleTemplate);
+      editToggle.addEventListener('click', () => setEditing(!isEditing));
+      fontIncrease.addEventListener('click', () => changeSelectedFontSize(4));
+      fontDecrease.addEventListener('click', () => changeSelectedFontSize(-4));
+      resetEdit.addEventListener('click', resetSelectedEdit);
+      colorButton.addEventListener('click', () => accentColorPicker.click());
+      accentColorPicker.addEventListener('input', event => setAccentColor(event.target.value));
+      phoneToggle.addEventListener('click', togglePhonePanel);
+      phoneClose.addEventListener('click', () => phonePanel.classList.remove('open'));
+      notesToggle.addEventListener('click', () => {
+        if (mode !== 'presentation') return;
+        notesPanel.classList.toggle('open');
+      });
+      fullscreen.addEventListener('click', () => {
+        phonePanel.classList.remove('open');
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen && document.exitFullscreen();
+        }
+      });
+
+      setInterval(syncPresenter, 1000);
+      collectEditableNodes();
+      applyMotionOrders();
+      startCommandSync();
+      const initialTheme = parseResolvedTheme();
+      if (initialTheme) {
+        applyResolvedTheme(initialTheme);
+      } else {
+        applyTemplate(0);
+      }
+      render();
+    }());
+  </script>
+</body>
+</html>

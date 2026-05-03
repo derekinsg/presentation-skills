@@ -1,0 +1,4 @@
+interface:
+  display_name: "Style Polish"
+  short_description: "Resolve website-inspired styles into reusable design themes"
+  default_prompt: "Use $style-polish to turn my design direction into one resolved style package with a source style, layout family, token set, suitability guidance, and translation notes for downstream HTML or PPT generation."

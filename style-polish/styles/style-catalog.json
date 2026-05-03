@@ -1,0 +1,3425 @@
+{
+  "generatedAt": "2026-05-03T13:54:21.803Z",
+  "source": "vendor/awesome-design-md/design-md",
+  "count": 70,
+  "families": [
+    {
+      "id": "product-launch",
+      "runtimeTemplateFallback": "apple",
+      "recommendedUses": [
+        "product-launch",
+        "tool-showcase",
+        "capability-intro",
+        "founder-demo"
+      ],
+      "seriousnessRange": [
+        4,
+        8
+      ]
+    },
+    {
+      "id": "warm-editorial",
+      "runtimeTemplateFallback": "airbnb",
+      "recommendedUses": [
+        "teaching",
+        "onboarding",
+        "community-story",
+        "consumer-explainer"
+      ],
+      "seriousnessRange": [
+        2,
+        6
+      ]
+    },
+    {
+      "id": "executive-report",
+      "runtimeTemplateFallback": "executive",
+      "recommendedUses": [
+        "board-update",
+        "leadership-brief",
+        "investor-summary",
+        "enterprise-pitch"
+      ],
+      "seriousnessRange": [
+        7,
+        10
+      ]
+    },
+    {
+      "id": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "recommendedUses": [
+        "strategy-report",
+        "market-analysis",
+        "transformation-plan",
+        "decision-memo"
+      ],
+      "seriousnessRange": [
+        7,
+        10
+      ]
+    },
+    {
+      "id": "dark-tooling",
+      "runtimeTemplateFallback": "executive",
+      "recommendedUses": [
+        "developer-tool",
+        "product-demo",
+        "technical-explainer",
+        "launch-deck"
+      ],
+      "seriousnessRange": [
+        5,
+        8
+      ]
+    },
+    {
+      "id": "minimal-monochrome",
+      "runtimeTemplateFallback": "apple",
+      "recommendedUses": [
+        "founder-story",
+        "brand-intro",
+        "minimal-report",
+        "portfolio-case"
+      ],
+      "seriousnessRange": [
+        5,
+        9
+      ]
+    },
+    {
+      "id": "luxury-brand",
+      "runtimeTemplateFallback": "apple",
+      "recommendedUses": [
+        "premium-brand",
+        "vision-deck",
+        "campaign-idea",
+        "high-end-showcase"
+      ],
+      "seriousnessRange": [
+        4,
+        8
+      ]
+    },
+    {
+      "id": "playful-consumer",
+      "runtimeTemplateFallback": "airbnb",
+      "recommendedUses": [
+        "consumer-feature",
+        "brand-story",
+        "lightweight-teaching",
+        "campaign-recap"
+      ],
+      "seriousnessRange": [
+        2,
+        6
+      ]
+    },
+    {
+      "id": "cinematic-dark",
+      "runtimeTemplateFallback": "executive",
+      "recommendedUses": [
+        "media-showcase",
+        "launch-film",
+        "creative-pitch",
+        "immersive-demo"
+      ],
+      "seriousnessRange": [
+        4,
+        8
+      ]
+    }
+  ],
+  "styles": [
+    {
+      "id": "airbnb",
+      "displayName": "Airbnb",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/airbnb/DESIGN.md",
+      "layoutFamily": "warm-editorial",
+      "runtimeTemplateFallback": "airbnb",
+      "summary": "A warm, generous consumer marketplace anchored on a clean white canvas and Airbnb Rausch (#ff385c), the single brand voltage that carries every primary CTA, search-button orb, and rating dot. Type runs Airbnb Cereal VF at modest weights — display sits at 22–28px in weight 500/600 rather than the heavy 700+ that fintech and enterprise systems use; the brand trusts photography and generous whitespace over typographic muscle. Three product entries (Homes, Experiences, Services) sit in the top nav with hand-illustrated 32-icon glyphs and \"NEW\" badges, signaling a marketplace expansion rather than a feature dump. Pill-shaped search bars (`{rounded.full}`), softly rounded property cards (`{rounded.lg}` ~14px), and 32px button radii read as friendly and human — there is no hard corner anywhere except the body grid.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#222222",
+        "muted": "#6a6a6a",
+        "panel": "#ffffff",
+        "panelSoft": "#f7f7f7",
+        "line": "#dddddd",
+        "accent": "#ff385c",
+        "accent2": "#e00b41"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "teaching",
+          "onboarding",
+          "community-story",
+          "consumer-explainer"
+        ],
+        "seriousnessRange": [
+          2,
+          6
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "airtable",
+      "displayName": "Airtable",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/airtable/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "A sober, editorial workflow-software interface anchored on white canvas and dark-ink type, where brand voltage comes from full-bleed signature cards in coral, dark green, peach, and dark navy that punctuate long-scroll explainer pages. Primary actions use a near-black pill CTA; secondary actions sit in a white outlined button. Type runs Haas Grotesk in modest weights — never bold for its own sake.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#181d26",
+        "muted": "#41454d",
+        "panel": "#f8fafc",
+        "panelSoft": "#f8fafc",
+        "line": "#dddddd",
+        "accent": "#181d26",
+        "accent2": "#0d1218"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "apple",
+      "displayName": "Apple",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/apple/DESIGN.md",
+      "layoutFamily": "product-launch",
+      "runtimeTemplateFallback": "apple",
+      "summary": "A photography-first interface that turns marketing into a museum gallery. Edge-to-edge product tiles alternate light and dark canvases, framed by SF Pro Display headlines with negative letter-spacing and a single Action Blue (#0066cc) interactive color. UI chrome recedes so the product can speak — no decorative gradients, no shadows on chrome, only the one signature drop-shadow under product imagery resting on a surface.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#1d1d1f",
+        "muted": "#cccccc",
+        "panel": "#fafafc",
+        "panelSoft": "#fafafc",
+        "line": "#e0e0e0",
+        "accent": "#0066cc",
+        "accent2": "#2997ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "light",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "product-launch",
+          "tool-showcase",
+          "capability-intro",
+          "founder-demo"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "binance",
+      "displayName": "Binance",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/binance/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "A confident financial-platform interface anchored on a deep near-black canvas, where Binance's iconic yellow (#FCD535) carries every primary CTA, brand accent, and value-claim moment. Type runs Binance's custom BinanceNova / BinancePlex stack at modest weights — the system trusts size and yellow voltage over bold weight. Marketing and product surfaces default to the dark theme; transactional surfaces (buy crypto, deposit, exchange) flip to a light theme that shares the same yellow CTAs and gray-blue hairlines. Trading green (up) and red (down) accents thread through both modes for price-direction signals.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#181a20",
+        "muted": "#707a8a",
+        "panel": "#1e2329",
+        "panelSoft": "#fafafa",
+        "line": "#eaecef",
+        "accent": "#fcd535",
+        "accent2": "#f0b90b"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "bmw",
+      "displayName": "BMW",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/bmw/DESIGN.md",
+      "layoutFamily": "luxury-brand",
+      "runtimeTemplateFallback": "apple",
+      "summary": "BMW's corporate site — distinct from BMW M's motorsport-bombastic variant, this is a measured and settled corporate-automotive interface. On a light (cream-tinted white) canvas, BMW corporate blue (#1c69d4) carries every primary CTA; dark navy hero bands frame model photography. BMW Type Next Latin sets the entire hierarchy on two weights — heavy 700 display and Light 300 body. Configuration and reservation flows ride a card-based 4-up grid, where each card holds a model render, a name, and a \"Learn More\" link.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#262626",
+        "muted": "#6b6b6b",
+        "panel": "#fafafa",
+        "panelSoft": "#f7f7f7",
+        "line": "#e6e6e6",
+        "accent": "#1c69d4",
+        "accent2": "#0653b6"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "light",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "premium-brand",
+          "vision-deck",
+          "campaign-idea",
+          "high-end-showcase"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": false,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "bmw-m",
+      "displayName": "BMW M",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/bmw-m/DESIGN.md",
+      "layoutFamily": "luxury-brand",
+      "runtimeTemplateFallback": "apple",
+      "summary": "A motorsport-engineering interface anchored on a near-black canvas with white BMW Type Next Latin display headlines in confident UPPERCASE. The brand carries no decorative voltage — its energy comes from full-bleed automotive photography (cars on tracks, driver-cockpit shots, carbon-fiber detail) and the iconic M tricolor stripe (light blue → dark blue → red) used sparingly as a brand signature on logos, dividers, and motorsport chrome. Type stays light to medium weight to feel European-engineered, never American-bombastic.",
+      "tokens": {
+        "bg": "#000000",
+        "ink": "#ffffff",
+        "muted": "#7e7e7e",
+        "panel": "#1a1a1a",
+        "panelSoft": "#0d0d0d",
+        "line": "#3c3c3c",
+        "accent": "#ffffff",
+        "accent2": "#ffffff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "light",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "premium-brand",
+          "vision-deck",
+          "campaign-idea",
+          "high-end-showcase"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": false,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "bugatti",
+      "displayName": "Bugatti",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/bugatti/DESIGN.md",
+      "layoutFamily": "luxury-brand",
+      "runtimeTemplateFallback": "apple",
+      "summary": "An austere luxury-automotive interface that uses near-pure black canvas, white uppercase letterspaced display, and full-bleed automotive photography as the only voltage. The system runs three custom Bugatti typefaces — Bugatti Display, Bugatti Text Regular, and Bugatti Monospace — and combines them at modest weights with wide tracking to feel European-engineered, hyper-minimal, and quietly expensive. There is no accent color, no decorative element, no chrome — only photography, typography, and the brand wordmark.",
+      "tokens": {
+        "bg": "#000000",
+        "ink": "#ffffff",
+        "muted": "#999999",
+        "panel": "#141414",
+        "panelSoft": "#0d0d0d",
+        "line": "#262626",
+        "accent": "#ffffff",
+        "accent2": "#ffffff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "premium-brand",
+          "vision-deck",
+          "campaign-idea",
+          "high-end-showcase"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": false,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "cal",
+      "displayName": "Cal.com",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/cal/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "A clean, calendar-software-first interface anchored on white canvas with black primary CTAs and custom Cal Sans display typography. The system reads as friendly modern SaaS — generous whitespace, soft-rounded cards (~12px), product UI fragments shown directly inside cards, and a dark navy footer that visually closes long-scroll pages. Brand voltage comes from the Cal Sans display headline (a custom geometric face) and from product UI artifacts shown in-card rather than from accent colors.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#111111",
+        "muted": "#6b7280",
+        "panel": "#f5f5f5",
+        "panelSoft": "#f8f9fa",
+        "line": "#e5e7eb",
+        "accent": "#111111",
+        "accent2": "#242424"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "claude",
+      "displayName": "Claude",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/claude/DESIGN.md",
+      "layoutFamily": "warm-editorial",
+      "runtimeTemplateFallback": "airbnb",
+      "summary": "A warm-canvas editorial interface for Anthropic's Claude product. The system anchors on a tinted cream canvas with serif display headlines, warm coral CTAs, and dark navy product surfaces (code editor mockups, model showcase cards). Brand voltage comes from the cream/coral pairing — deliberately warm and humanist where most AI brands use cool blue + slate. Type voice runs a slab-serif display (\"Copernicus\" / Tiempos Headline) for h1/h2 and a humanist sans for body. The signature Anthropic black-radial-spike mark anchors the wordmark.",
+      "tokens": {
+        "bg": "#faf9f5",
+        "ink": "#141413",
+        "muted": "#6c6a64",
+        "panel": "#efe9de",
+        "panelSoft": "#f5f0e8",
+        "line": "#e6dfd8",
+        "accent": "#cc785c",
+        "accent2": "#a9583e"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "teaching",
+          "onboarding",
+          "community-story",
+          "consumer-explainer"
+        ],
+        "seriousnessRange": [
+          2,
+          6
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "clay",
+      "displayName": "Clay",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/clay/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "A vibrant claymation-meets-data interface for Clay.com (GTM data-orchestration platform). Anchors on white canvas with dark-navy primary CTAs, custom rounded display type, and saturated single-color feature cards — hot pink, deep teal, lavender, peach, ochre — that punctuate long-scroll explainer pages. Brand voltage comes from 3D-rendered claymation illustrations (mountains, characters, mascots) used as full-bleed hero artifacts and the bright multi-color card surfaces showing product UI fragments.",
+      "tokens": {
+        "bg": "#fffaf0",
+        "ink": "#0a0a0a",
+        "muted": "#6a6a6a",
+        "panel": "#f5f0e0",
+        "panelSoft": "#faf5e8",
+        "line": "#e5e5e5",
+        "accent": "#0a0a0a",
+        "accent2": "#1f1f1f"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "clickhouse",
+      "displayName": "ClickHouse",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/clickhouse/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "A high-performance database interface anchored on near-pure black canvas with electric yellow as the brand voltage. White typography in confident sans, yellow CTAs, and yellow-text stat numbers carry the brand voice across every page. Code blocks and product UI fragments embed directly in dark cards. The yellow + black pairing (and yellow used scarcely as accent) is the system's signature — brand identity without atmospheric decoration.",
+      "tokens": {
+        "bg": "#0a0a0a",
+        "ink": "#ffffff",
+        "muted": "#888888",
+        "panel": "#1a1a1a",
+        "panelSoft": "#121212",
+        "line": "#2a2a2a",
+        "accent": "#faff69",
+        "accent2": "#e6eb52"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "cohere",
+      "displayName": "Cohere",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/cohere/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Cohere's 2026 web system is a controlled enterprise AI interface built from stark white editorial space, deep green-black product bands, soft mineral surfaces, rounded media cards, and a distinctive type split between monospaced-feeling display headlines and precise Unica77 UI text.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#212121",
+        "muted": "#93939f",
+        "panel": "#ffffff",
+        "panelSoft": "#f5f5f5",
+        "line": "#d9d9dd",
+        "accent": "#17171c",
+        "accent2": "#616165"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "coinbase",
+      "displayName": "Coinbase",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/coinbase/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "An institutional-grade crypto exchange whose marketing surfaces read like a quietly-confident financial-services brand. The base canvas is pure white; Coinbase Blue (`#0052ff`) is the single brand voltage, used scarcely on primary CTAs, signature glyphs, and inline accent moments. Type runs Coinbase's licensed CoinbaseDisplay (display) and CoinbaseSans (body) at modest weights — display sits at weight 400 not 700, signaling editorial calm rather than fintech-bombastic. Page rhythm rotates between bright white sections, soft gray elevation bands, and full-bleed dark editorial heroes (`#0a0b0d`) carrying product-ui mockup cards. Iconography is geometric and minimal; depth comes from card-on-card layering, never decorative shadows.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#0a0b0d",
+        "muted": "#7c828a",
+        "panel": "#ffffff",
+        "panelSoft": "#f7f7f7",
+        "line": "#dee1e6",
+        "accent": "#0052ff",
+        "accent2": "#003ecc"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "composio",
+      "displayName": "Composio",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/composio/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "A developer-tools brand for AI-agent tool integration whose marketing surfaces lean into a dark, technical aesthetic with a single deep-electric-blue voltage (`#0007cd`). The page floor is near-black (`#0f0f0f`); cards float above on subtle gray-tinted surfaces. abcDiatype carries display and body in a single sans family with weights 400-600. The brand's strongest visual signature is a four-pane terminal-style mockup (a 2×2 grid of dark code/output panels) with a central blue spotlight glow — used as the homepage hero anchor.",
+      "tokens": {
+        "bg": "#0f0f0f",
+        "ink": "#ffffff",
+        "muted": "#888888",
+        "panel": "#181818",
+        "panelSoft": "#2a2a2a",
+        "line": "#222222",
+        "accent": "#0007cd",
+        "accent2": "#0005a3"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "cursor",
+      "displayName": "Cursor",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/cursor/DESIGN.md",
+      "layoutFamily": "dark-tooling",
+      "runtimeTemplateFallback": "executive",
+      "summary": "An AI-first code editor whose marketing site reads like a quietly-confident developer-tools brand with a warm-cream editorial canvas (`#f7f7f4`) instead of the typical dark IDE atmosphere. Near-black warm ink (`#26251e`) carries body and display alike — display sits at weight 400 with negative letter-spacing for a magazine feel rather than a bold tech voice. The single brand voltage is **Cursor Orange** (`#f54e00`) reserved for primary CTAs and the wordmark. A signature pastel timeline palette (peach, mint, blue, lavender, gold) marks AI-action stages (Thinking / Reading / Editing / Grepping / Done) — only inside in-product timeline visualizations. Cards use minimal hairlines, no shadows, generous 80px section rhythm. CursorGothic for display/body, JetBrains Mono on every code surface (which is roughly half the page).",
+      "tokens": {
+        "bg": "#f7f7f4",
+        "ink": "#26251e",
+        "muted": "#807d72",
+        "panel": "#ffffff",
+        "panelSoft": "#e6e5e0",
+        "line": "#e6e5e0",
+        "accent": "#f54e00",
+        "accent2": "#d04200"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "developer-tool",
+          "product-demo",
+          "technical-explainer",
+          "launch-deck"
+        ],
+        "seriousnessRange": [
+          5,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": true
+      }
+    },
+    {
+      "id": "elevenlabs",
+      "displayName": "ElevenLabs",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/elevenlabs/DESIGN.md",
+      "layoutFamily": "cinematic-dark",
+      "runtimeTemplateFallback": "executive",
+      "summary": "A voice-AI brand whose marketing surfaces read like a quietly editorial print magazine. The base canvas is off-white (`#f5f5f5`) holding warm near-black ink (`#292524`); the brand voltage is photographic, not chromatic — soft pastel atmospheric gradient orbs (mint → peach → lavender → sky) drift through the page as the only \"color\" moments. Display runs Waldenburg Light at weight 300 — the editorial signature. Inter carries body, navigation, captions. CTAs are subtle: a near-black ink pill is the primary, a transparent outline is the secondary. The brand trusts atmospheric photography and modest type weights to do all of the brand work; there is no neon accent, no saturated CTA color, no developer-tools dark canvas.",
+      "tokens": {
+        "bg": "#f5f5f5",
+        "ink": "#0c0a09",
+        "muted": "#777169",
+        "panel": "#ffffff",
+        "panelSoft": "#f0efed",
+        "line": "#e7e5e4",
+        "accent": "#292524",
+        "accent2": "#0c0a09"
+      },
+      "traits": {
+        "density": "balanced",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "light",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "media-showcase",
+          "launch-film",
+          "creative-pitch",
+          "immersive-demo"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": false,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": true
+      }
+    },
+    {
+      "id": "expo",
+      "displayName": "Expo",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/expo/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "A React Native developer-platform whose marketing site reads like a quietly-confident infrastructure brand. The base canvas is pure white with a soft sky-blue gradient atmospheric wash behind the hero; near-black ink (`#171717`) carries body and display alike. The single brand voltage is **pure black** (`#000000`) for primary CTAs — minimal and editorial-feeling, paired with a small blue text-link accent (`#0d74ce`) reserved for inline body links. Type pairs Inter at modest weights (display 600, body 400) with JetBrains Mono on every code surface. The brand's strongest visual signature is the **device-mockup hero** — a centered MacBook + iPhone composite showing real Expo dev surfaces — over the gradient sky wash.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#171717",
+        "muted": "#999999",
+        "panel": "#ffffff",
+        "panelSoft": "#f0f0f3",
+        "line": "#f0f0f3",
+        "accent": "#000000",
+        "accent2": "#1a1a1a"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "ferrari",
+      "displayName": "Ferrari",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/ferrari/DESIGN.md",
+      "layoutFamily": "luxury-brand",
+      "runtimeTemplateFallback": "apple",
+      "summary": "A luxury-automotive brand whose marketing surfaces read as cinematic editorial. The base canvas is **near-black** (`#181818`) holding pure white display type; white-canvas bands appear only inside specific editorial contexts (preowned listings, pricing tables). The single brand voltage is **Rosso Corsa** (`#da291c`) — the iconic Ferrari racing red — used scarcely on primary CTAs, the Cavallino mark, and Formula 1 race-position highlights. Type runs **FerrariSans** at modest weights (display 500, body 400) — never bombastic. Spacing follows an explicit 8px token ladder (`xxxs` 4px through `super` 128px); generous editorial pacing throughout. The brand's strongest visual signature is the **full-bleed cinematic hero photograph** that fills the viewport top with car photography, model details, or trackside livery — followed by a tighter editorial body layout below.",
+      "tokens": {
+        "bg": "#181818",
+        "ink": "#ffffff",
+        "muted": "#666666",
+        "panel": "#303030",
+        "panelSoft": "#f7f7f7",
+        "line": "#303030",
+        "accent": "#da291c",
+        "accent2": "#9d2211"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "premium-brand",
+          "vision-deck",
+          "campaign-idea",
+          "high-end-showcase"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": false,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "figma",
+      "displayName": "Figma",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/figma/DESIGN.md",
+      "layoutFamily": "playful-consumer",
+      "runtimeTemplateFallback": "airbnb",
+      "summary": "A confident black-and-white editorial frame interrupted by oversized, hand-cut pastel color blocks. The marketing canvas is rigorously monochrome — figmaSans variable type, pure white surfaces, pure black ink, pill-shaped CTAs — while each story section drops the page into a saturated lime, lavender, cream, mint, or pink panel that reads like a sticky note placed on a clean desk. The result is a design system that feels both technical and joyful — a tool for serious work, made by people who like color.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#f7f7f5",
+        "panelSoft": "#f7f7f5",
+        "line": "#e6e6e6",
+        "accent": "#000000",
+        "accent2": "#ff3d8b"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "consumer-feature",
+          "brand-story",
+          "lightweight-teaching",
+          "campaign-recap"
+        ],
+        "seriousnessRange": [
+          2,
+          6
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "framer",
+      "displayName": "Framer",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/framer/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "A confident dark-canvas builder marketing site that treats the page like a working artboard — pure black surfaces, white display type set in GT Walsheim Medium with aggressive negative tracking, and a single confident blue (#0099ff) reserved for hyperlinks and selection states. The page rhythm is broken by oversized vibrant gradient atmosphere panels — magenta, violet, orange spotlights — that act as living showcase tiles, not decoration. Every CTA is a white pill on dark; every card is a translucent or charcoal surface; every section title pulls letter-spacing tight enough to feel like a poster.",
+      "tokens": {
+        "bg": "#090909",
+        "ink": "#ffffff",
+        "muted": "#999999",
+        "panel": "#141414",
+        "panelSoft": "#1c1c1c",
+        "line": "#262626",
+        "accent": "#ffffff",
+        "accent2": "#d44df0"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "hashicorp",
+      "displayName": "HashiCorp",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/hashicorp/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "An enterprise-infrastructure marketing canvas built around a near-black ground (#000000) and a system of per-product accent colors — Terraform purple, Vault yellow, Consul pink, Waypoint cyan, Vagrant blue — that act as identity tokens rather than decorative palette. Display type is hashicorpSans set in 600/700 with tight 1.17–1.21 line-heights; body type runs the same family at 500 weight with relaxed 1.50–1.71 line-heights. Cards live as charcoal surfaces with 1px translucent gray borders; product showcase cards lift into per-product chromatic gradients. The system reads as confident, technical, and intentionally multi-product — every section quietly signals which HashiCorp tool it represents.",
+      "tokens": {
+        "bg": "#000000",
+        "ink": "#ffffff",
+        "muted": "#b2b6bd",
+        "panel": "#15181e",
+        "panelSoft": "#1f232b",
+        "line": "#3b3d45",
+        "accent": "#000000",
+        "accent2": "#525252"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "ibm",
+      "displayName": "IBM",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/ibm/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "An enterprise-marketing canvas faithful to Carbon Design System: white surfaces, charcoal type, IBM Blue (#0f62fe) as the single confident accent, and a deliberately flat-square aesthetic where corners stay at 0–4px. Type runs IBM Plex Sans at light weight 300 for display sizes (a brand signature) and 400/600 for body and emphasis. Cards live as thin-bordered tiles with no shadow; sections separate via subtle gray rows. The chrome is square, the typography is light, and the only color in the system is one assertive blue — the result reads as old-world enterprise gravitas reframed for the cloud era.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#161616",
+        "muted": "#525252",
+        "panel": "#f4f4f4",
+        "panelSoft": "#e0e0e0",
+        "line": "#e0e0e0",
+        "accent": "#0f62fe",
+        "accent2": "#5c94fe"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "light",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "intercom",
+      "displayName": "Intercom",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/intercom/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "An editorial customer-service marketing canvas built around a soft cream-white ground, charcoal type set in Saans (Intercom's proprietary geometric sans), and a single confident Fin Orange (#ff5600) reserved for the Fin AI brand. Cards live as floating white tiles with thin hairline borders and minimal radii (8–16px). Display headlines run Saans at weight 500 with measured negative tracking. The system reads as a careful, product-led publication: product screenshots dominate, ornament is rare, and the only place chromatic energy enters is the Fin Orange CTA.",
+      "tokens": {
+        "bg": "#f5f1ec",
+        "ink": "#111111",
+        "muted": "#626260",
+        "panel": "#ffffff",
+        "panelSoft": "#ebe7e1",
+        "line": "#d3cec6",
+        "accent": "#111111",
+        "accent2": "#5d5d5d"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "kraken",
+      "displayName": "Kraken",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/kraken/DESIGN.md",
+      "layoutFamily": "warm-editorial",
+      "runtimeTemplateFallback": "airbnb",
+      "summary": "Kraken's website is a clean, trustworthy crypto exchange that uses purple as its commanding brand color. The design operates on white backgrounds with Kraken Purple (`#7132f5`, `#5741d8`, `#5b1ecf`) creating a distinctive, professional crypto identity. The proprietary Kraken-Brand font handles display headings with bold (700) weight and negative tracking, while Kraken-Product (with IBM Plex Sans fallback) serves as the UI workhorse.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#101114",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "balanced",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "teaching",
+          "onboarding",
+          "community-story",
+          "consumer-explainer"
+        ],
+        "seriousnessRange": [
+          2,
+          6
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "lamborghini",
+      "displayName": "Lamborghini",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/lamborghini/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Lamborghini's website is a cathedral of darkness — a digital stage where jet-black surfaces stretch infinitely and every element emerges from the void like a machine under a spotlight. The page is almost entirely black. Not dark gray, not near-black — true, uncompromising black (`#000000`) that saturates the viewport and refuses to yield. Into this abyss, white type and Lamborghini Gold (`#FFC000`) are deployed with surgical precision, creating a visual language that feels like walking through a nighttime motorsport event where every surface absorbs light except the things that matter.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3860be",
+        "accent2": "#3860be"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "light",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "linear.app",
+      "displayName": "Linear",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/linear.app/DESIGN.md",
+      "layoutFamily": "dark-tooling",
+      "runtimeTemplateFallback": "executive",
+      "summary": "A near-black product-focused marketing canvas built around #010102 (the deepest dark surface of any tool in this collection), light gray text (#f7f8f8), and the signature Linear lavender-blue (#5e6ad2) used as the single chromatic accent. The system reads as software-craft documentation: dense, technical, and quietly luxurious. Display type is set in the Linear custom sans (SF Pro Display fallback) at 500–700 with measured negative tracking. Cards live as charcoal panels (#0f1011) with hairline borders. The accent lavender appears on the brand mark, focus rings, and a few intentional CTAs — never decoratively. Page rhythm leans on product UI screenshots framed in dark panels rather than atmospheric color.",
+      "tokens": {
+        "bg": "#010102",
+        "ink": "#f7f8f8",
+        "muted": "#d0d6e0",
+        "panel": "#0f1011",
+        "panelSoft": "#141516",
+        "line": "#23252a",
+        "accent": "#5e6ad2",
+        "accent2": "#828fff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "developer-tool",
+          "product-demo",
+          "technical-explainer",
+          "launch-deck"
+        ],
+        "seriousnessRange": [
+          5,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": true
+      }
+    },
+    {
+      "id": "lovable",
+      "displayName": "Lovable",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/lovable/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Lovable's website radiates warmth through restraint. The entire page sits on a creamy, parchment-toned background (`#f7f4ed`) that immediately separates it from the cold-white conventions of most developer tool sites. This isn't minimalism for minimalism's sake — it's a deliberate choice to feel approachable, almost analog, like a well-crafted notebook. The near-black text (`#1c1c1c`) against this warm cream creates a contrast ratio that's easy on the eyes while maintaining sharp readability.",
+      "tokens": {
+        "bg": "#f7f4ed",
+        "ink": "#1c1c1c",
+        "muted": "#5f5f5d",
+        "panel": "#f7f4ed",
+        "panelSoft": "#eeebe4",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "mastercard",
+      "displayName": "Mastercard",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/mastercard/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Mastercard's experience reads like a warm, editorial magazine built from soft stone and signal orange. The canvas is a muted putty-cream (`#F3F0EE`) — not white, not gray, but a color that feels like the paper of a premium annual report. On top of that canvas, everything that matters is shaped like a stadium, a pill, or a perfect circle. The dominant visual gesture is the **oversized radius**: heroes carry 40-point corners, cards go fully pill-shaped, service images are cropped into circular orbits, and buttons either complete the pill or fit snugly at 20 points. There are almost no sharp corners anywhere on the page.",
+      "tokens": {
+        "bg": "#f3f0ee",
+        "ink": "#141413",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#eae7e5",
+        "line": "#d7dce4",
+        "accent": "#3860be",
+        "accent2": "#3860be"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "meta",
+      "displayName": "Meta",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/meta/DESIGN.md",
+      "layoutFamily": "product-launch",
+      "runtimeTemplateFallback": "apple",
+      "summary": "Meta's design system spans hardware commerce (Quest VR, Ray-Ban Meta AI glasses) and brand surfaces with a confident product-merchandising voice. The system pairs a stark white canvas with full-bleed photographic product cards, a confident Optimistic VF wordmark/headline face, dual-CTA hero patterns (black primary + outlined secondary), and a saturated cobalt blue (#0064E0) for in-product purchase actions. Pill-shaped 100px-radius buttons, generous 24-32px card rounding, and tight three-tier text hierarchy carry across homepage, product detail (PDP), buy-now configurator, and accessory subpages.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#1c1e21",
+        "muted": "#5f6978",
+        "panel": "#f1f4f7",
+        "panelSoft": "#f1f4f7",
+        "line": "#ced0d4",
+        "accent": "#0064e0",
+        "accent2": "#5296ea"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "product-launch",
+          "tool-showcase",
+          "capability-intro",
+          "founder-demo"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "minimax",
+      "displayName": "MiniMax",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/minimax/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "MiniMax presents itself as a premium AI infrastructure brand through a striking duality — bold black-pill CTAs and stark white canvas for marketing, paired with vibrant gradient product cards (orange-red, magenta-pink, purple, blue) that turn each model release into a distinctive visual identity. The system uses DM Sans across all surfaces, employs an oversized 80px hero display, anchors major actions in deep near-black pills, and layers content density via a 3-column documentation grid with sidebar nav, prose body, and TOC. Coverage spans the marketing homepage, model showcase pages, developer documentation, and platform pricing surfaces.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#0a0a0a",
+        "muted": "#a8aab2",
+        "panel": "#f2f3f5",
+        "panelSoft": "#f2f3f5",
+        "line": "#e5e7eb",
+        "accent": "#0a0a0a",
+        "accent2": "#ea5ec1"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "mintlify",
+      "displayName": "Mintlify",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/mintlify/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Mintlify presents documentation infrastructure with a dual-mode aesthetic — atmospheric sky-gradient marketing heroes (cloud illustration backdrops, soft cream-to-blue washes) paired with dense developer-grade documentation surfaces. The system uses Inter for UI prose, Geist Mono for code, and a signature Mintlify green ({colors.brand-green}) reserved for accent CTAs and active states. Black-pill primary buttons dominate marketing, white-on-dark inversions appear on dark hero bands, and a 3-column documentation layout (sidebar / prose / TOC) anchors the developer experience. Coverage spans homepage, startups program, pricing comparison, and the live tabs documentation page.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#0a0a0a",
+        "muted": "#a8a8aa",
+        "panel": "#fafafa",
+        "panelSoft": "#fafafa",
+        "line": "#e5e5e5",
+        "accent": "#0a0a0a",
+        "accent2": "#585858"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "miro",
+      "displayName": "Miro",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/miro/DESIGN.md",
+      "layoutFamily": "playful-consumer",
+      "runtimeTemplateFallback": "airbnb",
+      "summary": "Miro presents itself as the AI-powered visual workspace through a confident, almost playful brand voice — anchored by its signature canary yellow ({colors.brand-yellow}) wordmark over white canvas, broken open by colorful pastel feature tints (rose, teal, coral, orange, mint) that echo the actual sticky-note color palette used on the live whiteboard. Black-pill primary buttons dominate marketing, real Miro-board mockups serve as feature illustrations, and a 4-tier pricing grid leads into a dense comparison table. Roobert PRO carries display headlines; the system supports homepage, pricing, AI Workflows product page, agile vertical, and customer stories surfaces.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#1c1c1e",
+        "muted": "#a5a8b5",
+        "panel": "#fafbfc",
+        "panelSoft": "#fafbfc",
+        "line": "#e0e2e8",
+        "accent": "#1c1c1e",
+        "accent2": "#656566"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "consumer-feature",
+          "brand-story",
+          "lightweight-teaching",
+          "campaign-recap"
+        ],
+        "seriousnessRange": [
+          2,
+          6
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "mistral.ai",
+      "displayName": "Mistral AI",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/mistral.ai/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Mistral AI brands itself with a singular signature — atmospheric sunset gradients (mustard, orange, deep red) layered over photography of mountains, plus a horizontal \"sunset stripe\" bar that closes every page. The system pairs warm cream-yellow surfaces ({colors.cream}) with a saturated orange primary CTA ({colors.primary}) and uses an elegant near-serif voice for hero displays. Coverage spans homepage (Frontier AI hero), Le Studio product page, Coding solutions, news article surfaces, contact form, and services tier page — all anchored by the signature gradient closing band.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#1f1f1f",
+        "muted": "#a8a8a8",
+        "panel": "#fafafa",
+        "panelSoft": "#f5f5f5",
+        "line": "#e5e5e5",
+        "accent": "#fa520f",
+        "accent2": "#fc895c"
+      },
+      "traits": {
+        "density": "balanced",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "mongodb",
+      "displayName": "MongoDB",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/mongodb/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "MongoDB carries a strong dual-mode visual identity — dark deep-teal hero bands with bright MongoDB green ({colors.brand-green}) CTAs paired with stark white documentation surfaces. The signature green pill button is unmistakable across product, pricing, learning, and AI use-case surfaces. The system uses Euclid Circular A as its display face, anchors a 3-tier pricing comparison (Free / Flex / Dedicated), and presents extensive course catalogs in card grids with colored category tags. Coverage spans homepage, Atlas product page, Community Edition, MongoDB University, AI use cases, and pricing.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#001e2b",
+        "muted": "#a8b3bc",
+        "panel": "#f4f7f6",
+        "panelSoft": "#f4f7f6",
+        "line": "#e1e5e8",
+        "accent": "#00ed64",
+        "accent2": "#52f396"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "nike",
+      "displayName": "Nike",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/nike/DESIGN.md",
+      "layoutFamily": "luxury-brand",
+      "runtimeTemplateFallback": "apple",
+      "summary": "|",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#111111",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#f5f5f5",
+        "line": "#cacacb",
+        "accent": "#111111",
+        "accent2": "#5d5d5d"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "premium-brand",
+          "vision-deck",
+          "campaign-idea",
+          "high-end-showcase"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": false,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "notion",
+      "displayName": "Notion",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/notion/DESIGN.md",
+      "layoutFamily": "warm-editorial",
+      "runtimeTemplateFallback": "airbnb",
+      "summary": "Notion presents itself as the all-in-one workspace through a confident, illustration-rich brand voice — anchored by a deep navy hero band ({colors.brand-navy}) decorated with brand-colored sticky-note dots and mesh wire illustrations, a signature purple pill primary CTA ({colors.primary}), and a rich palette of pastel-tinted feature cards that echo the colorful database properties of the live product. The system uses a Notion-Sans (Inter-based) typeface across every UI surface, anchors a 4-tier pricing comparison (Free / Plus / Business / Enterprise), and presents the live workspace UI mockup directly inside the hero band. Coverage spans homepage, Enterprise, Product AI, Product Agents, Startups, and Pricing surfaces.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#1a1a1a",
+        "muted": "#bbb8b1",
+        "panel": "#fafaf9",
+        "panelSoft": "#fafaf9",
+        "line": "#e5e3df",
+        "accent": "#5645d4",
+        "accent2": "#0075de"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "teaching",
+          "onboarding",
+          "community-story",
+          "consumer-explainer"
+        ],
+        "seriousnessRange": [
+          2,
+          6
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "nvidia",
+      "displayName": "NVIDIA",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/nvidia/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "|",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#f7f7f7",
+        "panelSoft": "#f7f7f7",
+        "line": "#cccccc",
+        "accent": "#76b900",
+        "accent2": "#0046a4"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "ollama",
+      "displayName": "Ollama",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/ollama/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "|",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#fafafa",
+        "line": "#e5e5e5",
+        "accent": "#000000",
+        "accent2": "#525252"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "balanced",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "opencode.ai",
+      "displayName": "OpenCode",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/opencode.ai/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "|",
+      "tokens": {
+        "bg": "#fdfcfc",
+        "ink": "#201d1d",
+        "muted": "#5f6978",
+        "panel": "#f1eeee",
+        "panelSoft": "#f8f7f7",
+        "line": "#d7dce4",
+        "accent": "#201d1d",
+        "accent2": "#676565"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "pinterest",
+      "displayName": "Pinterest",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/pinterest/DESIGN.md",
+      "layoutFamily": "playful-consumer",
+      "runtimeTemplateFallback": "airbnb",
+      "summary": "|",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#f6f6f3",
+        "panelSoft": "#fbfbf9",
+        "line": "#dadad3",
+        "accent": "#e60023",
+        "accent2": "#ee5269"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "consumer-feature",
+          "brand-story",
+          "lightweight-teaching",
+          "campaign-recap"
+        ],
+        "seriousnessRange": [
+          2,
+          6
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "playstation",
+      "displayName": "PlayStation",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/playstation/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "|",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#f5f7fa",
+        "panelSoft": "#f3f3f3",
+        "line": "#f3f3f3",
+        "accent": "#0070d1",
+        "accent2": "#004d8d"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "light",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "posthog",
+      "displayName": "PostHog",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/posthog/DESIGN.md",
+      "layoutFamily": "dark-tooling",
+      "runtimeTemplateFallback": "executive",
+      "summary": "|",
+      "tokens": {
+        "bg": "#eeefe9",
+        "ink": "#23251d",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#e5e7e0",
+        "line": "#bfc1b7",
+        "accent": "#f7a501",
+        "accent2": "#b17816"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "developer-tool",
+          "product-demo",
+          "technical-explainer",
+          "launch-deck"
+        ],
+        "seriousnessRange": [
+          5,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": true
+      }
+    },
+    {
+      "id": "raycast",
+      "displayName": "Raycast",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/raycast/DESIGN.md",
+      "layoutFamily": "dark-tooling",
+      "runtimeTemplateFallback": "executive",
+      "summary": "|",
+      "tokens": {
+        "bg": "#07080a",
+        "ink": "#f4f4f6",
+        "muted": "#9aa3b2",
+        "panel": "#121212",
+        "panelSoft": "#252627",
+        "line": "#242728",
+        "accent": "#ffffff",
+        "accent2": "#ffffff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "balanced",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "developer-tool",
+          "product-demo",
+          "technical-explainer",
+          "launch-deck"
+        ],
+        "seriousnessRange": [
+          5,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": true
+      }
+    },
+    {
+      "id": "renault",
+      "displayName": "Renault",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/renault/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "|",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#f7f7f7",
+        "line": "#f2f2f2",
+        "accent": "#ffed00",
+        "accent2": "#fff352"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "replicate",
+      "displayName": "Replicate",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/replicate/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "|",
+      "tokens": {
+        "bg": "#f9f7f3",
+        "ink": "#202020",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#f0eeea",
+        "line": "#d7dce4",
+        "accent": "#ea2804",
+        "accent2": "#f16d54"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "resend",
+      "displayName": "Resend",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/resend/DESIGN.md",
+      "layoutFamily": "minimal-monochrome",
+      "runtimeTemplateFallback": "apple",
+      "summary": "|",
+      "tokens": {
+        "bg": "#000000",
+        "ink": "#fcfdff",
+        "muted": "#9aa3b2",
+        "panel": "#0a0a0c",
+        "panelSoft": "#1f1f1f",
+        "line": "#d7dce4",
+        "accent": "#fcfdff",
+        "accent2": "#fdfeff"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "balanced",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "founder-story",
+          "brand-intro",
+          "minimal-report",
+          "portfolio-case"
+        ],
+        "seriousnessRange": [
+          5,
+          9
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "revolut",
+      "displayName": "Revolut",
+      "sourceType": "structured",
+      "sourceFile": "vendor/awesome-design-md/design-md/revolut/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "|",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#191c1f",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#f4f4f4",
+        "line": "#e2e2e7",
+        "accent": "#494fdf",
+        "accent2": "#8387e9"
+      },
+      "traits": {
+        "density": "balanced",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "runwayml",
+      "displayName": "Runway",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/runwayml/DESIGN.md",
+      "layoutFamily": "cinematic-dark",
+      "runtimeTemplateFallback": "executive",
+      "summary": "Runway's interface is a cinematic reel brought to life as a website — a dark, editorial, film-production-grade design where full-bleed photography and video ARE the primary UI elements. This is not a typical tech product page; it's a visual manifesto for AI-powered creativity. Every section feels like a frame from a film: dramatic lighting, sweeping landscapes, and intimate human moments captured in high-quality imagery that dominates the viewport.",
+      "tokens": {
+        "bg": "#1a1a1a",
+        "ink": "#000000",
+        "muted": "#a7a7a7",
+        "panel": "#1a1a1a",
+        "panelSoft": "#353535",
+        "line": "#434343",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "media-showcase",
+          "launch-film",
+          "creative-pitch",
+          "immersive-demo"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": false,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": true
+      }
+    },
+    {
+      "id": "sanity",
+      "displayName": "Sanity",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/sanity/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Sanity's website is a developer-content platform rendered as a nocturnal command center -- dark, precise, and deeply structured. The entire experience sits on a near-black canvas (`#0b0b0b`) that reads less like a \"dark mode toggle\" and more like the natural state of a tool built for people who live in terminals. Where most CMS marketing pages reach for friendly pastels and soft illustration, Sanity leans into the gravity of its own product: structured content deserves a structured stage.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "sentry",
+      "displayName": "Sentry",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/sentry/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Sentry's website is a dark-mode-first developer tool interface that speaks the language of code editors and terminal windows. The entire aesthetic is rooted in deep purple-black backgrounds (`#1f1633`, `#150f23`) that evoke the late-night debugging sessions Sentry was built for. Against this inky canvas, a carefully curated set of purples, pinks, and a distinctive lime-green accent (`#c2ef4e`) create a visual system that feels simultaneously technical and vibrant.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#422082",
+        "muted": "#79628c",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "shopify",
+      "displayName": "Shopify",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/shopify/DESIGN.md",
+      "layoutFamily": "product-launch",
+      "runtimeTemplateFallback": "apple",
+      "summary": "Shopify.com is a dark-first digital theatre — a website that stages its commerce platform like a cinematic premiere. The entire experience unfolds against an abyss of near-black surfaces that carry the faintest whisper of deep forest green (`#02090A`, `#061A1C`, `#102620`), creating a nocturnal atmosphere that feels less like a SaaS marketing page and more like an exclusive product reveal at a tech keynote. This darkness isn't cold or corporate — it's the warm, enveloping dark of a luxury experience, like sitting in the front row of a darkened auditorium.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#000000",
+        "muted": "#a1a1aa",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "light",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "product-launch",
+          "tool-showcase",
+          "capability-intro",
+          "founder-demo"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "spacex",
+      "displayName": "SpaceX",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/spacex/DESIGN.md",
+      "layoutFamily": "minimal-monochrome",
+      "runtimeTemplateFallback": "apple",
+      "summary": "SpaceX's website is a full-screen cinematic experience that treats aerospace engineering like a film — every section is a scene, every photograph is a frame, and the interface disappears entirely behind the imagery. The design is pure black (`#000000`) with photography of rockets, space, and planets occupying 100% of the viewport. Text overlays sit directly on these photographs with no background panels, cards, or containers — just type on image, bold and unapologetic.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "founder-story",
+          "brand-intro",
+          "minimal-report",
+          "portfolio-case"
+        ],
+        "seriousnessRange": [
+          5,
+          9
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "spotify",
+      "displayName": "Spotify",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/spotify/DESIGN.md",
+      "layoutFamily": "cinematic-dark",
+      "runtimeTemplateFallback": "executive",
+      "summary": "Spotify's web interface is a dark, immersive music player that wraps listeners in a near-black cocoon (`#121212`, `#181818`, `#1f1f1f`) where album art and content become the primary source of color. The design philosophy is \"content-first darkness\" — the UI recedes into shadow so that music, podcasts, and playlists can glow. Every surface is a shade of charcoal, creating a theater-like environment where the only true color comes from the iconic Spotify Green (`#1ed760`) and the album artwork itself.",
+      "tokens": {
+        "bg": "#181818",
+        "ink": "#121212",
+        "muted": "#9aa3b2",
+        "panel": "#181818",
+        "panelSoft": "#343434",
+        "line": "#424242",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "media-showcase",
+          "launch-film",
+          "creative-pitch",
+          "immersive-demo"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": false,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": true
+      }
+    },
+    {
+      "id": "starbucks",
+      "displayName": "Starbucks",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/starbucks/DESIGN.md",
+      "layoutFamily": "warm-editorial",
+      "runtimeTemplateFallback": "airbnb",
+      "summary": "Starbucks' design system is a **warm, confident retail flagship** wearing the green of their storefront apron across every surface. The canvas alternates between a neutral-warm cream (`#f2f0eb`) and a ceramic off-white (`#edebe9`) — colors that reference actual store materials: the paper napkins, the café walls, the wood finishes — while the signature **Starbucks Green** (`#006241`) anchors the brand moment on hero bands, CTAs, and the Rewards experience. The greens come in four calibrated shades (Starbucks, Accent, House, Uplift) each mapped to a specific surface role, and gold (`#cba258`) appears only around Rewards-status ceremony — not as a general accent.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "balanced",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "teaching",
+          "onboarding",
+          "community-story",
+          "consumer-explainer"
+        ],
+        "seriousnessRange": [
+          2,
+          6
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "stripe",
+      "displayName": "Stripe",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/stripe/DESIGN.md",
+      "layoutFamily": "product-launch",
+      "runtimeTemplateFallback": "apple",
+      "summary": "Stripe's website is the gold standard of fintech design -- a system that manages to feel simultaneously technical and luxurious, precise and warm. The page opens on a clean white canvas (`#ffffff`) with deep navy headings (`#061b31`) and a signature purple (`#533afd`) that functions as both brand anchor and interactive accent. This isn't the cold, clinical purple of enterprise software; it's a rich, saturated violet that reads as confident and premium. The overall impression is of a financial institution redesigned by a world-class type foundry.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#64748d",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#533afd",
+        "accent2": "#f96bee"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "light",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "product-launch",
+          "tool-showcase",
+          "capability-intro",
+          "founder-demo"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "supabase",
+      "displayName": "Supabase",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/supabase/DESIGN.md",
+      "layoutFamily": "dark-tooling",
+      "runtimeTemplateFallback": "executive",
+      "summary": "Supabase's website is a dark-mode-native developer platform that channels the aesthetic of a premium code editor — deep black backgrounds (`#0f0f0f`, `#171717`) with emerald green accents (`#3ecf8e`, `#00c573`) that reference the brand's open-source, PostgreSQL-green identity. The design system feels like it was born in a terminal window and evolved into a sophisticated marketing surface without losing its developer soul.",
+      "tokens": {
+        "bg": "#0f1115",
+        "ink": "#0f0f0f",
+        "muted": "#9aa3b2",
+        "panel": "#222428",
+        "panelSoft": "#2c2e31",
+        "line": "#3a3c3f",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "developer-tool",
+          "product-demo",
+          "technical-explainer",
+          "launch-deck"
+        ],
+        "seriousnessRange": [
+          5,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": true
+      }
+    },
+    {
+      "id": "superhuman",
+      "displayName": "Superhuman",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/superhuman/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Superhuman's website feels like opening a luxury envelope — predominantly white, immaculately clean, with a single dramatic gesture of color that commands attention. The hero section is a cinematic purple gradient, a deep twilight wash of `#1b1938` that evokes the moment just before dawn, overlaid with confident white typography. Below this dramatic entrance, the rest of the site is almost entirely white canvas with dark charcoal text, creating a stark but refined reading experience.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#292827",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "tesla",
+      "displayName": "Tesla",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/tesla/DESIGN.md",
+      "layoutFamily": "luxury-brand",
+      "runtimeTemplateFallback": "apple",
+      "summary": "Tesla's website is an exercise in radical subtraction — a digital showroom where the product is everything and the interface is almost nothing. The page opens with a full-viewport hero that fills the entire screen with cinematic car photography: three vehicles arranged on polished concrete against a hazy cityscape sky, with a single model name floating above in translucent white type. There are no decorative borders, no gradients, no patterns, no shadows. The UI exists only to provide just enough navigational structure to get out of the way. Every pixel that isn't product imagery is white space, and that restraint is the design system's most powerful statement.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#171a20",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#f5f5f5",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "premium-brand",
+          "vision-deck",
+          "campaign-idea",
+          "high-end-showcase"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": false,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "theverge",
+      "displayName": "The Verge",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/theverge/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "The Verge's 2024 redesign feels like somebody wired a Condé Nast magazine to a chiptune soundboard. The canvas is almost-black (`#131313`), the headlines are built from a brutally heavy display face (Manuka) that runs up to 107px, and the whole page is peppered with acid-mint `#3cffd0` and ultraviolet `#5200ff` that behave less like brand colors and more like hazard tape. Story tiles are not quiet gray cards — they're saturated, full-bleed color blocks (yellow, pink, orange, blue, purple) that feel like pasted-up rave flyers arranged into a timeline. The mood is \"developer console meets club night meets tech tabloid\": serious enough to cover a congressional hearing, loud enough to review a synthesizer.",
+      "tokens": {
+        "bg": "#131313",
+        "ink": "#000000",
+        "muted": "#e9e9e9",
+        "panel": "#2d2d2d",
+        "panelSoft": "#2f2f2f",
+        "line": "#3d3d3d",
+        "accent": "#ffffff",
+        "accent2": "#3860be"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "light",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "together.ai",
+      "displayName": "Together AI",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/together.ai/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Together AI's interface is a pastel-gradient dreamscape built for enterprise AI infrastructure — a design that somehow makes GPU clusters and model inference feel light, airy, and optimistic. The hero section blooms with soft pink-blue-lavender gradients and abstract, painterly illustrations that evoke clouds and flight, establishing a visual metaphor for the \"AI-Native Cloud\" proposition. Against this softness, the typography cuts through with precision: \"The Future\" display font at 64px with aggressive negative tracking (-1.92px) creates dense, authoritative headline blocks.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#ef2cc1"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "uber",
+      "displayName": "Uber",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/uber/DESIGN.md",
+      "layoutFamily": "minimal-monochrome",
+      "runtimeTemplateFallback": "apple",
+      "summary": "Uber's design language is a masterclass in confident minimalism -- a black-and-white universe where every pixel serves a purpose and nothing decorates without earning its place. The entire experience is built on a stark duality: jet black (`#000000`) and pure white (`#ffffff`), with virtually no mid-tone grays diluting the message. This isn't the sterile minimalism of a startup that hasn't finished designing -- it's the deliberate restraint of a brand so established it can afford to whisper.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#4b4b4b",
+        "muted": "#afafaf",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#0000ee",
+        "accent2": "#0000ee"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "founder-story",
+          "brand-intro",
+          "minimal-report",
+          "portfolio-case"
+        ],
+        "seriousnessRange": [
+          5,
+          9
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "vercel",
+      "displayName": "Vercel",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/vercel/DESIGN.md",
+      "layoutFamily": "minimal-monochrome",
+      "runtimeTemplateFallback": "apple",
+      "summary": "Vercel's website is the visual thesis of developer infrastructure made invisible — a design system so restrained it borders on philosophical. The page is overwhelmingly white (`#ffffff`) with near-black (`#171717`) text, creating a gallery-like emptiness where every element earns its pixel. This isn't minimalism as decoration; it's minimalism as engineering principle. The Geist design system treats the interface like a compiler treats code — every unnecessary token is stripped away until only structure remains.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#000000",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#0072f5",
+        "accent2": "#0072f5"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "founder-story",
+          "brand-intro",
+          "minimal-report",
+          "portfolio-case"
+        ],
+        "seriousnessRange": [
+          5,
+          9
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "vodafone",
+      "displayName": "Vodafone",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/vodafone/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Vodafone's corporate web system carries the confident, broadcast-scale presence of a global telecom brand — built around a single, fiercely-owned brand red and a restrained, editorial layout that lets imagery and type carry the emotional weight. Every page opens the same way: a cinematic dark hero image behind a towering, tight-tracked uppercase display headline (\"EVERYONE. CONNECTED.\", \"INVESTORS\", \"OUR BUSINESS\") followed by a deep red full-width band that acts as a chapter break, then a crisp white editorial grid or a near-black section reserved for institutional content (share ticker, global map, ESG data). The voice is institutional but human: warm documentary photography — cable-laying crews, coral reefs, pine forests, urban twilight — photographed with color-graded realism and set against clean neutral surfaces that never compete with the content.",
+      "tokens": {
+        "bg": "#ffffff",
+        "ink": "#7e7e7e",
+        "muted": "#5f6978",
+        "panel": "#25282b",
+        "panelSoft": "#f5f5f5",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "light",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "voltagent",
+      "displayName": "VoltAgent",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/voltagent/DESIGN.md",
+      "layoutFamily": "dark-tooling",
+      "runtimeTemplateFallback": "executive",
+      "summary": "VoltAgent's interface is a deep-space command terminal for the AI age — a developer-facing darkness built on near-pure-black surfaces (`#050507`) where the only interruption is the electric pulse of emerald green energy. The entire experience evokes the feeling of staring into a high-powered IDE at 2am: dark, focused, and alive with purpose. This is not a friendly SaaS landing page — it's an engineering platform that announces itself through code snippets, architectural diagrams, and raw technical confidence.",
+      "tokens": {
+        "bg": "#101010",
+        "ink": "#050507",
+        "muted": "#9aa3b2",
+        "panel": "#101010",
+        "panelSoft": "#2d2d2d",
+        "line": "#3b3b3b",
+        "accent": "#306cce",
+        "accent2": "#729bde"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "light",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "developer-tool",
+          "product-demo",
+          "technical-explainer",
+          "launch-deck"
+        ],
+        "seriousnessRange": [
+          5,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": true
+      }
+    },
+    {
+      "id": "warp",
+      "displayName": "Warp",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/warp/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Warp's website feels like sitting at a campfire in a deep forest — warm, dark, and alive with quiet confidence. Unlike the cold, blue-tinted blacks favored by most developer tools, Warp wraps everything in a warm near-black that feels like charred wood or dark earth. The text isn't pure white either — it's Warm Parchment (`#faf9f6`), a barely-perceptible cream that softens every headline and makes the dark canvas feel inviting rather than austere.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#353534",
+        "muted": "#666469",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "webflow",
+      "displayName": "Webflow",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/webflow/DESIGN.md",
+      "layoutFamily": "product-launch",
+      "runtimeTemplateFallback": "apple",
+      "summary": "Webflow's website is a visually rich, tool-forward platform that communicates \"design without code\" through clean white surfaces, the signature Webflow Blue (`#146ef5`), and a rich secondary color palette (purple, pink, green, orange, yellow, red). The custom WF Visual Sans Variable font creates a confident, precise typographic system with weight 600 for display and 500 for body.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#080808",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "balanced",
+        "radius": "large",
+        "shadow": "dramatic",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "product-launch",
+          "tool-showcase",
+          "capability-intro",
+          "founder-demo"
+        ],
+        "seriousnessRange": [
+          4,
+          8
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "wired",
+      "displayName": "WIRED",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/wired/DESIGN.md",
+      "layoutFamily": "warm-editorial",
+      "runtimeTemplateFallback": "airbnb",
+      "summary": "WIRED's homepage feels like a printed broadsheet that someone has plugged into a wall socket. The grid is dense, the rules are thin, the type is loud, and almost every surface is paper-white or pure black with no rounded corners and no decoration that doesn't earn its place. Image rectangles butt directly against headlines, hairline dividers separate stories the way pica rules separate columns in a real magazine, and the only colors that aren't grayscale come from the photography itself. There is no \"card with shadow\" anywhere — the entire layout is held together by typographic weight and the discipline of rules and whitespace, the same way a Condé Nast print page would be assembled in a paste-up room.",
+      "tokens": {
+        "bg": "#f6f7fb",
+        "ink": "#1a1a1a",
+        "muted": "#5f6978",
+        "panel": "#ffffff",
+        "panelSoft": "#edeef2",
+        "line": "#e2e8f0",
+        "accent": "#057dbc",
+        "accent2": "#057dbc"
+      },
+      "traits": {
+        "density": "dense",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "teaching",
+          "onboarding",
+          "community-story",
+          "consumer-explainer"
+        ],
+        "seriousnessRange": [
+          2,
+          6
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "wise",
+      "displayName": "Wise",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/wise/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Wise's website is a bold, confident fintech platform that communicates \"money without borders\" through massive typography and a distinctive lime-green accent. The design operates on a warm off-white canvas with near-black text (`#0e0f0c`) and a signature Wise Green (`#9fe870`) — a fresh, lime-bright color that feels alive and optimistic, unlike the corporate blues of traditional banking.",
+      "tokens": {
+        "bg": "#e8ebe6",
+        "ink": "#0e0f0c",
+        "muted": "#5f6978",
+        "panel": "#e8ebe6",
+        "panelSoft": "#dfe2dd",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "moderate",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": null,
+          "weightBias": "strong",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "x.ai",
+      "displayName": "xAI",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/x.ai/DESIGN.md",
+      "layoutFamily": "minimal-monochrome",
+      "runtimeTemplateFallback": "apple",
+      "summary": "xAI's website is a masterclass in dark-first, monospace-driven brutalist minimalism -- a design system that feels like it was built by engineers who understand that restraint is the ultimate form of sophistication. The entire experience is anchored to an almost-black background (`#1f2228`) with pure white text (`#ffffff`), creating a high-contrast, terminal-inspired aesthetic that signals deep technical credibility. There are no gradients, no decorative illustrations, no color accents competing for attention. This is a site that communicates through absence.",
+      "tokens": {
+        "bg": "#1f2228",
+        "ink": "#1f2228",
+        "muted": "#9aa3b2",
+        "panel": "#313439",
+        "panelSoft": "#3a3d42",
+        "line": "#474a4f",
+        "accent": "#ffffff",
+        "accent2": "#ffffff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": true,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "light",
+          "trackingBias": "normal"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "founder-story",
+          "brand-intro",
+          "minimal-report",
+          "portfolio-case"
+        ],
+        "seriousnessRange": [
+          5,
+          9
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": false,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    },
+    {
+      "id": "zapier",
+      "displayName": "Zapier",
+      "sourceType": "prose",
+      "sourceFile": "vendor/awesome-design-md/design-md/zapier/DESIGN.md",
+      "layoutFamily": "consulting-report",
+      "runtimeTemplateFallback": "consulting",
+      "summary": "Zapier's website radiates warm, approachable professionalism. It rejects the cold monochrome minimalism of developer tools in favor of a cream-tinted canvas (`#fffefb`) that feels like unbleached paper -- the digital equivalent of a well-organized notebook. The near-black (`#201515`) text has a faint reddish-brown warmth, creating an atmosphere more human than mechanical. This is automation designed to feel effortless, not technical.",
+      "tokens": {
+        "bg": "#fffefb",
+        "ink": "#201515",
+        "muted": "#5f6978",
+        "panel": "#fffefb",
+        "panelSoft": "#f5f5f2",
+        "line": "#d7dce4",
+        "accent": "#3366ff",
+        "accent2": "#7497ff"
+      },
+      "traits": {
+        "density": "airy",
+        "radius": "large",
+        "shadow": "minimal",
+        "darkCanvas": false,
+        "typography": {
+          "displayFamily": null,
+          "codeFamily": "monospace",
+          "weightBias": "strong",
+          "trackingBias": "tight"
+        }
+      },
+      "suitability": {
+        "recommendedUses": [
+          "strategy-report",
+          "market-analysis",
+          "transformation-plan",
+          "decision-memo"
+        ],
+        "seriousnessRange": [
+          7,
+          10
+        ],
+        "supportsCharts": true,
+        "supportsDenseReport": true,
+        "supportsSpeakerNarrative": true,
+        "darkDeckPreferred": false
+      }
+    }
+  ]
+}
