@@ -753,11 +753,17 @@ function presenterHtml() {
 	    function renderState(state) {
 	      activeState = state;
       const fragmentLabel = state.fragmentCount ? ' · 动画 ' + Math.min(state.fragmentIndex, state.fragmentCount) + '/' + state.fragmentCount : '';
+      const hasNextSlide = Number.isFinite(state.slideIndex) && Number.isFinite(state.slideCount)
+        ? state.slideIndex < state.slideCount - 1
+        : Boolean(state.nextTitle);
+      const fallbackPreview = hasNextSlide
+        ? '<div class="slide-preview"><div class="slide-body"><p class="muted">下一页预览需要新版 deck 同步字段；请看上方标题。</p></div></div>'
+        : '<div class="slide-preview"><div class="slide-body"><p class="muted">已经是最后一页</p></div></div>';
       counterEl.textContent = (state.slideIndex + 1) + ' / ' + state.slideCount + fragmentLabel;
 	      titleEl.textContent = state.title || '当前页';
 	      notesEl.innerHTML = state.notesHtml || '这一页没有备注。';
-	      nextTitleEl.textContent = state.nextTitle || '已经是最后一页';
-	      nextPreviewEl.innerHTML = state.nextSlidePreviewHtml || '<div class="slide-preview"><div class="slide-body"><p class="muted">已经是最后一页</p></div></div>';
+	      nextTitleEl.textContent = hasNextSlide ? (state.nextTitle || '下一页') : '已经是最后一页';
+	      nextPreviewEl.innerHTML = state.nextSlidePreviewHtml || fallbackPreview;
 	      renderQuestion(state);
 	      timerEl.textContent = elapsedText(Date.now() - (state.startedAt || Date.now()));
 	      updateRemoteButtons();

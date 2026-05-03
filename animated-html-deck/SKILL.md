@@ -177,6 +177,7 @@ Template switching must change layout feel, density, radius, shadow, and emphasi
 - Prefer strong layout systems: title, agenda/thesis, section divider, metric, comparison, process, evidence, quote, recommendation, conclusion.
 - Keep slide copy concise. Move narration into speaker notes.
 - Create charts, diagrams, and visual metaphors with HTML/CSS when they improve comprehension.
+- Use flat backgrounds by default. For serious reports, consulting decks, and Phone-ready decks, avoid decorative gradient stacks, glow pseudo-layers, grid overlays, large canvas shadows, and heavy card shadows unless the user explicitly asks for a poster-like, atmospheric, or launch-event visual.
 - For branded decks, use ordinary content components for logos, company names, source labels, or dates. Do not add fixed page headers or footers.
 - When a website-inspired style is requested, keep the source site's color logic, typography bias, and surface treatment, but translate it into slide-friendly information design. Do not mechanically recreate the source homepage layout or browser chrome.
 

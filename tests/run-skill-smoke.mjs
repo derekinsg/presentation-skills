@@ -590,9 +590,18 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.match(html, /@page deck-phone/, 'template should include 9:16 print page support');
   assert.match(html, /Publish\/IP/, 'template should include an IP publish control');
   assert.match(html, /Copy command/, 'template should include a copyable publish command');
+  assert.match(html, /nextSlidePreviewHtml:\s*slidePreviewHtml\(nextSlide\)/, 'template should send next-slide preview HTML to the phone presenter');
+  assert.match(html, /\.slide::before\s*\{[\s\S]*?display:\s*none;/, 'template should disable the decorative slide glow layer by default');
+  assert.match(html, /body\[data-template="consulting"\]\s+\.slide\s*\{\s*background:\s*var\(--bg\);/m, 'consulting template should use a flat slide background');
+  assert.doesNotMatch(html, /body\[data-template="consulting"\]\s+\.slide\s*\{[^}]*repeating-linear-gradient/, 'consulting template should not use a grid background layer');
+  assert.doesNotMatch(html, /\.slide\s*\{[^}]*background:\s*\n\s*linear-gradient\(135deg/, 'default slide background should not stack decorative gradients');
+  assert.doesNotMatch(html, /\.slides\s*\{[^}]*box-shadow:\s*var\(--shadow\)/, 'slide canvas should not add an outer presentation shadow');
   assert.ok(html.includes('addEventListener(\'keydown\''), 'template should include keyboard controls');
   assert.doesNotMatch(html, /\b(?:src|href)=["']https?:\/\//i, 'template should not link remote runtime assets');
   assert.doesNotMatch(html, /(?:unpkg|jsdelivr|fonts\.googleapis|cdn\.)/i, 'template should not depend on public CDNs');
+
+  const skillText = await readFile(repoPath('animated-html-deck/SKILL.md'), 'utf8');
+  assert.match(skillText, /Use flat backgrounds by default/, 'skill should require flat backgrounds by default');
 });
 
 test('presenter server starts and reports deck, phone, and QR URLs', async () => {

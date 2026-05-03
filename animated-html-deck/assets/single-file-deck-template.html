@@ -199,8 +199,8 @@
       aspect-ratio: var(--aspect-ratio);
       overflow: hidden;
       perspective: 1600px;
-      box-shadow: var(--shadow);
-      background: var(--bg);
+      box-shadow: none;
+      background: transparent;
     }
 
     body[data-aspect="9-16"] .slides {
@@ -223,14 +223,12 @@
         opacity var(--duration) var(--ease),
         transform calc(var(--duration) + 160ms) var(--ease),
         filter var(--duration) var(--ease);
-      background:
-        linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 34%),
-        linear-gradient(315deg, color-mix(in srgb, var(--accent-2) 10%, transparent), transparent 32%),
-        var(--bg);
+      background: var(--bg);
     }
 
     .slide::before {
       content: "";
+      display: none;
       position: absolute;
       inset: clamp(18px, 3vw, 44px);
       z-index: 0;
@@ -266,16 +264,11 @@
     }
 
     body[data-template="executive"] .slide {
-      background:
-        linear-gradient(90deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 28%),
-        var(--bg);
+      background: var(--bg);
     }
 
     body[data-template="consulting"] .slide {
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.58), transparent),
-        repeating-linear-gradient(90deg, rgba(23,23,23,.025), rgba(23,23,23,.025) 1px, transparent 1px, transparent 96px),
-        var(--bg);
+      background: var(--bg);
     }
 
     .slide.active {
@@ -402,7 +395,7 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: color-mix(in srgb, var(--panel) 92%, transparent);
-      box-shadow: 0 12px 38px rgba(23, 32, 51, .07);
+      box-shadow: none;
     }
 
     body[data-template="apple"] .panel {
@@ -412,12 +405,12 @@
     }
 
     body[data-template="airbnb"] .panel {
-      box-shadow: var(--shadow);
+      box-shadow: none;
     }
 
     body[data-template="executive"] .panel {
       border-radius: 8px;
-      box-shadow: 0 10px 26px rgba(18, 24, 38, .06);
+      box-shadow: none;
     }
 
     body[data-template="consulting"] .panel {
@@ -480,7 +473,7 @@
       border-left: 6px solid var(--accent);
       border-radius: var(--radius);
       background: color-mix(in srgb, var(--panel) 88%, transparent);
-      box-shadow: 0 18px 60px rgba(23, 32, 51, .08);
+      box-shadow: none;
     }
 
     .process {
@@ -554,7 +547,7 @@
       color: var(--ink);
       font-size: clamp(1rem, 1.6vw, 1.35rem);
       line-height: 1.5;
-      box-shadow: var(--shadow);
+      box-shadow: none;
       white-space: pre-wrap;
     }
 
@@ -593,10 +586,8 @@
       margin: 0;
       border: 1px solid color-mix(in srgb, var(--line) 76%, transparent);
       border-radius: calc(var(--radius) + 12px);
-      background:
-        linear-gradient(145deg, color-mix(in srgb, var(--panel) 82%, transparent), color-mix(in srgb, var(--accent) 9%, var(--panel-soft))),
-        var(--panel);
-      box-shadow: var(--shadow);
+      background: var(--panel);
+      box-shadow: none;
       isolation: isolate;
     }
 
@@ -614,10 +605,11 @@
     .media-frame::before,
     .media-bleed::before {
       content: "";
+      display: none;
       position: absolute;
       inset: 0;
       z-index: 1;
-      background: linear-gradient(135deg, rgba(255,255,255,.22), transparent 36%, rgba(255,255,255,.12));
+      background: none;
       pointer-events: none;
       mix-blend-mode: soft-light;
     }
@@ -668,7 +660,7 @@
       border: 1px solid var(--line);
       border-radius: 999px;
       background: color-mix(in srgb, var(--panel) 86%, transparent);
-      box-shadow: 0 12px 34px rgba(23, 32, 51, .08);
+      box-shadow: none;
       color: var(--muted);
       font-weight: 800;
     }
@@ -1652,6 +1644,17 @@
         return minutes + ':' + seconds;
       }
 
+      function slidePreviewHtml(slide) {
+        if (!slide) return '';
+        const clone = slide.cloneNode(true);
+        clone.classList.remove('active', 'leaving');
+        clone.removeAttribute('style');
+        clone.querySelectorAll('.notes, script, style, .controls, .notes-panel, .phone-panel, input, nav, button').forEach(node => node.remove());
+        clone.querySelectorAll('.fragment').forEach(fragment => fragment.classList.add('visible'));
+        const body = clone.querySelector('.slide-body');
+        return '<div class="slide-preview">' + (body ? body.outerHTML : clone.innerHTML) + '</div>';
+      }
+
       function buildSyncState() {
         const notes = slides[index].querySelector('.notes');
         const nextSlide = slides[index + 1];
@@ -1663,6 +1666,7 @@
           title: currentTitle(),
           notesHtml: notes ? notes.innerHTML : 'No notes for this slide.',
           nextTitle: nextSlide ? (nextSlide.dataset.title || 'Next slide') : 'Final slide',
+          nextSlidePreviewHtml: slidePreviewHtml(nextSlide),
           startedAt,
           updatedAt: Date.now()
         };
