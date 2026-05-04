@@ -2324,14 +2324,20 @@
         return document.title ? document.title.replace(/[^\w.-]+/g, '-').replace(/^-|-$/g, '') + '.html' : 'deck.html';
       }
 
+      function resolveLocalToolPath(toolPath) {
+        if (window.location.protocol !== 'file:' || toolPath.startsWith('/')) return toolPath;
+        const deckPath = currentDeckPath();
+        return deckPath.slice(0, deckPath.lastIndexOf('/') + 1) + toolPath;
+      }
+
       function buildPublishCommand() {
         const serverPath = document.body.dataset.presenterServer || 'animated-html-deck/scripts/presenter-server.mjs';
-        return 'node ' + shellQuote(serverPath) + ' ' + shellQuote(currentDeckPath()) + ' --port 4173 --deck-host lan';
+        return 'node ' + shellQuote(resolveLocalToolPath(serverPath)) + ' ' + shellQuote(currentDeckPath()) + ' --port 4173 --deck-host lan';
       }
 
       function buildExportPdfCommand() {
         const exportPath = document.body.dataset.pdfExporter || 'animated-html-deck/scripts/export-html-to-pdf.mjs';
-        return 'node ' + shellQuote(exportPath) + ' ' + shellQuote(currentDeckPath());
+        return 'node ' + shellQuote(resolveLocalToolPath(exportPath)) + ' ' + shellQuote(currentDeckPath());
       }
 
       function updatePublishCommand() {
