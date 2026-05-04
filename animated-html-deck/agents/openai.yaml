@@ -1,4 +1,4 @@
 interface:
-  display_name: "Animated HTML Deck"
+  display_name: "Awesome Presentation"
   short_description: "Generate premium animated HTML presentations"
-  default_prompt: "Use $animated-html-deck to create a branded single-file HTML presentation from my brief or launcher payload, infer any skipped setup fields when possible, use one resolved website-inspired theme from $style-polish when relevant, include speaker notes and editing controls, and add premium motion only when I explicitly ask for animation."
+  default_prompt: "Use $awesome-presentation to create a branded single-file HTML presentation from my brief or launcher payload, infer any skipped setup fields when possible, use one resolved website-inspired theme from $style-polish when relevant, include speaker notes and editing controls, and add premium motion only when I explicitly ask for animation."

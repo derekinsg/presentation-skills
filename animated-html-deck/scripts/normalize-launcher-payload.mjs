@@ -6,7 +6,7 @@ function usage() {
     'Usage: node scripts/normalize-launcher-payload.mjs [payload.json]',
     '',
     'Reads launcher payload JSON from a file or stdin and fills missing fields',
-    'with inferred/defaulted values for animated-html-deck startup flows.'
+    'with inferred/defaulted values for awesome-presentation startup flows.'
   ].join('\n');
 }
 
@@ -140,7 +140,7 @@ function hasConcreteTopicSignal(text) {
   ])) return true;
 
   const cleaned = text
-    .replace(/\$?animated-html-deck/gi, '')
+    .replace(/\$?(?:awesome-presentation|animated-html-deck)/gi, '')
     .replace(/use\s+/gi, '')
     .replace(/帮我|请|麻烦|做一个|做个|来个|生成|create|make|build/gi, '')
     .replace(/ppt|deck|slides?|presentation|演示稿|幻灯片/gi, '')

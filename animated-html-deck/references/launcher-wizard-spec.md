@@ -1,6 +1,6 @@
-# Animated HTML Deck Launcher Wizard
+# Awesome Presentation Launcher Wizard
 
-Use this spec when a host UI wants to launch `/animated-html-deck` through a structured multi-step dialog instead of a plain chat prompt.
+Use this spec when a host UI wants to launch `/awesome-presentation` through a structured multi-step dialog instead of a plain chat prompt.
 
 See also: `references/launcher-design-rationale.md` for the design principles behind this flow and for guidance on when to ask, infer, defer, or preview launcher inputs.
 
@@ -146,7 +146,7 @@ The host UI should pass:
 
 ## Downstream Behavior
 
-`animated-html-deck` should:
+`awesome-presentation` should:
 
 - trust launcher payload values first
 - avoid re-asking about fields already marked `user_provided`

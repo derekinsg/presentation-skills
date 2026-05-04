@@ -104,6 +104,16 @@ function commandOutput(command, args = [], env = process.env) {
   return result.stdout.trim();
 }
 
+function readPdfPageCount(pdfPath) {
+  const result = spawnSync(process.env.SHELL || '/bin/sh', ['-lc', `pdfinfo ${shellQuote(pdfPath)} 2>/dev/null`], {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe']
+  });
+  if (result.status !== 0) return null;
+  const match = result.stdout.match(/^Pages:\s*(\d+)\s*$/m);
+  return match ? Number.parseInt(match[1], 10) : null;
+}
+
 function shellQuote(value) {
   return `'${String(value).replace(/'/g, `'\\''`)}'`;
 }
@@ -180,6 +190,7 @@ async function exportPdf(browserPath, sourcePath, outputPath) {
     '--disable-dev-shm-usage',
     '--allow-file-access-from-files',
     '--run-all-compositor-stages-before-draw',
+    '--window-size=1600,900',
     '--virtual-time-budget=1000',
     '--no-pdf-header-footer',
     `--print-to-pdf=${outputPath}`,
@@ -217,12 +228,25 @@ async function main() {
   const browserPath = await findBrowser();
 
   await exportPdf(browserPath, sourcePath, outputPath);
+  const pdfPageCount = readPdfPageCount(outputPath);
+
+  if (pdfPageCount !== null && pageCount > 0 && pdfPageCount < pageCount) {
+    fail(
+      'Exported PDF has fewer pages than the HTML deck.',
+      [
+        `HTML slides: ${pageCount}`,
+        `PDF pages: ${pdfPageCount}`,
+        'Check the deck print CSS: printable .slides containers must not clip slides, and each .slide should break after a page.'
+      ].join('\n')
+    );
+  }
 
   console.log(JSON.stringify({
     sourcePath,
     outputPath,
     browserPath,
-    pageCount
+    pageCount,
+    pdfPageCount
   }, null, 2));
 }
 

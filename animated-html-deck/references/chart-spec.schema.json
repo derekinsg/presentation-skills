@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "animated-html-deck.chart-spec.schema.json",
-  "title": "Animated HTML Deck Chart Spec",
+  "$id": "awesome-presentation.chart-spec.schema.json",
+  "title": "Awesome Presentation Chart Spec",
   "type": "object",
   "additionalProperties": true,
   "required": ["type", "title", "takeaway", "data"],

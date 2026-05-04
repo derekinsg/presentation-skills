@@ -37,6 +37,8 @@ mkdir -p "$CODEX_HOME/skills"
 cp -R animated-html-deck style-polish speaker-polish "$CODEX_HOME/skills/"
 ```
 
+这里的文件夹仍叫 `animated-html-deck`，但安装后对外调用的 skill 名称是 `$awesome-presentation`。
+
 为了做干净测试，可以临时使用一个新的 `CODEX_HOME`，避免旧版本同名 skill 干扰：
 
 ```bash
@@ -50,7 +52,7 @@ cp -R animated-html-deck style-polish speaker-polish "$CODEX_HOME/skills/"
 新开一个 Codex 会话，然后复制下面任意 prompt：
 
 ```text
-Use $animated-html-deck to create an 8-slide Chinese investor pitch HTML deck about an AI customer service product. Seriousness 9/10. Style like Vercel. Include speaker notes.
+Use $awesome-presentation to create an 8-slide Chinese investor pitch HTML deck about an AI customer service product. Seriousness 9/10. Style like Vercel. Include speaker notes.
 ```
 
 ```text
@@ -71,7 +73,7 @@ Use $speaker-polish to rewrite these slide notes in a Steve Jobs inspired produc
 帮我做个 PPT
 ```
 
-`$animated-html-deck` 应该先弹出一个可点击 brief 弹窗，而不是直接生成，也不是发一长串文字问题。这个弹窗会在第一轮一次性覆盖主题/材料、源文件、用途、听众、长度、风格、讲稿和输出比例/Phone 模式；每个问题都可以选常用项，也可以用 Other 自由输入。
+`$awesome-presentation` 应该先弹出一个可点击 brief 弹窗，而不是直接生成，也不是发一长串文字问题。这个弹窗会在第一轮一次性覆盖主题/材料、源文件、用途、听众、长度、风格、讲稿和输出比例/Phone 模式；每个问题都可以选常用项，也可以用 Other 自由输入。
 
 如果你不想点弹窗，也可以一次性写完整 brief：
 
@@ -88,14 +90,14 @@ Use $speaker-polish to rewrite these slide notes in a Steve Jobs inspired produc
 也可以直接写进 prompt：
 
 ```text
-使用 $animated-html-deck 生成一个 8 页中文融资路演 HTML PPT，主题是 AI 客服产品，听众是早期投资人，用于 10 分钟演讲，严肃度 9/10，风格像 Vercel，需要每页 speaker notes、转场提示和 memory point，不要远程图片。
+使用 $awesome-presentation 生成一个 8 页中文融资路演 HTML PPT，主题是 AI 客服产品，听众是早期投资人，用于 10 分钟演讲，严肃度 9/10，风格像 Vercel，需要每页 speaker notes、转场提示和 memory point，不要远程图片。
 ```
 
 如果你要复刻已有 PPT/PDF，把源文件放在项目根目录，或直接告诉 Codex 文件路径；这种情况下页数会跟源文件锁定，不需要重新回答主题和页数。
 
 ## 6. 检查生成的 PPT
 
-对于 `$animated-html-deck` 生成的 HTML PPT，至少检查：
+对于 `$awesome-presentation` 生成的 HTML PPT，至少检查：
 
 - 页数是否和 prompt 一致。
 - 每页是否有 speaker notes。
@@ -112,6 +114,6 @@ Use $speaker-polish to rewrite these slide notes in a Steve Jobs inspired produc
 
 1. 从 GitHub release 下载 zip。
 2. 在 ChatGPT Skills UI 上传对应 skill 文件夹。
-3. 分别测试 `$animated-html-deck`、`$style-polish`、`$speaker-polish` 的示例 prompt。
+3. 分别测试 `$awesome-presentation`、`$style-polish`、`$speaker-polish` 的示例 prompt。
 
 OpenAI Skills 的产品支持范围可能变化，以上传和分享能力的最新说明以 OpenAI 官方文档为准。

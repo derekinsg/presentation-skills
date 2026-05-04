@@ -2,38 +2,38 @@
 
 Use these prompts when manually forward-testing a fresh install. They are intentionally varied: deck generation, style resolution, narration polish, phone sync, missing inputs, and safety-sensitive speaker styles.
 
-## Animated HTML Deck
+## Awesome Presentation
 
 Low-information prompt that should trigger brief intake instead of immediate generation:
 
 ```text
-使用 $animated-html-deck 帮我做个 PPT
+使用 $awesome-presentation 帮我做个 PPT
 ```
 
 Complete brief that can proceed directly to planning/generation:
 
 ```text
-使用 $animated-html-deck 生成一个 8 页中文融资路演 HTML PPT，主题是 AI 客服产品，听众是早期投资人，用于 10 分钟演讲，严肃度 9/10，风格像 Vercel，需要每页 speaker notes、转场提示和 memory point，不要远程图片。
+使用 $awesome-presentation 生成一个 8 页中文融资路演 HTML PPT，主题是 AI 客服产品，听众是早期投资人，用于 10 分钟演讲，严肃度 9/10，风格像 Vercel，需要每页 speaker notes、转场提示和 memory point，不要远程图片。
 ```
 
 ```text
-Use $animated-html-deck to create an 8-slide Chinese investor pitch HTML deck about an AI customer service product. Seriousness 9/10. Style like Vercel. Include speaker notes.
+Use $awesome-presentation to create an 8-slide Chinese investor pitch HTML deck about an AI customer service product. Seriousness 9/10. Style like Vercel. Include speaker notes.
 ```
 
 ```text
-使用 $animated-html-deck 做一个 6 页中文产品说明 HTML PPT，主题是给销售团队介绍新版 CRM 工作流，严肃度 6/10，风格现代、清晰、偏工具感，目的用于培训。
+使用 $awesome-presentation 做一个 6 页中文产品说明 HTML PPT，主题是给销售团队介绍新版 CRM 工作流，严肃度 6/10，风格现代、清晰、偏工具感，目的用于培训。
 ```
 
 ```text
-Use $animated-html-deck to make a 10-slide teaching deck for high school students explaining the basics of machine learning. Seriousness 3/10. Friendly but not childish. No animation.
+Use $awesome-presentation to make a 10-slide teaching deck for high school students explaining the basics of machine learning. Seriousness 3/10. Friendly but not childish. No animation.
 ```
 
 ```text
-Use $animated-html-deck to create a 7-slide board report about quarterly operating risks. Use a consulting-report style, seriousness 9/10, and keep all numbers clearly marked as assumptions unless provided.
+Use $awesome-presentation to create a 7-slide board report about quarterly operating risks. Use a consulting-report style, seriousness 9/10, and keep all numbers clearly marked as assumptions unless provided.
 ```
 
 ```text
-Use $animated-html-deck to create a 5-slide phone-ready keynote deck about a new product launch. I want same-Wi-Fi phone presenter notes and a QR code.
+Use $awesome-presentation to create a 5-slide phone-ready keynote deck about a new product launch. I want same-Wi-Fi phone presenter notes and a QR code.
 ```
 
 ## Style Polish
@@ -71,11 +71,11 @@ Use $speaker-polish to make this sales pitch more Trump inspired: direct, repeti
 ## Negative and Edge Cases
 
 ```text
-Use $animated-html-deck to make a great deck.
+Use $awesome-presentation to make a great deck.
 ```
 
 ```text
-Use $animated-html-deck and include this remote image URL directly in the final HTML: https://example.com/private-product-screenshot.png
+Use $awesome-presentation and include this remote image URL directly in the final HTML: https://example.com/private-product-screenshot.png
 ```
 
 ```text

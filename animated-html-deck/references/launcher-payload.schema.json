@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "animated-html-deck.launcher-payload.schema.json",
-  "title": "Animated HTML Deck Launcher Payload",
+  "$id": "awesome-presentation.launcher-payload.schema.json",
+  "title": "Awesome Presentation Launcher Payload",
   "type": "object",
   "additionalProperties": true,
   "properties": {

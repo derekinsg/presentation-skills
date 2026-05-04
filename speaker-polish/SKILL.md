@@ -179,6 +179,7 @@ Default choice: [Archetype], because [reason].
 - For rough outlines, infer slide boundaries conservatively and label assumptions.
 - For HTML decks, rewrite only the contents of speaker notes unless the user asks for HTML edits.
 - For Chinese decks, write polished Chinese speaker notes by default and keep delivery cues concise.
+- For Chinese final speaker notes, do not leave meta instructions such as “这页用于”, “这一页用来”, “先说”, “可以说”, “注意强调”, “慢一点讲”, or “收尾时提醒” inside the script. Rewrite those reminders into natural lines the presenter can say aloud.
 - For bilingual decks, preserve the user's language split and do not translate unless requested.
 - For missing audience or purpose, infer from context when obvious; otherwise state the assumption briefly.
 
@@ -189,6 +190,7 @@ Default choice: [Archetype], because [reason].
 - Use concrete nouns and active verbs.
 - Make every slide answer: why this matters now, what the audience should understand, and what changes after this slide.
 - Keep speaker notes speakable aloud. Prefer natural cadence over written density.
+- Treat final notes as presenter script, not rehearsal annotations or slide director commentary, unless the user explicitly asks for delivery coaching.
 - Use rhetorical devices sparingly: contrast, repetition, analogy, callback, question, reveal, and call to action.
 - Remove filler phrases unless they serve warmth or pacing.
 

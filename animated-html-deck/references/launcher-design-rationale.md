@@ -1,6 +1,6 @@
-# Animated HTML Deck Launcher Design Rationale
+# Awesome Presentation Launcher Design Rationale
 
-This note explains why the `/animated-html-deck` launcher is designed as a low-friction, inference-friendly intake flow instead of a rigid form or a fully automatic black box.
+This note explains why the `/awesome-presentation` launcher is designed as a low-friction, inference-friendly intake flow instead of a rigid form or a fully automatic black box.
 
 It is written for two audiences:
 

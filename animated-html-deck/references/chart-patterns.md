@@ -1,6 +1,6 @@
 # Chart Patterns
 
-These patterns are the default vocabulary for chart planning in `animated-html-deck`.
+These patterns are the default vocabulary for chart planning in `awesome-presentation`.
 
 ## Investment Research / Market Analysis
 

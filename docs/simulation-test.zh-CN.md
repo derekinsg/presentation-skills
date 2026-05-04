@@ -57,6 +57,8 @@ mkdir -p "$CODEX_HOME/skills"
 cp -R animated-html-deck style-polish speaker-polish "$CODEX_HOME/skills/"
 ```
 
+注意：HTML PPT 这个 skill 的文件夹仍是 `animated-html-deck`，触发名称应验证为 `$awesome-presentation`。
+
 然后新开 Codex 会话，确认不会读到你平时环境里的旧 skill。
 
 ## 五、真实生成测试
@@ -64,7 +66,7 @@ cp -R animated-html-deck style-polish speaker-polish "$CODEX_HOME/skills/"
 至少跑这三类：
 
 ```text
-Use $animated-html-deck to create an 8-slide Chinese investor pitch HTML deck about an AI customer service product. Seriousness 9/10. Style like Vercel. Include speaker notes.
+Use $awesome-presentation to create an 8-slide Chinese investor pitch HTML deck about an AI customer service product. Seriousness 9/10. Style like Vercel. Include speaker notes.
 ```
 
 ```text
@@ -106,6 +108,6 @@ Main issue:
 
 - 新 clone 后 `npm test` 全绿。
 - 干净环境里 3 个 skill 都能被 `$skill-name` 触发。
-- `$animated-html-deck` 能生成可打开、可演示的单文件 HTML PPT。
+- `$awesome-presentation` 能生成可打开、可演示的单文件 HTML PPT。
 - 至少 2-3 个外部用户只看 README 或快速开始文档，也能完成第一次生成。
 - 主要卡点已经记录到 GitHub issue。

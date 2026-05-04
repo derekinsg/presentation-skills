@@ -14,7 +14,8 @@ const repoRoot = path.resolve(__dirname, '..');
 const skills = [
   {
     name: 'animated-html-deck',
-    displayName: 'Animated HTML Deck',
+    metadataName: 'awesome-presentation',
+    displayName: 'Awesome Presentation',
     files: [
       'SKILL.md',
       'agents/openai.yaml',
@@ -443,7 +444,7 @@ test('skill folders contain required files and metadata', async () => {
 
     const skillMd = await readFile(repoPath(skill.name, 'SKILL.md'), 'utf8');
     const metadata = parseFrontmatter(skillMd);
-    assert.equal(metadata.name, skill.name, `${skill.name} frontmatter name should match folder`);
+    assert.equal(metadata.name, skill.metadataName || skill.name, `${skill.name} frontmatter name should match expected skill name`);
     assert.ok(metadata.description && metadata.description.length > 80, `${skill.name} needs a useful trigger description`);
 
     const agentYaml = await readFile(repoPath(skill.name, 'agents', 'openai.yaml'), 'utf8');
@@ -614,7 +615,7 @@ test('style resolver returns deterministic theme packages', async () => {
 
 test('chart intelligence validates and renders core chart specs', async () => {
   const schema = JSON.parse(await readFile(repoPath('animated-html-deck/references/chart-spec.schema.json'), 'utf8'));
-  assert.equal(schema.title, 'Animated HTML Deck Chart Spec');
+  assert.equal(schema.title, 'Awesome Presentation Chart Spec');
   assert.ok(schema.properties.type.enum.includes('kpi-strip'), 'chart schema should include kpi-strip');
   assert.ok(schema.properties.type.enum.includes('heatmap'), 'chart schema should include heatmap');
 
@@ -844,6 +845,7 @@ test('single-file deck template preserves promised runtime features', async () =
     'notesSave',
     'notesReset',
     'notesSaveStatus',
+    'laserCursor',
     'hideToggle'
   ]) {
     assert.ok(html.includes(`id="${id}"`), `template should include ${id}`);
@@ -857,11 +859,12 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.match(controlsMarkup, />Note<\/button>/, 'notes control should use the concise Note label');
   const liveStyles = html.slice(0, html.indexOf('@media print'));
   assert.match(liveStyles, /\.deck\s*\{[\s\S]*?height:\s*100vh;[\s\S]*?width:\s*100vw;[\s\S]*?display:\s*grid;[\s\S]*?place-items:\s*center;[\s\S]*?padding:\s*0;/, 'live deck stage should fill and center the true slide canvas');
-  assert.match(liveStyles, /--slide-width:\s*min\(100vw,\s*calc\(100vh \* 16 \/ 9\)\);[\s\S]*?--slide-height:\s*min\(100vh,\s*calc\(100vw \* 9 \/ 16\)\);/, '16:9 should use a real viewport-fitted canvas formula');
-  assert.match(liveStyles, /body\[data-aspect="9-16"\]\s*\{[\s\S]*?--slide-width:\s*min\(100vw,\s*calc\(100vh \* 9 \/ 16\)\);[\s\S]*?--slide-height:\s*min\(100vh,\s*calc\(100vw \* 16 \/ 9\)\);/, '9:16 should use a real phone canvas formula');
-  assert.match(liveStyles, /\.slides\s*\{[\s\S]*?width:\s*var\(--slide-width\);[\s\S]*?height:\s*var\(--slide-height\);[\s\S]*?max-height:\s*none;[\s\S]*?aspect-ratio:\s*var\(--aspect-ratio\);/, 'live slides should use the selected true aspect-ratio canvas');
+  assert.match(liveStyles, /--design-width:\s*1600px;[\s\S]*?--design-height:\s*900px;[\s\S]*?--slide-width:\s*var\(--design-width\);[\s\S]*?--slide-height:\s*var\(--design-height\);/, '16:9 should use a fixed 1600x900 design canvas');
+  assert.match(liveStyles, /body\[data-aspect="9-16"\]\s*\{[\s\S]*?--design-width:\s*900px;[\s\S]*?--design-height:\s*1600px;[\s\S]*?--slide-width:\s*var\(--design-width\);[\s\S]*?--slide-height:\s*var\(--design-height\);/, '9:16 should use a fixed 900x1600 design canvas');
+  assert.match(liveStyles, /\.slides\s*\{[\s\S]*?width:\s*var\(--slide-width\);[\s\S]*?height:\s*var\(--slide-height\);[\s\S]*?max-height:\s*none;[\s\S]*?aspect-ratio:\s*var\(--aspect-ratio\);[\s\S]*?transform:\s*scale\(var\(--deck-scale\)\);/, 'live slides should render the fixed design canvas through a viewport scale');
   assert.match(liveStyles, /body\[data-aspect="9-16"\]\s+\.slides\s*\{[\s\S]*?width:\s*var\(--slide-width\);[\s\S]*?height:\s*var\(--slide-height\);[\s\S]*?aspect-ratio:\s*var\(--aspect-ratio\);/, '9:16 live slides should keep the true aspect-ratio canvas');
   assert.doesNotMatch(liveStyles, /calc\(\(100vh - var\(--controls-reserve/, 'live canvas should not subtract controls height');
+  assert.match(html, /function updateDeckScale\(\)/, 'template should scale the fixed canvas to the viewport at runtime');
   assert.match(html, /<body[^>]+data-deck-id="animated-html-deck-template"/, 'template should include a stable data-deck-id');
   assert.match(html, /data-aspect="16-9"/, 'template should default to 16:9 aspect mode');
   assert.match(html, /body\[data-aspect="9-16"\]/, 'template should include 9:16 aspect styling');
@@ -882,8 +885,31 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.match(html, /data-chart-type="kpi-strip"/, 'template should include a sample structured chart');
   assert.match(html, /data-chart-spec='/, 'template should preserve chart specs in data-chart-spec');
   assert.match(html, /body\[data-aspect="9-16"\]\s+\.viz-kpi-strip/, 'template should reflow chart components for 9:16');
-  assert.match(html, /function setCursorMode\(\)/, 'template should include an explicit cursor mode reset function');
-  assert.match(html, /bindControl\('cursor',\s*cursorToggle,\s*'click',\s*setCursorMode\)/, 'Cursor should call the reset function directly');
+  assert.match(html, /--hover-lift:\s*-6px;/, 'template should define subtle hover lift tokens');
+  assert.match(html, /@media\s*\(hover:\s*hover\)\s*and\s*\(pointer:\s*fine\)/, 'template should gate hover interactions to pointer devices');
+  assert.match(html, /body:not\(\.editing\)\s+\.slide\.active\s+\.panel,[\s\S]*?\.viz-waterfall-bar\s*\{[\s\S]*?transition:/, 'template should only arm hover transitions on the active slide outside edit mode');
+  assert.match(html, /body:not\(\.editing\)\s+\.slide\.active\s+\.panel:hover,[\s\S]*?\.viz-card:hover,[\s\S]*?transform:\s*translateY\(var\(--hover-lift\)\);/, 'template should lift reusable cards and chart cards on hover');
+  assert.match(html, /body:not\(\.editing\)\s+\.slide\.active\s+\.viz-waterfall-bar:hover\s*\{[\s\S]*?filter:\s*var\(--hover-glow\);/, 'template should highlight chart bars on hover');
+  assert.match(html, /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.viz-waterfall-bar\s*\{[\s\S]*?transform:\s*none !important;/, 'template should suppress hover transforms for reduced motion');
+  assert.match(html, /@media print[\s\S]*?\.viz-waterfall-bar\s*\{[\s\S]*?transform:\s*none !important;[\s\S]*?filter:\s*none !important;/, 'template should keep hover transforms out of print and PDF output');
+  assert.match(html, /\.laser-cursor\s*\{[\s\S]*?position:\s*fixed;[\s\S]*?pointer-events:\s*none;/, 'template should include a non-blocking laser cursor style');
+  assert.match(html, /id="laserCursor"[\s\S]*data-laser-mode="laser"/, 'laser cursor should declare its default mode');
+  assert.match(html, /\.laser-cursor\[data-laser-mode="laser"\]/, 'template should include laser pointer styling');
+  assert.match(html, /\.laser-cursor\[data-laser-mode="spotlight"\]/, 'template should include spotlight pointer styling');
+  assert.match(html, /\.laser-cursor\[data-laser-mode="crosshair"\]/, 'template should include crosshair pointer styling');
+  assert.match(html, /body\.laser-active\s+\.laser-cursor\.is-visible/, 'template should reveal the laser cursor only in pointer mode');
+  assert.match(html, /body\.laser-active\s+\.slide\.active,[\s\S]*?cursor:\s*none;/, 'template should hide the native cursor over the active slide in pointer mode');
+  assert.match(html, /body\.laser-active\s+\.controls,[\s\S]*?body\.laser-active\s+\.phone-panel \*,[\s\S]*?cursor:\s*auto;/, 'template should restore the native cursor over controls and panels');
+  assert.match(html, /const laserPointerModes = \['laser', 'spotlight', 'crosshair'\]/, 'template should define the pointer mode cycle');
+  assert.match(html, /function setCursorMode\(options = \{\}\)/, 'template should include an explicit cursor mode reset function');
+  assert.match(html, /function toggleCursorMode\(\)[\s\S]*laserPointerMode === 'laser'[\s\S]*laserPointerMode:\s*'spotlight'[\s\S]*laserPointerMode === 'spotlight'[\s\S]*laserPointerMode:\s*'crosshair'[\s\S]*setCursorMode\(\{ laserPointer:\s*false \}\)/, 'Cursor should cycle Laser to Spot to Cross to off');
+  assert.match(html, /bindControl\('cursor',\s*cursorToggle,\s*'click',\s*toggleCursorMode\)/, 'Cursor should bind to laser pointer toggle');
+  assert.match(html, /function setLaserPointer\(enabled,\s*mode = laserPointerMode\)/, 'template should include laser pointer mode state management');
+  assert.match(html, /function updateLaserPointer\(event\)/, 'template should track laser pointer movement');
+  assert.match(html, /cursorToggle\.textContent = cursorPointerActive \? 'Cursor: ' \+ laserPointerLabel\(laserPointerMode\) : 'Cursor'/, 'Cursor button should display the active pointer mode');
+  assert.match(html, /setLaserPointer\(false\);[\s\S]*isEditing = enabled;/, 'Edit mode should close the laser pointer before editing');
+  assert.match(html, /event\.key === 'Escape' && laserPointerActive[\s\S]*setLaserPointer\(false\)/, 'Escape should close the laser pointer');
+  assert.match(html, /document\.addEventListener\('pointermove'[\s\S]*updateLaserPointer\(event\)/, 'pointer movement should update the laser cursor');
   assert.match(html, /selection\.removeAllRanges/, 'Cursor mode should clear text selection ranges');
   assert.match(html, /querySelectorAll\('\.editable-node\.is-selected, \.editable-node\.is-dragging'\)/, 'Cursor mode should clear residual selected edit nodes');
   assert.match(html, /id="colorToggle"[\s\S]*for="accentColorPicker"|for="accentColorPicker"[\s\S]*id="colorToggle"/, 'Color should be a native label trigger for the color input');
@@ -896,6 +922,8 @@ test('single-file deck template preserves promised runtime features', async () =
     assert.match(html, new RegExp(`${healthKey}[:\\s]`), `control health should cover ${healthKey}`);
     assert.match(html, new RegExp(`bindControl\\('${healthKey}'`), `${healthKey} should be bound through bindControl`);
   }
+  assert.match(html, /laserPointer:\s*laserPointerActive/, 'control health should expose laser pointer state');
+  assert.match(html, /laserPointerMode:\s*laserPointerActive \? laserPointerMode : 'off'/, 'control health should expose laser pointer mode');
   assert.match(html, /controlsHidden:/, 'control health should expose hidden controls state');
   assert.match(html, /function toggleControlsHidden\(\)/, 'template should include a hide/show controls toggle');
   assert.match(html, /document\.addEventListener\('click'[\s\S]*forward\(\);[\s\S]*\}\);/, 'template should advance on slide clicks');
@@ -954,6 +982,16 @@ test('single-file deck template preserves promised runtime features', async () =
     skillText,
     /Speaker Notes Editing Contract/,
     'skill should document editable speaker notes'
+  );
+  assert.match(
+    skillText,
+    /presenter script by default, not slide director notes/,
+    'skill should forbid slide-director commentary in speaker notes'
+  );
+  assert.match(
+    skillText,
+    /do not include meta instructions such as "this slide is for\.\.\.", "first say\.\.\.", "remind the audience\.\.\.", or "slow down here"/,
+    'skill should name common meta-note phrases to avoid'
   );
   assert.match(
     skillText,
@@ -1050,6 +1088,23 @@ test('single-file deck template preserves promised runtime features', async () =
     /\/sync\/commands/,
     'skill should require phone command sync'
   );
+
+  const speakerSkillText = await readFile(repoPath('speaker-polish/SKILL.md'), 'utf8');
+  assert.match(
+    speakerSkillText,
+    /For Chinese final speaker notes/,
+    'speaker-polish should include Chinese final-script guardrails'
+  );
+  assert.match(
+    speakerSkillText,
+    /这页用于|这一页用来|注意强调|慢一点讲|收尾时提醒/,
+    'speaker-polish should name Chinese meta-note phrases to rewrite'
+  );
+  assert.match(
+    speakerSkillText,
+    /presenter script, not rehearsal annotations or slide director commentary/,
+    'speaker-polish should require final notes rather than rehearsal annotations'
+  );
 });
 
 test('presenter server starts and reports deck, phone, and QR URLs', async () => {
@@ -1095,7 +1150,10 @@ test('agent simulation prompt fixture covers positive, edge, and negative cases'
   assert.ok(fixture.prompts.length >= 10, 'fixture should include at least 10 prompts');
 
   const skillsCovered = new Set(fixture.prompts.map(prompt => prompt.skill));
-  for (const skill of skills) assert.ok(skillsCovered.has(skill.name), `${skill.name} should have simulation prompts`);
+  for (const skill of skills) {
+    const expectedName = skill.metadataName || skill.name;
+    assert.ok(skillsCovered.has(expectedName), `${expectedName} should have simulation prompts`);
+  }
 
   const types = new Set(fixture.prompts.map(prompt => prompt.type));
   for (const type of ['positive', 'edge', 'negative']) assert.ok(types.has(type), `fixture should include ${type} prompts`);

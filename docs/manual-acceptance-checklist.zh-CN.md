@@ -4,7 +4,7 @@
 
 ## HTML PPT 验收
 
-对 `$animated-html-deck` 生成的每份 HTML PPT 检查：
+对 `$awesome-presentation` 生成的每份 HTML PPT 检查：
 
 - 页数和 prompt 完全一致。
 - 第一屏直接是演示稿，不是说明页或营销页。
@@ -14,6 +14,7 @@
 - 低信息请求（如“帮我做个 PPT”）首轮出现一个可点击 brief 弹窗，一次性覆盖核心字段；不应发送“请给我这 6 个信息”的纯文字列表。
 - 左右方向键、空格键、Home/End 可用。
 - Cursor、Edit、Color、Mode、Ratio、Template、Export PDF、Phone、Note、Hide 控件存在，底排不会被裁掉。
+- 连续点击 Cursor 会按 `Cursor: Laser`、`Cursor: Spot`、`Cursor: Cross`、关闭循环；开启时 slide 区域隐藏系统鼠标，只显示演示指针，移动到底部 controls/notes/phone 面板时系统鼠标恢复；点击 Edit 或按 Escape 后指针关闭。
 - Ratio 能在 16:9 和 9:16 真实画布之间切换；9:16 在桌面上显示居中的手机竖版画布。
 - 打印预览是一页一 slide。
 - 没有远程图片、CDN、远程字体、analytics。

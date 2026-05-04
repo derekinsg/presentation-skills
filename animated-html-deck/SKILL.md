@@ -1,9 +1,9 @@
 ---
-name: animated-html-deck
+name: awesome-presentation
 description: Generate polished, single-file HTML presentations from a user brief. Use when Codex needs to create an offline-ready HTML slide deck or PPT-like presentation with optional native CSS/JS motion presets, embedded local images, exact slide-count control, keyboard navigation, speaker notes, print/export styling, and purpose-aware visual direction based on content, page count, seriousness level, style, and whether the deck is for a speech, pitch, teaching, report, or explanation.
 ---
 
-# Animated HTML Deck
+# Awesome Presentation
 
 ## Overview
 
@@ -40,6 +40,8 @@ After the modal response, produce a visible confirmed brief and continue plannin
 If only some answers are provided, continue with a visible "confirmed / defaulted" brief before planning. Do not silently turn a vague request into an unrelated topic. If the user explicitly says "just decide for me" after the intake, default to 8 slides, balanced seriousness 6/10, modern clear style, concise speaker notes, and label the assumptions.
 
 When speaking context is detected (演讲, 口播, 讲稿, 上台讲, 发布会, 路演, speaker notes, keynote, presenter notes), surface speaker script guidance before generation unless already specified. Default speaker notes should include per-slide narration, transition cue, delivery cue, and one memory point, at roughly 60-90 seconds per content slide.
+
+Speaker notes are presenter script by default, not slide director notes. Write what the speaker can actually say aloud; do not include meta instructions such as "this slide is for...", "first say...", "remind the audience...", or "slow down here" unless the user explicitly asks for rehearsal coaching.
 
 ## Required Inputs
 
@@ -146,7 +148,7 @@ Every generated deck must include a visual planning pass after the slide outline
    - Keep `data-motion-mode="static"` on the body by default. Do not add `data-motion` or `.fragment` by default. Use motion presets only when the user explicitly asks for animation, advanced motion, product-launch feel, or a similar animated deck.
    - Use `media-frame`, `media-bleed`, `media-split`, `logo-lockup`, and `image-caption` components for visual material.
    - Use `.viz-card` components for charts and diagrams, preserving `data-chart-type` and `data-chart-spec` on the rendered figure.
-   - Include `<aside class="notes">` on every slide. Put narration, transitions, and delivery cues there instead of overloading visible slide text.
+   - Include `<aside class="notes">` on every slide. Put narration, transitions, and delivery cues there instead of overloading visible slide text. Keep notes speakable as final presenter script, not internal slide-planning commentary.
    - Keep the built-in template switcher, lightweight editing controls, recording presenter mode, and phone presenter hooks unless the user explicitly asks for a minimal deck.
 7. Verify the HTML before delivery:
    - Confirm slide count by counting `.slide` sections.
@@ -199,10 +201,10 @@ Built-in controls must be runnable, not just visible. Use stable IDs: `cursorTog
 
 - `Color` must use `colorToggle` as the canonical control id. Keep JS compatibility with old `colorButton` decks, but do not generate new `colorButton`-only controls.
 - Make `Color` a native trigger for `accentColorPicker`, such as `<label for="accentColorPicker">Color</label>`, and also listen to both `input` and `change` so the accent updates during drag and after confirmation.
-- `Cursor` must call `setCursorMode()`, exit editing, clear DOM selection, remove `.is-selected` / `.is-dragging`, and close `contentEditable`.
-- `Edit` must be the only visible control that enables text selection, drag-to-move, and contentEditable nodes.
+- `Cursor` must cycle through visible presentation pointer modes: `Cursor: Laser`, `Cursor: Spot`, `Cursor: Cross`, then off. Entering Cursor exits editing, clears DOM selection, removes `.is-selected` / `.is-dragging`, closes `contentEditable`, hides the native mouse cursor over the active slide area, and restores the native cursor over controls/panels.
+- `Edit` must close the laser pointer and be the only visible control that enables text selection, drag-to-move, and contentEditable nodes.
 - Bind control events through a safe helper so one missing optional control warns through `console.warn` but does not prevent the rest of the controls from binding.
-- Expose `window.__deckControlHealth` with required controls, bound controls, and live state for editing, accent color, aspect, PDF export, phone panel, notes panel, controls visibility, and fullscreen state.
+- Expose `window.__deckControlHealth` with required controls, bound controls, and live state for editing, laser pointer, laser pointer mode, accent color, aspect, PDF export, phone panel, notes panel, controls visibility, and fullscreen state.
 
 ## Go Live / Phone Sync Contract
 
@@ -263,21 +265,21 @@ Template switching must change layout feel, density, radius, shadow depth, and b
 ## Chinese Example Prompts
 
 ```text
-使用 $animated-html-deck 生成一个 8 页中文商业路演 HTML PPT，主题是 AI 客服产品融资介绍，氛围 9/10 严肃，风格是高端企业感，目的用于 10 分钟演讲。
+使用 $awesome-presentation 生成一个 8 页中文商业路演 HTML PPT，主题是 AI 客服产品融资介绍，氛围 9/10 严肃，风格是高端企业感，目的用于 10 分钟演讲。
 ```
 
 ```text
-使用 $animated-html-deck 做一个 6 页产品说明型 HTML 演示，内容是面向销售团队介绍新版 CRM 工作流，氛围 6/10，风格现代、清晰、偏工具感，目的用于说明和培训。
+使用 $awesome-presentation 做一个 6 页产品说明型 HTML 演示，内容是面向销售团队介绍新版 CRM 工作流，氛围 6/10，风格现代、清晰、偏工具感，目的用于说明和培训。
 ```
 
 ```text
-使用 $animated-html-deck 制作一个 10 页教学型 HTML PPT，主题是给高中生讲解机器学习基本概念，氛围 3/10，风格活泼但不要幼稚。
+使用 $awesome-presentation 制作一个 10 页教学型 HTML PPT，主题是给高中生讲解机器学习基本概念，氛围 3/10，风格活泼但不要幼稚。
 ```
 
 ## Resource Use
 
 - `assets/single-file-deck-template.html`: copy this as the starting point for every default deck, then replace sample slides and theme variables.
-- `references/launcher-wizard-spec.md`: use this when the host UI wants a multi-step launcher for `/animated-html-deck`.
+- `references/launcher-wizard-spec.md`: use this when the host UI wants a multi-step launcher for `/awesome-presentation`.
 - `references/launcher-design-rationale.md`: explains why the launcher is skippable, inference-friendly, and preview-driven, and how to keep future launcher extensions aligned with that model.
 - `references/launcher-payload.schema.json`: the structured launcher contract for host UI payloads.
 - `scripts/image-to-data-uri.mjs`: convert a local image into an inline `data:` URI for single-file decks.

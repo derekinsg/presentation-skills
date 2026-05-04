@@ -2,7 +2,7 @@
 
 This repository packages three presentation-focused AI skills for public GitHub distribution:
 
-- `animated-html-deck`: generate self-contained browser-based HTML slide decks with speaker notes, print styles, editing controls, optional motion presets, and optional same-Wi-Fi presenter sync.
+- `awesome-presentation`: generate self-contained browser-based HTML slide decks with speaker notes, print styles, editing controls, optional motion presets, and optional same-Wi-Fi presenter sync.
 - `style-polish`: resolve a vague or website-inspired visual direction into one reusable design theme package.
 - `speaker-polish`: rewrite presentation scripts and speaker notes with clear, performable, master-inspired rhetorical patterns.
 
@@ -30,6 +30,8 @@ For Codex-style local skills, copy any skill folder you want to use into your lo
 mkdir -p "$CODEX_HOME/skills"
 cp -R animated-html-deck style-polish speaker-polish "$CODEX_HOME/skills/"
 ```
+
+The deck skill folder is still `animated-html-deck`, but its public skill name is `$awesome-presentation`.
 
 For ChatGPT Skills, download a release zip and upload the skill folder through the ChatGPT Skills UI. OpenAI's current Skills documentation is the source of truth for supported upload, sharing, and product-specific behavior: <https://help.openai.com/en/articles/20001066-skills-in-chatgpt>
 
@@ -79,7 +81,7 @@ The smoke suite checks:
 See [examples/prompts.md](examples/prompts.md) for copy-ready prompts. Minimal examples:
 
 ```text
-Use $animated-html-deck to create an 8-slide Chinese investor pitch HTML deck about an AI customer service product. Seriousness 9/10. Style like Vercel. Include speaker notes.
+Use $awesome-presentation to create an 8-slide Chinese investor pitch HTML deck about an AI customer service product. Seriousness 9/10. Style like Vercel. Include speaker notes.
 ```
 
 ```text

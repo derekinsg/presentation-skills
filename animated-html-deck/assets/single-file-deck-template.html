@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Animated HTML Deck</title>
+  <title>Awesome Presentation</title>
   <style>
     :root {
       --bg: #f5f6f8;
@@ -16,23 +16,31 @@
       --accent-2: #2997ff;
       --shadow: 0 20px 70px rgba(29, 29, 31, .12);
       --radius: 12px;
-      --slide-pad-x: clamp(32px, 6vw, 86px);
-      --slide-pad-y: clamp(28px, 5vw, 64px);
-      --content-gap: clamp(18px, 3vw, 34px);
-      --h1-size: clamp(3.2rem, 7.8vw, 7.4rem);
-      --h2-size: clamp(2.2rem, 5vw, 5.2rem);
-      --lead-size: clamp(1.08rem, 2vw, 1.65rem);
+      --slide-pad-x: 86px;
+      --slide-pad-y: 64px;
+      --content-gap: 34px;
+      --h1-size: 118px;
+      --h2-size: 83px;
+      --lead-size: 26px;
       --duration: 360ms;
       --ease: cubic-bezier(.22, .61, .36, 1);
       --motion-duration: 760ms;
       --motion-distance: 34px;
       --motion-depth: 72px;
       --stagger-step: 78ms;
+      --hover-lift: -6px;
+      --hover-border: color-mix(in srgb, var(--accent) 48%, var(--line));
+      --hover-surface: color-mix(in srgb, var(--panel) 86%, var(--accent) 7%);
+      --hover-shadow: 0 18px 44px color-mix(in srgb, var(--accent) 16%, transparent), 0 14px 34px rgba(15, 23, 42, .1);
+      --hover-glow: drop-shadow(0 8px 18px color-mix(in srgb, var(--accent) 20%, transparent));
       --aspect-ratio: 16 / 9;
-      --slide-width: min(100vw, 177.7778vh);
-      --slide-height: min(100vh, 56.25vw);
+      --design-width: 1600px;
+      --design-height: 900px;
+      --slide-width: var(--design-width);
+      --slide-height: var(--design-height);
+      --deck-scale: 1;
       --controls-reserve: 108px;
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -52,26 +60,28 @@
 
     body[data-aspect="9-16"] {
       --aspect-ratio: 9 / 16;
-      --slide-width: min(100vw, 56.25vh);
-      --slide-height: min(100vh, 177.7778vw);
+      --design-width: 900px;
+      --design-height: 1600px;
+      --slide-width: var(--design-width);
+      --slide-height: var(--design-height);
       --controls-reserve: 138px;
-      --slide-pad-x: clamp(20px, 5.4vw, 34px);
-      --slide-pad-y: clamp(22px, 4.2vh, 42px);
-      --content-gap: clamp(10px, 2.8vw, 18px);
-      --h1-size: clamp(2rem, 8vw, 3.25rem);
-      --h2-size: clamp(1.55rem, 6.3vw, 2.55rem);
-      --lead-size: clamp(.9rem, 3.2vw, 1.12rem);
+      --slide-pad-x: 34px;
+      --slide-pad-y: 42px;
+      --content-gap: 18px;
+      --h1-size: 52px;
+      --h2-size: 41px;
+      --lead-size: 18px;
     }
 
     @supports (width: calc(100vh * 16 / 9)) {
       :root {
-        --slide-width: min(100vw, calc(100vh * 16 / 9));
-        --slide-height: min(100vh, calc(100vw * 9 / 16));
+        --slide-width: var(--design-width);
+        --slide-height: var(--design-height);
       }
 
       body[data-aspect="9-16"] {
-        --slide-width: min(100vw, calc(100vh * 9 / 16));
-        --slide-height: min(100vh, calc(100vw * 16 / 9));
+        --slide-width: var(--design-width);
+        --slide-height: var(--design-height);
       }
     }
 
@@ -222,6 +232,8 @@
       perspective: 1600px;
       box-shadow: none;
       background: var(--bg);
+      transform: scale(var(--deck-scale));
+      transform-origin: center center;
     }
 
     body[data-aspect="9-16"] .slides {
@@ -271,7 +283,7 @@
       inset: 0;
       display: grid;
       grid-template-rows: minmax(0, 1fr);
-      gap: clamp(14px, 2vw, 24px);
+      gap: 24px;
       padding: var(--slide-pad-y) var(--slide-pad-x) max(var(--slide-pad-y), calc(var(--controls-reserve) + 20px));
       overflow: hidden;
       opacity: 0;
@@ -989,6 +1001,62 @@
       font-weight: 850;
     }
 
+    @media (hover: hover) and (pointer: fine) {
+      body:not(.editing) .slide.active .panel,
+      body:not(.editing) .slide.active .callout,
+      body:not(.editing) .slide.active .step,
+      body:not(.editing) .slide.active .viz-card,
+      body:not(.editing) .slide.active .viz-kpi,
+      body:not(.editing) .slide.active .viz-scenario,
+      body:not(.editing) .slide.active .viz-timeline-item,
+      body:not(.editing) .slide.active .viz-waterfall-bar {
+        transition:
+          transform 260ms var(--ease),
+          border-color 260ms var(--ease),
+          box-shadow 260ms var(--ease),
+          background 260ms var(--ease),
+          filter 260ms var(--ease);
+        will-change: transform;
+      }
+
+      body:not(.editing) .slide.active .metric {
+        transition:
+          transform 240ms var(--ease),
+          color 240ms var(--ease),
+          filter 240ms var(--ease);
+        will-change: transform;
+      }
+
+      body:not(.editing) .slide.active .panel:hover,
+      body:not(.editing) .slide.active .callout:hover,
+      body:not(.editing) .slide.active .step:hover,
+      body:not(.editing) .slide.active .viz-card:hover,
+      body:not(.editing) .slide.active .viz-kpi:hover,
+      body:not(.editing) .slide.active .viz-scenario:hover,
+      body:not(.editing) .slide.active .viz-timeline-item:hover {
+        transform: translateY(var(--hover-lift));
+        border-color: var(--hover-border);
+        background: var(--hover-surface);
+        box-shadow: var(--hover-shadow);
+      }
+
+      body:not(.editing) .slide.active .metric:hover {
+        transform: translateY(calc(var(--hover-lift) * .45));
+        color: var(--accent-2);
+        filter: var(--hover-glow);
+      }
+
+      body:not(.editing) .slide.active .viz-waterfall-bar:hover {
+        transform: translateY(calc(var(--hover-lift) * .65)) scaleY(1.015);
+        filter: var(--hover-glow);
+      }
+
+      body:not(.editing) .slide.active .viz-kpi:hover strong,
+      body:not(.editing) .slide.active .viz-card:hover .chart-title {
+        color: var(--accent);
+      }
+    }
+
     body[data-motion-mode="animated"] .bar span:nth-child(2)::before {
       width: 0;
       transition: width 880ms var(--ease);
@@ -1445,6 +1513,130 @@
       pointer-events: none;
     }
 
+    .laser-cursor {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 18;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate3d(-50%, -50%, 0) scale(.88);
+      transition:
+        opacity 120ms var(--ease),
+        transform 120ms var(--ease),
+        width 120ms var(--ease),
+        height 120ms var(--ease),
+        border-color 120ms var(--ease),
+        box-shadow 120ms var(--ease);
+    }
+
+    .laser-cursor::before,
+    .laser-cursor::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .laser-cursor[data-laser-mode="laser"] {
+      width: 34px;
+      height: 34px;
+      border: 2px solid color-mix(in srgb, var(--accent) 74%, #ffffff);
+      border-radius: 999px;
+      box-shadow:
+        0 0 0 7px color-mix(in srgb, var(--accent) 18%, transparent),
+        0 0 34px color-mix(in srgb, var(--accent) 42%, transparent);
+    }
+
+    .laser-cursor[data-laser-mode="laser"]::after {
+      left: 50%;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 82%, transparent);
+    }
+
+    .laser-cursor[data-laser-mode="spotlight"] {
+      width: 148px;
+      height: 148px;
+      border: 2px solid color-mix(in srgb, var(--accent) 72%, #ffffff);
+      border-radius: 999px;
+      background:
+        radial-gradient(circle, color-mix(in srgb, var(--accent) 12%, transparent) 0 30%, transparent 68%),
+        radial-gradient(circle, rgba(255,255,255,.34) 0 10%, transparent 42%);
+      box-shadow:
+        0 0 0 9999px rgba(10, 16, 25, .16),
+        0 0 52px color-mix(in srgb, var(--accent) 38%, transparent);
+    }
+
+    .laser-cursor[data-laser-mode="spotlight"]::after {
+      left: 50%;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      border: 1px solid color-mix(in srgb, var(--accent) 78%, #ffffff);
+      border-radius: 999px;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 64%, transparent);
+    }
+
+    .laser-cursor[data-laser-mode="crosshair"] {
+      width: 54px;
+      height: 54px;
+      border: 1px solid color-mix(in srgb, var(--accent) 70%, #ffffff);
+      border-radius: 999px;
+      background: radial-gradient(circle, var(--accent) 0 3px, transparent 4px);
+      box-shadow:
+        0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent),
+        0 0 28px color-mix(in srgb, var(--accent) 34%, transparent);
+    }
+
+    .laser-cursor[data-laser-mode="crosshair"]::before {
+      left: 50%;
+      top: 8px;
+      width: 1px;
+      height: calc(100% - 16px);
+      background: color-mix(in srgb, var(--accent) 86%, #ffffff);
+      transform: translateX(-50%);
+      box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 58%, transparent);
+    }
+
+    .laser-cursor[data-laser-mode="crosshair"]::after {
+      left: 8px;
+      top: 50%;
+      width: calc(100% - 16px);
+      height: 1px;
+      background: color-mix(in srgb, var(--accent) 86%, #ffffff);
+      transform: translateY(-50%);
+      box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 58%, transparent);
+    }
+
+    body.laser-active .laser-cursor.is-visible {
+      opacity: 1;
+      transform: translate3d(-50%, -50%, 0) scale(1);
+    }
+
+    body.laser-active .slide.active,
+    body.laser-active .slide.active * {
+      cursor: none;
+    }
+
+    body.laser-active .controls,
+    body.laser-active .controls *,
+    body.laser-active .notes-panel,
+    body.laser-active .notes-panel *,
+    body.laser-active .phone-panel,
+    body.laser-active .phone-panel *,
+    body.laser-active .edit-hint {
+      cursor: auto;
+    }
+
+    .print-backdrop {
+      display: none;
+    }
+
     body.editing .editable-node {
       outline: 1px dashed color-mix(in srgb, var(--accent) 34%, transparent);
       outline-offset: 5px;
@@ -1575,7 +1767,7 @@
       white-space: normal;
     }
 
-    @media (max-width: 760px) {
+    @media screen and (max-width: 760px) {
       .deck {
         padding: 0;
       }
@@ -1665,27 +1857,45 @@
       .slide,
       .slide.leaving,
       [data-motion],
-      .fragment {
+      .fragment,
+      .panel,
+      .metric,
+      .callout,
+      .step,
+      .viz-card,
+      .viz-kpi,
+      .viz-scenario,
+      .viz-timeline-item,
+      .viz-waterfall-bar {
         transform: none !important;
         filter: none !important;
         clip-path: none !important;
       }
     }
 
+    @page {
+      size: 1600px 900px;
+      margin: 0;
+    }
+
     @page deck-wide {
-      size: 16in 9in;
+      size: 1600px 900px;
       margin: 0;
     }
 
     @page deck-phone {
-      size: 9in 16in;
+      size: 900px 1600px;
       margin: 0;
     }
 
     @media print {
+      html,
       body {
+        height: auto;
         overflow: visible;
         background: white;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
       }
 
       body[data-aspect="9-16"] {
@@ -1694,27 +1904,59 @@
 
       .deck, .slides {
         display: block;
+        position: static;
         height: auto;
+        min-height: 0;
         width: auto;
         padding: 0;
+        overflow: visible !important;
         box-shadow: none;
+        transform: none !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
       }
 
       .slide {
         page: deck-wide;
         position: relative;
+        break-after: page;
         page-break-after: always;
-        width: 16in;
-        min-height: 9in;
+        width: 1600px;
+        height: 900px;
+        min-height: 0;
+        overflow: hidden;
         opacity: 1 !important;
         transform: none !important;
         pointer-events: auto;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
       }
 
       body[data-aspect="9-16"] .slide {
         page: deck-phone;
-        width: 9in;
-        min-height: 16in;
+        width: 900px;
+        height: 1600px;
+        min-height: 0;
+      }
+
+      .slides .slide:last-of-type {
+        break-after: auto !important;
+        page-break-after: auto !important;
+      }
+
+      .print-backdrop {
+        display: block !important;
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .slide > :not(.print-backdrop) {
+        position: relative;
+        z-index: 1;
       }
 
       .fragment {
@@ -1729,11 +1971,24 @@
         clip-path: none !important;
       }
 
+      .panel,
+      .metric,
+      .callout,
+      .step,
+      .viz-card,
+      .viz-kpi,
+      .viz-scenario,
+      .viz-timeline-item,
+      .viz-waterfall-bar {
+        transform: none !important;
+        filter: none !important;
+      }
+
       .bar span:nth-child(2)::before {
         width: var(--value) !important;
       }
 
-      .controls, .notes-panel, .phone-panel, .edit-hint {
+      .controls, .notes-panel, .phone-panel, .edit-hint, .laser-cursor {
         display: none !important;
       }
     }
@@ -1864,7 +2119,7 @@
 
     <nav class="controls" aria-label="Presentation controls">
       <div class="control-group secondary">
-        <button type="button" id="cursorToggle" class="cursor-button active" aria-label="Use cursor mode">Cursor</button>
+        <button type="button" id="cursorToggle" class="cursor-button" aria-label="Use cursor laser pointer">Cursor</button>
         <button type="button" id="editToggle" class="edit-button" aria-label="Toggle edit mode">Edit</button>
         <label id="colorToggle" class="control-label color-button" for="accentColorPicker" role="button" tabindex="0" aria-label="Change accent color">Color</label>
         <button type="button" id="modeToggle" class="mode-button" aria-label="Toggle presentation or recording mode">Mode: Talk</button>
@@ -1916,6 +2171,7 @@
       }
     </script>
     <div class="edit-hint" id="editHint">Click text to edit. Drag selected text to move it.</div>
+    <div class="laser-cursor" id="laserCursor" data-laser-mode="laser" aria-hidden="true"></div>
     <input class="color-input" id="accentColorPicker" type="color" value="#0066cc" aria-label="Accent color">
   </main>
 
@@ -1937,6 +2193,7 @@
       const colorToggle = document.getElementById('colorToggle') || document.getElementById('colorButton');
       const accentColorPicker = document.getElementById('accentColorPicker');
       const editHint = document.getElementById('editHint');
+      const laserCursor = document.getElementById('laserCursor');
       const phoneToggle = document.getElementById('phoneToggle');
       const phonePanel = document.getElementById('phonePanel');
       const phonePanelTitle = document.getElementById('phonePanelTitle');
@@ -1968,6 +2225,9 @@
       let mode = 'presentation';
       let presenterWindow = null;
       let isEditing = false;
+      let laserPointerActive = false;
+      const laserPointerModes = ['laser', 'spotlight', 'crosshair'];
+      let laserPointerMode = 'laser';
       let selectedEditable = null;
       let dragState = null;
       let exportPdfStatus = 'idle';
@@ -2014,9 +2274,12 @@
           editing: isEditing,
           hasSelection: Boolean(selectedEditable),
           cursorActive: !isEditing,
+          laserPointer: laserPointerActive,
+          laserPointerMode: laserPointerActive ? laserPointerMode : 'off',
           color: accentColorPicker ? accentColorPicker.value : null,
           hasCustomAccent: document.body.classList.contains('has-custom-accent'),
           aspect: document.body.dataset.aspect || '16-9',
+          deckScale: getComputedStyle(document.documentElement).getPropertyValue('--deck-scale').trim() || '1',
           mode,
           exportPdf: exportPdfStatus,
           phoneOpen: phonePanel ? phonePanel.classList.contains('open') : false,
@@ -2035,6 +2298,19 @@
         }
         node.addEventListener(eventName, handler);
         controlHealth.bound[name] = true;
+      }
+
+      function numericCssVar(name, fallback) {
+        const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        const parsed = Number.parseFloat(raw);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+      }
+
+      function updateDeckScale() {
+        const designWidth = numericCssVar('--design-width', 1600);
+        const designHeight = numericCssVar('--design-height', 900);
+        const scale = Math.min(window.innerWidth / designWidth, window.innerHeight / designHeight);
+        document.documentElement.style.setProperty('--deck-scale', String(Math.max(0.1, scale)));
       }
 
       function shellQuote(value) {
@@ -2080,6 +2356,62 @@
         publishCommandText.textContent = buildExportPdfCommand();
       }
 
+      function svgColor(value, fallback) {
+        const raw = String(value || '').trim();
+        return raw && raw !== 'transparent' && raw !== 'rgba(0, 0, 0, 0)' ? raw : fallback;
+      }
+
+      function colorLuminance(value) {
+        const match = String(value || '').match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (!match) return 255;
+        return Number(match[1]) * 0.2126 + Number(match[2]) * 0.7152 + Number(match[3]) * 0.0722;
+      }
+
+      function preparePrintBackdrops() {
+        const svgNamespace = 'http://www.w3.org/2000/svg';
+        const aspect = document.body.dataset.aspect === '9-16' ? '9-16' : '16-9';
+        const viewBox = aspect === '9-16' ? '0 0 900 1600' : '0 0 1600 900';
+        const width = aspect === '9-16' ? 900 : 1600;
+        const height = aspect === '9-16' ? 1600 : 900;
+        const rootStyle = getComputedStyle(document.documentElement);
+        const accent = svgColor(rootStyle.getPropertyValue('--accent'), '#86e000');
+        const accent2 = svgColor(rootStyle.getPropertyValue('--accent-2'), '#2ad39f');
+
+        slides.forEach((slide, slideNumber) => {
+          slide.querySelectorAll(':scope > .print-backdrop').forEach(node => node.remove());
+          const slideStyle = getComputedStyle(slide);
+          const bodyStyle = getComputedStyle(document.body);
+          const rootBackground = svgColor(rootStyle.getPropertyValue('--bg'), svgColor(bodyStyle.backgroundColor, '#ffffff'));
+          const inferredBackground = colorLuminance(slideStyle.color) > 180 && slideStyle.backgroundImage !== 'none'
+            ? '#101820'
+            : rootBackground;
+          const background = svgColor(slideStyle.backgroundColor, inferredBackground);
+          const svg = document.createElementNS(svgNamespace, 'svg');
+          svg.setAttribute('class', 'print-backdrop');
+          svg.setAttribute('viewBox', viewBox);
+          svg.setAttribute('preserveAspectRatio', 'none');
+          svg.setAttribute('aria-hidden', 'true');
+          svg.innerHTML = [
+            '<defs>',
+            '<radialGradient id="printGlow' + slideNumber + '" cx="68%" cy="28%" r="70%">',
+            '<stop offset="0" stop-color="' + accent2 + '" stop-opacity="0.22"/>',
+            '<stop offset="0.52" stop-color="' + accent + '" stop-opacity="0.12"/>',
+            '<stop offset="1" stop-color="' + background + '" stop-opacity="0"/>',
+            '</radialGradient>',
+            '<linearGradient id="printShade' + slideNumber + '" x1="0" y1="0" x2="1" y2="1">',
+            '<stop offset="0" stop-color="' + background + '" stop-opacity="1"/>',
+            '<stop offset="0.54" stop-color="' + background + '" stop-opacity="0.96"/>',
+            '<stop offset="1" stop-color="' + accent + '" stop-opacity="0.08"/>',
+            '</linearGradient>',
+            '</defs>',
+            '<rect width="' + width + '" height="' + height + '" fill="' + background + '"/>',
+            '<rect width="' + width + '" height="' + height + '" fill="url(#printShade' + slideNumber + ')"/>',
+            '<rect width="' + width + '" height="' + height + '" fill="url(#printGlow' + slideNumber + ')"/>'
+          ].join('');
+          slide.insertBefore(svg, slide.firstChild);
+        });
+      }
+
       function showExportPdfFallback(message) {
         phonePanel.classList.add('open');
         panelCommandMode = 'exportPdf';
@@ -2088,8 +2420,8 @@
         if (pdfFallbackActions) pdfFallbackActions.hidden = false;
         publishCommand.hidden = false;
         phoneUrl.removeAttribute('href');
-        phoneUrl.textContent = 'Use browser print, or run the command below';
-        phoneStatus.textContent = message || 'This file is open in offline mode. Click Print / Save as PDF, then choose Save as PDF in the browser print dialog. The terminal command below is an advanced export option.';
+        phoneUrl.textContent = 'Best result: run the export command below';
+        phoneStatus.textContent = message || 'This file is open in offline mode. The terminal command is the most reliable PDF path. Browser Print / Save as PDF now includes a print-safe background layer, but Chrome print settings can still affect the result.';
         updateExportPdfCommand();
         exportPdfStatus = 'print-fallback';
         updateControlHealth();
@@ -2144,6 +2476,7 @@
         if (persist) {
           try { localStorage.setItem(aspectStorageKey, aspect); } catch (error) {}
         }
+        updateDeckScale();
         updateControlHealth();
         publishSyncState();
       }
@@ -2641,11 +2974,66 @@
         editHint.textContent = text || (selectedEditable ? 'Selected. Drag this text to move it; type to edit.' : 'Click text to edit. Drag selected text to move it.');
       }
 
+      function laserPointerLabel(mode) {
+        if (mode === 'spotlight') return 'Spot';
+        if (mode === 'crosshair') return 'Cross';
+        return 'Laser';
+      }
+
+      function setLaserPointer(enabled, mode = laserPointerMode) {
+        if (laserPointerModes.includes(mode)) {
+          laserPointerMode = mode;
+        }
+        laserPointerActive = Boolean(enabled && laserCursor);
+        document.body.classList.toggle('laser-active', laserPointerActive);
+        if (laserCursor) {
+          laserCursor.dataset.laserMode = laserPointerMode;
+          if (!laserPointerActive) {
+            laserCursor.classList.remove('is-visible');
+          }
+        }
+        updateEditControls();
+      }
+
+      function updateLaserPointer(event) {
+        if (!laserPointerActive || !laserCursor) return;
+        const target = event.target;
+        const blocked = target && target.closest && target.closest('.controls, .notes-panel, .phone-panel, .edit-hint');
+        const activeSlide = target && target.closest && target.closest('.slide.active');
+        if (blocked || !activeSlide) {
+          laserCursor.classList.remove('is-visible');
+          return;
+        }
+        laserCursor.dataset.laserMode = laserPointerMode;
+        laserCursor.style.left = event.clientX + 'px';
+        laserCursor.style.top = event.clientY + 'px';
+        laserCursor.classList.add('is-visible');
+      }
+
+      function toggleCursorMode() {
+        if (isEditing || !laserPointerActive) {
+          setCursorMode({ laserPointer: true, laserPointerMode: 'laser' });
+          return;
+        }
+        if (laserPointerMode === 'laser') {
+          setCursorMode({ laserPointer: true, laserPointerMode: 'spotlight' });
+          return;
+        }
+        if (laserPointerMode === 'spotlight') {
+          setCursorMode({ laserPointer: true, laserPointerMode: 'crosshair' });
+          return;
+        }
+        setCursorMode({ laserPointer: false });
+      }
+
       function updateEditControls() {
+        const cursorPointerActive = !isEditing && laserPointerActive;
         editToggle.classList.toggle('active', isEditing);
         editToggle.setAttribute('aria-pressed', String(isEditing));
-        cursorToggle.classList.toggle('active', !isEditing);
-        cursorToggle.setAttribute('aria-pressed', String(!isEditing));
+        cursorToggle.classList.toggle('active', cursorPointerActive);
+        cursorToggle.textContent = cursorPointerActive ? 'Cursor: ' + laserPointerLabel(laserPointerMode) : 'Cursor';
+        cursorToggle.setAttribute('aria-label', cursorPointerActive ? 'Cursor pointer mode: ' + laserPointerLabel(laserPointerMode) : 'Use cursor pointer');
+        cursorToggle.setAttribute('aria-pressed', String(cursorPointerActive));
         updateEditHint();
         updateControlHealth();
       }
@@ -2689,7 +3077,7 @@
         node.setPointerCapture && node.setPointerCapture(event.pointerId);
       }
 
-      function setCursorMode() {
+      function setCursorMode(options = {}) {
         isEditing = false;
         document.body.classList.remove('editing');
         if (dragState && dragState.node) {
@@ -2708,7 +3096,7 @@
         selectedEditable = null;
         const selection = window.getSelection && window.getSelection();
         if (selection && selection.removeAllRanges) selection.removeAllRanges();
-        updateEditControls();
+        setLaserPointer(Boolean(options.laserPointer), options.laserPointerMode || laserPointerMode);
       }
 
       function setEditing(enabled) {
@@ -2716,6 +3104,7 @@
           setCursorMode();
           return;
         }
+        setLaserPointer(false);
         isEditing = enabled;
         document.body.classList.toggle('editing', isEditing);
         collectEditableNodes().forEach(node => {
@@ -2820,6 +3209,11 @@
         const activeEditable = event.target && event.target.closest && event.target.closest('.editable-node');
         const activeNotesEditor = event.target && event.target.closest && event.target.closest('#notesEditor');
         if (activeNotesEditor) return;
+        if (event.key === 'Escape' && laserPointerActive) {
+          event.preventDefault();
+          setLaserPointer(false);
+          return;
+        }
         if (event.key === 'Escape' && isEditing) {
           event.preventDefault();
           setEditing(false);
@@ -2865,6 +3259,7 @@
       });
 
       document.addEventListener('pointermove', (event) => {
+        updateLaserPointer(event);
         if (!dragState || !isEditing) return;
         const dx = event.clientX - dragState.startX;
         const dy = event.clientY - dragState.startY;
@@ -2917,7 +3312,7 @@
         updateControlHealth();
       }
 
-      bindControl('cursor', cursorToggle, 'click', setCursorMode);
+      bindControl('cursor', cursorToggle, 'click', toggleCursorMode);
       bindControl('edit', editToggle, 'click', () => setEditing(!isEditing));
       bindControl('color', colorToggle, 'click', openColorPicker);
       bindControl('colorKeyboard', colorToggle, 'keydown', openColorPickerFromKeyboard);
@@ -2930,7 +3325,8 @@
       bindControl('printPdfFallback', printPdfFallback, 'click', () => {
         exportPdfStatus = 'print-dialog';
         updateControlHealth();
-        window.print();
+        preparePrintBackdrops();
+        requestAnimationFrame(() => window.print());
       });
       bindControl('copyPublishCommand', copyPublishCommand, 'click', () => {
         if (panelCommandMode === 'exportPdf') {
@@ -2948,6 +3344,8 @@
       });
       bindControl('phone', phoneToggle, 'click', togglePhonePanel);
       bindControl('hide', hideToggle, 'click', toggleControlsHidden);
+
+      window.addEventListener('beforeprint', preparePrintBackdrops);
       bindControl('phoneClose', phoneClose, 'click', () => {
         phonePanel.classList.remove('open');
         updateControlHealth();
@@ -2965,12 +3363,20 @@
         notesPanel.classList.toggle('open');
         updateControlHealth();
       });
-      document.addEventListener('fullscreenchange', updateControlHealth);
+      window.addEventListener('resize', () => {
+        updateDeckScale();
+        updateControlHealth();
+      });
+      document.addEventListener('fullscreenchange', () => {
+        updateDeckScale();
+        updateControlHealth();
+      });
 
       setInterval(syncPresenter, 1000);
       collectEditableNodes();
       applyMotionOrders();
       startCommandSync();
+      updateDeckScale();
       restoreAspect();
       restoreSavedNotes();
       const initialTheme = parseResolvedTheme();
