@@ -29,6 +29,8 @@
       --motion-depth: 72px;
       --stagger-step: 78ms;
       --aspect-ratio: 16 / 9;
+      --slide-width: min(100vw, 177.7778vh);
+      --slide-height: min(100vh, 56.25vw);
       --controls-reserve: 108px;
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -50,6 +52,8 @@
 
     body[data-aspect="9-16"] {
       --aspect-ratio: 9 / 16;
+      --slide-width: min(100vw, 56.25vh);
+      --slide-height: min(100vh, 177.7778vw);
       --controls-reserve: 138px;
       --slide-pad-x: clamp(20px, 5.4vw, 34px);
       --slide-pad-y: clamp(22px, 4.2vh, 42px);
@@ -57,6 +61,18 @@
       --h1-size: clamp(2rem, 8vw, 3.25rem);
       --h2-size: clamp(1.55rem, 6.3vw, 2.55rem);
       --lead-size: clamp(.9rem, 3.2vw, 1.12rem);
+    }
+
+    @supports (width: calc(100vh * 16 / 9)) {
+      :root {
+        --slide-width: min(100vw, calc(100vh * 16 / 9));
+        --slide-height: min(100vh, calc(100vw * 9 / 16));
+      }
+
+      body[data-aspect="9-16"] {
+        --slide-width: min(100vw, calc(100vh * 9 / 16));
+        --slide-height: min(100vh, calc(100vw * 16 / 9));
+      }
     }
 
     body[data-template="apple"] {
@@ -190,17 +206,18 @@
       min-height: 100vh;
       width: 100vw;
       overflow: hidden;
-      display: block;
+      display: grid;
+      place-items: center;
       padding: 0;
       background: var(--bg);
     }
 
     .slides {
       position: relative;
-      width: 100vw;
-      height: 100vh;
+      width: var(--slide-width);
+      height: var(--slide-height);
       max-height: none;
-      aspect-ratio: auto;
+      aspect-ratio: var(--aspect-ratio);
       overflow: hidden;
       perspective: 1600px;
       box-shadow: none;
@@ -208,9 +225,10 @@
     }
 
     body[data-aspect="9-16"] .slides {
-      width: 100vw;
-      height: 100vh;
+      width: var(--slide-width);
+      height: var(--slide-height);
       max-height: none;
+      aspect-ratio: var(--aspect-ratio);
     }
 
     body[data-aspect="9-16"] .slide {
@@ -242,6 +260,10 @@
     body[data-aspect="9-16"] .lead {
       max-width: 100%;
       line-height: 1.38;
+    }
+
+    body[data-aspect="9-16"] .kicker {
+      font-size: clamp(.68rem, 2.4vw, .86rem);
     }
 
     .slide {
@@ -1121,8 +1143,10 @@
 
     .controls.controls-hidden {
       left: auto;
+      right: 18px;
       grid-template-columns: auto;
       grid-template-areas: "right";
+      gap: 0;
     }
 
     .controls.controls-hidden .control-group.primary,
@@ -1130,6 +1154,36 @@
     .controls.controls-hidden .counter,
     .controls.controls-hidden .control-group.secondary > :not(#hideToggle) {
       display: none !important;
+    }
+
+    .controls.controls-hidden .control-group.secondary {
+      padding: 0;
+      overflow: visible;
+    }
+
+    .controls.controls-hidden #hideToggle {
+      width: 24px;
+      min-width: 24px;
+      height: 24px;
+      padding: 0;
+      border-color: color-mix(in srgb, var(--accent) 32%, var(--line));
+      background: color-mix(in srgb, var(--accent) 16%, #ffffff);
+      color: transparent;
+      font-size: 0;
+      opacity: .52;
+      box-shadow: 0 6px 18px rgba(23, 32, 51, .12);
+    }
+
+    .controls.controls-hidden #hideToggle::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .controls.controls-hidden #hideToggle:hover {
+      opacity: .9;
     }
 
     button,
@@ -1330,6 +1384,19 @@
       gap: 8px;
     }
 
+    .pdf-fallback-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pdf-fallback-actions button {
+      min-width: 148px;
+      height: 36px;
+      background: var(--accent);
+      color: #fff;
+    }
+
     .publish-command code {
       display: block;
       max-height: 124px;
@@ -1417,24 +1484,95 @@
       width: 100%;
     }
 
+    body[data-aspect="9-16"] .row,
+    body[data-aspect="9-16"] .bar {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    body[data-aspect="9-16"] .stack,
+    body[data-aspect="9-16"] .chart,
+    body[data-aspect="9-16"] .viz-card {
+      width: 100%;
+      max-width: 100%;
+    }
+
     body[data-aspect="9-16"] .panel,
     body[data-aspect="9-16"] .step,
     body[data-aspect="9-16"] .callout,
     body[data-aspect="9-16"] .viz-card {
       min-height: auto;
-      padding: clamp(14px, 3.4vw, 20px);
+      padding: clamp(12px, 3.2vw, 18px);
+      border-radius: min(var(--radius), 16px);
+    }
+
+    body[data-aspect="9-16"] .metric {
+      font-size: clamp(1.55rem, 7vw, 2.7rem);
+    }
+
+    body[data-aspect="9-16"] .metric small,
+    body[data-aspect="9-16"] .list li,
+    body[data-aspect="9-16"] .chart-takeaway {
+      font-size: clamp(.76rem, 2.5vw, .92rem);
+      line-height: 1.34;
+    }
+
+    body[data-aspect="9-16"] .quote {
+      max-width: 100%;
+      font-size: clamp(1.55rem, 7.2vw, 2.75rem);
+      line-height: 1.08;
     }
 
     body[data-aspect="9-16"] .viz-kpi-strip,
     body[data-aspect="9-16"] .viz-scenarios,
     body[data-aspect="9-16"] .viz-timeline {
       grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    body[data-aspect="9-16"] .viz-kpi,
+    body[data-aspect="9-16"] .viz-scenario,
+    body[data-aspect="9-16"] .viz-timeline-item {
+      padding: 10px;
+    }
+
+    body[data-aspect="9-16"] .viz-kpi strong {
+      font-size: clamp(1.45rem, 7vw, 2.55rem);
+    }
+
+    body[data-aspect="9-16"] .viz-svg {
+      min-height: 180px;
+    }
+
+    body[data-aspect="9-16"] .viz-funnel-step,
+    body[data-aspect="9-16"] .viz-heat-head,
+    body[data-aspect="9-16"] .viz-heat-row {
+      grid-template-columns: 1fr;
+      width: 100%;
+      min-width: 0;
+    }
+
+    body[data-aspect="9-16"] .viz-waterfall {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      min-height: 170px;
     }
 
     body[data-aspect="9-16"] .media-frame,
     body[data-aspect="9-16"] .media-bleed {
       width: 100%;
-      min-height: 180px;
+      min-height: 0;
+      max-height: 32vh;
+      aspect-ratio: 4 / 3;
+    }
+
+    body[data-aspect="9-16"] figcaption,
+    body[data-aspect="9-16"] .image-caption {
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      max-width: calc(100% - 20px);
+      font-size: .68rem;
+      white-space: normal;
     }
 
     @media (max-width: 760px) {
@@ -1442,16 +1580,19 @@
         padding: 0;
       }
 
-      .slides,
-      body[data-aspect="9-16"] .slides {
-        width: 100vw;
-        height: 100vh;
-        max-height: none;
+      .slides {
+        width: var(--slide-width);
+        height: var(--slide-height);
+        aspect-ratio: var(--aspect-ratio);
       }
 
       .slide {
         padding: 24px 20px max(92px, calc(var(--controls-reserve) + 18px));
         overflow-y: auto;
+      }
+
+      body[data-aspect="9-16"] .slide {
+        padding: var(--slide-pad-y) var(--slide-pad-x) max(118px, calc(var(--controls-reserve) + env(safe-area-inset-bottom)));
       }
 
       .slide-body {
@@ -1722,24 +1863,16 @@
     </div>
 
     <nav class="controls" aria-label="Presentation controls">
-      <div class="control-group primary">
-        <button type="button" id="prev" aria-label="Previous slide">&lt;</button>
-        <button type="button" id="next" aria-label="Next slide">&gt;</button>
+      <div class="control-group secondary">
         <button type="button" id="cursorToggle" class="cursor-button active" aria-label="Use cursor mode">Cursor</button>
         <button type="button" id="editToggle" class="edit-button" aria-label="Toggle edit mode">Edit</button>
-        <button type="button" id="fontIncrease" aria-label="Increase selected text size" disabled>A+</button>
-        <button type="button" id="fontDecrease" aria-label="Decrease selected text size" disabled>A-</button>
-        <button type="button" id="resetEdit" aria-label="Reset selected text edits" disabled>Reset</button>
         <label id="colorToggle" class="control-label color-button" for="accentColorPicker" role="button" tabindex="0" aria-label="Change accent color">Color</label>
-      </div>
-      <div class="control-group secondary">
         <button type="button" id="modeToggle" class="mode-button" aria-label="Toggle presentation or recording mode">Mode: Talk</button>
-        <button type="button" id="templateToggle" class="template-button" aria-label="Switch template style">Template: Apple</button>
         <button type="button" id="ratioToggle" aria-label="Toggle slide aspect ratio">Ratio: 16:9</button>
+        <button type="button" id="templateToggle" class="template-button" aria-label="Switch template style">Template: Apple</button>
         <button type="button" id="exportPdfToggle" aria-label="Export this deck to PDF">Export PDF</button>
         <button type="button" id="phoneToggle" aria-label="Show phone or IP presenter setup">Phone</button>
-        <button type="button" id="notesToggle" aria-label="Toggle speaker notes">Notes</button>
-        <button type="button" id="fullscreen" aria-label="Toggle fullscreen">Full</button>
+        <button type="button" id="notesToggle" aria-label="Toggle speaker notes">Note</button>
         <button type="button" id="hideToggle" aria-label="Hide presentation controls" aria-pressed="false">Hide</button>
         <span class="counter" id="counter">1 / 6</span>
       </div>
@@ -1765,6 +1898,9 @@
       <img id="phoneQr" alt="Phone presenter QR code">
       <p id="phoneStatus">Start the local presenter server, then scan this QR code from your phone.</p>
       <p><a href="#" id="phoneUrl" target="_blank" rel="noreferrer">Waiting for sync server</a></p>
+      <div class="pdf-fallback-actions" id="pdfFallbackActions" hidden>
+        <button type="button" id="printPdfFallback">Print / Save as PDF</button>
+      </div>
       <div class="publish-command" id="publishCommand" hidden>
         <code id="publishCommandText"></code>
         <button type="button" id="copyPublishCommand">Copy command</button>
@@ -1794,15 +1930,10 @@
       const notesSave = document.getElementById('notesSave');
       const notesReset = document.getElementById('notesReset');
       const notesSaveStatus = document.getElementById('notesSaveStatus');
-      const prev = document.getElementById('prev');
-      const next = document.getElementById('next');
       const modeToggle = document.getElementById('modeToggle');
       const templateToggle = document.getElementById('templateToggle');
       const cursorToggle = document.getElementById('cursorToggle');
       const editToggle = document.getElementById('editToggle');
-      const fontIncrease = document.getElementById('fontIncrease');
-      const fontDecrease = document.getElementById('fontDecrease');
-      const resetEdit = document.getElementById('resetEdit');
       const colorToggle = document.getElementById('colorToggle') || document.getElementById('colorButton');
       const accentColorPicker = document.getElementById('accentColorPicker');
       const editHint = document.getElementById('editHint');
@@ -1814,12 +1945,13 @@
       const phoneStatus = document.getElementById('phoneStatus');
       const phoneUrl = document.getElementById('phoneUrl');
       const exportPdfToggle = document.getElementById('exportPdfToggle');
+      const pdfFallbackActions = document.getElementById('pdfFallbackActions');
+      const printPdfFallback = document.getElementById('printPdfFallback');
       const publishCommand = document.getElementById('publishCommand');
       const publishCommandText = document.getElementById('publishCommandText');
       const copyPublishCommand = document.getElementById('copyPublishCommand');
       const ratioToggle = document.getElementById('ratioToggle');
       const notesToggle = document.getElementById('notesToggle');
-      const fullscreen = document.getElementById('fullscreen');
       const controls = document.querySelector('.controls');
       const hideToggle = document.getElementById('hideToggle');
 
@@ -1851,26 +1983,21 @@
       const deckId = document.body.dataset.deckId || (document.title || window.location.pathname || 'deck').replace(/[^\w.-]+/g, '-').replace(/^-|-$/g, '') || 'deck';
       document.body.dataset.deckId = deckId;
       const requiredControls = {
-        prev,
-        next,
         cursor: cursorToggle,
         edit: editToggle,
-        fontIncrease,
-        fontDecrease,
-        reset: resetEdit,
         color: colorToggle,
         colorInput: accentColorPicker,
         mode: modeToggle,
         template: templateToggle,
         ratio: ratioToggle,
         exportPdf: exportPdfToggle,
+        printPdfFallback,
         phone: phoneToggle,
         notes: notesToggle,
         hide: hideToggle,
         notesEditor,
         notesSave,
-        notesReset,
-        fullscreen
+        notesReset
       };
       const controlHealth = {
         required: {},
@@ -1932,6 +2059,7 @@
       }
 
       function updatePublishCommand() {
+        if (pdfFallbackActions) pdfFallbackActions.hidden = true;
         publishCommandText.textContent = buildPublishCommand();
       }
 
@@ -1940,6 +2068,7 @@
         panelCommandMode = 'publish';
         if (phonePanelTitle) phonePanelTitle.textContent = 'Phone / IP';
         phoneQr.hidden = true;
+        if (pdfFallbackActions) pdfFallbackActions.hidden = true;
         publishCommand.hidden = false;
         phoneUrl.removeAttribute('href');
         phoneUrl.textContent = 'Run this command to open the IP/LAN deck';
@@ -1956,12 +2085,13 @@
         panelCommandMode = 'exportPdf';
         if (phonePanelTitle) phonePanelTitle.textContent = 'Export PDF';
         phoneQr.hidden = true;
+        if (pdfFallbackActions) pdfFallbackActions.hidden = false;
         publishCommand.hidden = false;
         phoneUrl.removeAttribute('href');
-        phoneUrl.textContent = 'Run this command to save a local PDF';
-        phoneStatus.textContent = message || 'This file is open in offline mode. Browser JavaScript cannot run local export commands, so copy this command into a terminal.';
+        phoneUrl.textContent = 'Use browser print, or run the command below';
+        phoneStatus.textContent = message || 'This file is open in offline mode. Click Print / Save as PDF, then choose Save as PDF in the browser print dialog. The terminal command below is an advanced export option.';
         updateExportPdfCommand();
-        exportPdfStatus = 'command';
+        exportPdfStatus = 'print-fallback';
         updateControlHealth();
       }
 
@@ -1977,6 +2107,7 @@
         }
 
         exportPdfStatus = 'exporting';
+        if (pdfFallbackActions) pdfFallbackActions.hidden = true;
         publishCommand.hidden = true;
         phoneUrl.textContent = 'Exporting...';
         phoneStatus.textContent = 'Exporting this deck to a slide-only PDF through the local presenter server.';
@@ -1987,7 +2118,7 @@
           .then(result => {
             if (!result.ok || !result.data || result.data.ok !== true) {
               const error = result.data && (result.data.error || result.data.stderr) ? (result.data.error || result.data.stderr) : 'PDF export failed.';
-              showExportPdfFallback(error + ' Copy the command below to retry from a terminal.');
+              showExportPdfFallback(error + ' Use browser print to save as PDF, or copy the command below to retry from a terminal.');
               exportPdfStatus = 'error';
               updateControlHealth();
               return;
@@ -1999,7 +2130,7 @@
             updateControlHealth();
           })
           .catch(() => {
-            showExportPdfFallback('Unable to reach the local presenter server export endpoint. Copy the command below to export from a terminal.');
+            showExportPdfFallback('Unable to reach the local presenter server export endpoint. Use browser print to save as PDF, or copy the command below to export from a terminal.');
             exportPdfStatus = 'error';
             updateControlHealth();
           });
@@ -2014,6 +2145,7 @@
           try { localStorage.setItem(aspectStorageKey, aspect); } catch (error) {}
         }
         updateControlHealth();
+        publishSyncState();
       }
 
       function cycleAspect() {
@@ -2276,6 +2408,7 @@
           slideCount: slides.length,
           fragmentIndex,
           fragmentCount: fragmentsFor(index).length,
+          aspect: document.body.dataset.aspect || '16-9',
           title: currentTitle(),
           notesHtml: notes ? notes.innerHTML : 'No notes for this slide.',
           nextTitle: nextSlide ? (nextSlide.dataset.title || 'Next slide') : 'Final slide',
@@ -2353,7 +2486,7 @@
       function setControlsHidden(hidden) {
         if (!controls || !hideToggle) return;
         controls.classList.toggle('controls-hidden', hidden);
-        hideToggle.textContent = hidden ? 'Show' : 'Hide';
+        hideToggle.textContent = hidden ? '' : 'Hide';
         hideToggle.setAttribute('aria-label', hidden ? 'Show presentation controls' : 'Hide presentation controls');
         hideToggle.setAttribute('aria-pressed', String(hidden));
         updateControlHealth();
@@ -2400,8 +2533,10 @@
         mode = nextMode;
         const recording = mode === 'recording';
         document.body.classList.toggle('recording', recording);
-        modeToggle.textContent = recording ? 'Mode: Record' : 'Mode: Talk';
-        modeToggle.classList.toggle('recording', recording);
+        if (modeToggle) {
+          modeToggle.textContent = recording ? 'Mode: Record' : 'Mode: Talk';
+          modeToggle.classList.toggle('recording', recording);
+        }
         if (recording) {
           notesPanel.classList.remove('open');
           openPresenter();
@@ -2507,10 +2642,6 @@
       }
 
       function updateEditControls() {
-        const hasSelection = Boolean(selectedEditable);
-        fontIncrease.disabled = !isEditing || !hasSelection;
-        fontDecrease.disabled = !isEditing || !hasSelection;
-        resetEdit.disabled = !isEditing || !hasSelection;
         editToggle.classList.toggle('active', isEditing);
         editToggle.setAttribute('aria-pressed', String(isEditing));
         cursorToggle.classList.toggle('active', !isEditing);
@@ -2632,8 +2763,6 @@
 
         progressBar.style.width = ((index + 1) / slides.length * 100) + '%';
         counter.textContent = (index + 1) + ' / ' + slides.length;
-        prev.disabled = index === 0 && fragmentIndex === 0;
-        next.disabled = index === slides.length - 1 && fragmentIndex >= fragmentsFor(index).length;
         updateNotes();
         syncPresenter();
         publishSyncState();
@@ -2788,21 +2917,21 @@
         updateControlHealth();
       }
 
-      bindControl('prev', prev, 'click', backward);
-      bindControl('next', next, 'click', forward);
-      bindControl('mode', modeToggle, 'click', cycleMode);
-      bindControl('template', templateToggle, 'click', cycleTemplate);
       bindControl('cursor', cursorToggle, 'click', setCursorMode);
       bindControl('edit', editToggle, 'click', () => setEditing(!isEditing));
-      bindControl('fontIncrease', fontIncrease, 'click', () => changeSelectedFontSize(4));
-      bindControl('fontDecrease', fontDecrease, 'click', () => changeSelectedFontSize(-4));
-      bindControl('reset', resetEdit, 'click', resetSelectedEdit);
       bindControl('color', colorToggle, 'click', openColorPicker);
       bindControl('colorKeyboard', colorToggle, 'keydown', openColorPickerFromKeyboard);
       bindControl('colorInput', accentColorPicker, 'input', event => setAccentColor(event.target.value));
       bindControl('colorChange', accentColorPicker, 'change', event => setAccentColor(event.target.value));
+      bindControl('mode', modeToggle, 'click', cycleMode);
       bindControl('ratio', ratioToggle, 'click', cycleAspect);
+      bindControl('template', templateToggle, 'click', cycleTemplate);
       bindControl('exportPdf', exportPdfToggle, 'click', showExportPdfPanel);
+      bindControl('printPdfFallback', printPdfFallback, 'click', () => {
+        exportPdfStatus = 'print-dialog';
+        updateControlHealth();
+        window.print();
+      });
       bindControl('copyPublishCommand', copyPublishCommand, 'click', () => {
         if (panelCommandMode === 'exportPdf') {
           updateExportPdfCommand();
@@ -2835,15 +2964,6 @@
         updateNotes();
         notesPanel.classList.toggle('open');
         updateControlHealth();
-      });
-      bindControl('fullscreen', fullscreen, 'click', () => {
-        phonePanel.classList.remove('open');
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
-        } else {
-          document.exitFullscreen && document.exitFullscreen();
-        }
-        setTimeout(updateControlHealth, 0);
       });
       document.addEventListener('fullscreenchange', updateControlHealth);
 

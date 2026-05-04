@@ -86,7 +86,9 @@ When the user asks to export, save, render, or convert an HTML deck to PDF, trea
 - If no HTML path is supplied, scan only the project root for `.html` files. Use the file automatically only when exactly one root HTML deck exists; otherwise ask for an explicit path.
 - Default output path is the same folder and basename as the HTML deck with `.pdf`.
 - Generated decks must include a visible `Export PDF` button beside the single `Phone` presenter/publish button.
-- In raw `file://` mode, `Export PDF` opens the phone/publish panel with a copyable `export-html-to-pdf.mjs` command.
+- Do not promise unconditional automatic PDF download. Automatic PDF generation depends on local Node plus Chrome/Chromium, or on the bundled presenter server export endpoint.
+- In raw `file://` mode, `Export PDF` must provide a browser-native `Print / Save as PDF` fallback that calls `window.print()` so any modern browser user can save a PDF manually.
+- In raw `file://` mode, also show a copyable `export-html-to-pdf.mjs` command as an advanced export path, but do not make the terminal command the only fallback.
 - In presenter-server mode, `Export PDF` calls `POST /export/pdf?session=...` and reports the saved local PDF path.
 - Default PDF content is slide-only. Controls, speaker notes, phone panels, edit hints, and runtime UI must be hidden through print CSS.
 - Use the deck's existing `@media print` and `@page` rules so 16:9 and 9:16 aspect modes export with matching page sizing.
@@ -95,13 +97,14 @@ When the user asks to export, save, render, or convert an HTML deck to PDF, trea
 
 ## Fullscreen Canvas Contract
 
-Generated decks must treat the browser viewport as the slide canvas. Do not shrink the presentation into a centered 16:9 card, stage, browser-frame preview, or decorative shell.
+Generated decks must treat the browser viewport as the presentation stage and `.slides` as the true slide canvas. Do not wrap the canvas in a decorative browser frame, card, or preview shell.
 
-- Live `.deck` and `.slides` must fill the viewport with `100vw` and `100vh`; do not subtract controls height from the canvas.
-- The active slide background must cover the full viewport so no outer gray/colored gutters appear at the sides.
+- Live `.deck` must fill the viewport with `100vw` and `100vh`; do not subtract controls height from the stage.
+- Live `.slides` must use a real aspect-ratio canvas. Default 16:9 uses `min(100vw, calc(100vh * 16 / 9))` by `min(100vh, calc(100vw * 9 / 16))`; 9:16 uses `min(100vw, calc(100vh * 9 / 16))` by `min(100vh, calc(100vw * 16 / 9))`.
+- The active slide background must cover the full `.slides` canvas. In 9:16 desktop preview, outer stage gutters are allowed because the phone-shaped slide canvas is centered inside the viewport.
 - Controls are an overlay on top of the slide, not a layout element that resizes the slide canvas.
 - Use internal slide padding to keep important content clear of the bottom controls.
-- `Ratio: 16:9 / 9:16` may change layout bias and print sizing, but it must not create a smaller framed live canvas.
+- `Ratio: 16:9 / 9:16` changes live canvas geometry, layout bias, phone preview aspect, and print sizing.
 - Print/PDF export still uses `@page deck-wide` and `@page deck-phone` for strict page dimensions.
 
 ## Chart Intelligence Protocol
@@ -148,10 +151,11 @@ Every generated deck must include a visual planning pass after the slide outline
 7. Verify the HTML before delivery:
    - Confirm slide count by counting `.slide` sections.
    - For source deck replication, confirm the `.slide` count equals the source manifest `pageCount`.
-   - Confirm arrow keys, space, Home/End, fullscreen button, progress, notes toggle, and print styles are present.
+   - Confirm arrow keys, space, Home/End, click-to-advance, progress, notes toggle, and print styles are present.
    - Confirm no external URLs or linked assets exist. Logos and images must be inline `data:` URIs or generated with HTML/CSS, not remote.
    - Confirm text fits at common desktop and mobile widths and the first viewport shows the actual deck.
-8. If the user wants a PDF file, run `scripts/export-html-to-pdf.mjs` after HTML verification and return the local PDF path alongside the HTML source path.
+   - For PDF-capable deliverables, verify at least one working PDF path exists: successful local export, presenter-server `/export/pdf`, or the raw-file browser `Print / Save as PDF` fallback. A visible `Export PDF` button with no usable fallback fails QA.
+8. If the user wants a PDF file, run `scripts/export-html-to-pdf.mjs` after HTML verification. If export succeeds, return the local PDF path alongside the HTML source path. If export fails because the environment lacks Chrome/Chromium, has a path issue, or cannot run Node, return the HTML path and explicitly point to the deck's browser `Print / Save as PDF` fallback.
 9. If the user wants phone speaker notes, projection, or same-Wi-Fi sync, default to a LAN publish flow after generating the deck. Start `scripts/presenter-server.mjs` and give the user the opened computer PPT URL plus the phone presenter URL/QR status instead of telling them to open the raw file.
 
 ## Purpose Structures
@@ -173,7 +177,7 @@ Adapt these patterns to the requested slide count. If there are fewer slides tha
 - Use native CSS and JavaScript for navigation. Use native motion presets only when explicitly requested.
 - Include print support with one slide per page.
 - Include speaker notes on every slide; notes are hidden by default.
-- Include previous, next, Cursor, Edit, A+/A-, Reset, Color, Mode, Template, Ratio, Export PDF, Phone, Notes, Full, and Hide controls by default.
+- Include only Cursor, Edit, Color, Mode, Ratio, Template, Export PDF, Phone, Note, and Hide controls by default.
 - Include editable slide text, editable/savable speaker notes, theme accent color editing, drag-to-move selected text, reset for local presentation polishing, explicit 16:9/9:16 aspect control, and a copyable LAN/IP publish command for raw file mode.
 - Include optional phone presenter support when using the bundled template. The deck must still open as a standalone file; cross-device sync only works after running the local presenter server, which is the default publish path for phone-ready sessions and should open a LAN IP deck URL.
 - Avoid visible instructions about how to use the deck. The presentation content should be the first-screen experience.
@@ -191,14 +195,14 @@ Speaker notes are presenter scripts and must be editable from the deck UI, not o
 
 ## Control Runtime Contract
 
-Built-in controls must be runnable, not just visible. Use stable IDs: `cursorToggle`, `editToggle`, `fontIncrease`, `fontDecrease`, `resetEdit`, `colorToggle`, `accentColorPicker`, `ratioToggle`, `exportPdfToggle`, `phoneToggle`, `notesToggle`, `fullscreen`, and `hideToggle`.
+Built-in controls must be runnable, not just visible. Use stable IDs: `cursorToggle`, `editToggle`, `colorToggle`, `accentColorPicker`, `modeToggle`, `ratioToggle`, `templateToggle`, `exportPdfToggle`, `phoneToggle`, `notesToggle`, and `hideToggle`.
 
 - `Color` must use `colorToggle` as the canonical control id. Keep JS compatibility with old `colorButton` decks, but do not generate new `colorButton`-only controls.
 - Make `Color` a native trigger for `accentColorPicker`, such as `<label for="accentColorPicker">Color</label>`, and also listen to both `input` and `change` so the accent updates during drag and after confirmation.
-- `Cursor` must call `setCursorMode()`, exit editing, clear DOM selection, remove `.is-selected` / `.is-dragging`, close `contentEditable`, and disable A+/A-/Reset when nothing is selected.
-- `Edit` must be the only mode that enables text selection, drag-to-move, A+/A-/Reset, and contentEditable nodes.
+- `Cursor` must call `setCursorMode()`, exit editing, clear DOM selection, remove `.is-selected` / `.is-dragging`, and close `contentEditable`.
+- `Edit` must be the only visible control that enables text selection, drag-to-move, and contentEditable nodes.
 - Bind control events through a safe helper so one missing optional control warns through `console.warn` but does not prevent the rest of the controls from binding.
-- Expose `window.__deckControlHealth` with required controls, bound controls, and live state for editing, accent color, aspect, PDF export, phone panel, notes panel, controls visibility, and fullscreen.
+- Expose `window.__deckControlHealth` with required controls, bound controls, and live state for editing, accent color, aspect, PDF export, phone panel, notes panel, controls visibility, and fullscreen state.
 
 ## Go Live / Phone Sync Contract
 
@@ -293,7 +297,7 @@ Template switching must change layout feel, density, radius, shadow depth, and b
 ## Publish Rules
 
 - Default deliverable: return the generated `.html` file path for offline use.
-- PDF deliverable: if the user asks for a saved PDF, run `node animated-html-deck/scripts/export-html-to-pdf.mjs deck.html [output.pdf]`, then return both the editable HTML source path and the local PDF path.
+- PDF deliverable: if the user asks for a saved PDF, run `node animated-html-deck/scripts/export-html-to-pdf.mjs deck.html [output.pdf]`. Return both the editable HTML source path and local PDF path when export succeeds; if export fails, return the HTML source path plus the browser `Print / Save as PDF` fallback and the error reason.
 - Default phone-sync deliverable: if the user asks for phone notes, presenter sync, QR scanning, same-Wi-Fi linking, or projection with mobile notes, do not make the raw `file://` deck the main entrypoint.
 - For those phone-sync requests, Codex should automatically start:
   `node scripts/presenter-server.mjs deck.html --port 4173 --deck-host lan`

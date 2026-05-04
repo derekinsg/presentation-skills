@@ -542,6 +542,11 @@ function presenterHtml() {
 	      color: #111827;
 	      aspect-ratio: 16 / 9;
 	    }
+	    .preview-frame[data-aspect="9-16"] {
+	      width: min(240px, 100%);
+	      justify-self: center;
+	      aspect-ratio: 9 / 16;
+	    }
 	    .slide-preview {
 	      width: 100%;
 	      height: 100%;
@@ -652,6 +657,61 @@ function presenterHtml() {
 	      line-height: 1.05;
 	      font-weight: 850;
 	    }
+	    .preview-frame[data-aspect="9-16"] .slide-preview {
+	      padding: 7%;
+	      font-size: 7px;
+	    }
+	    .preview-frame[data-aspect="9-16"] .slide-preview .slide-body {
+	      align-content: start;
+	      gap: 5px;
+	    }
+	    .preview-frame[data-aspect="9-16"] .slide-preview h1,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .macro-title {
+	      font-size: 18px;
+	      line-height: 1.04;
+	    }
+	    .preview-frame[data-aspect="9-16"] .slide-preview h2 {
+	      font-size: 14px;
+	      line-height: 1.08;
+	    }
+	    .preview-frame[data-aspect="9-16"] .slide-preview h3 {
+	      font-size: 8px;
+	    }
+	    .preview-frame[data-aspect="9-16"] .slide-preview .lead,
+	    .preview-frame[data-aspect="9-16"] .slide-preview p,
+	    .preview-frame[data-aspect="9-16"] .slide-preview li {
+	      font-size: 6.5px;
+	      line-height: 1.3;
+	    }
+	    .preview-frame[data-aspect="9-16"] .slide-preview .grid,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .report-layout,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .macro-dashboard,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .signal-matrix,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .asset-map,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .meeting-timeline {
+	      grid-template-columns: 1fr;
+	      gap: 4px;
+	    }
+	    .preview-frame[data-aspect="9-16"] .slide-preview .panel,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .callout,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .thesis-band,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .probability-strip,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .corridor-card,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .thermo-card,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .pricing-bar,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .path-map,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .verdict-panel,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .dashboard-card,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .signal-card,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .asset-node,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .meeting {
+	      padding: 5px;
+	      border-radius: 6px;
+	    }
+	    .preview-frame[data-aspect="9-16"] .slide-preview .metric,
+	    .preview-frame[data-aspect="9-16"] .slide-preview .quote {
+	      font-size: 16px;
+	    }
 	    .question-field {
 	      width: 100%;
 	      min-height: 130px;
@@ -757,6 +817,7 @@ function presenterHtml() {
 
 	    function renderState(state) {
 	      activeState = state;
+      const aspect = state.aspect === '9-16' ? '9-16' : '16-9';
       const fragmentLabel = state.fragmentCount ? ' · 动画 ' + Math.min(state.fragmentIndex, state.fragmentCount) + '/' + state.fragmentCount : '';
       const hasNextSlide = Number.isFinite(state.slideIndex) && Number.isFinite(state.slideCount)
         ? state.slideIndex < state.slideCount - 1
@@ -768,6 +829,7 @@ function presenterHtml() {
 	      titleEl.textContent = state.title || '当前页';
 	      notesEl.innerHTML = state.notesHtml || '这一页没有备注。';
 	      nextTitleEl.textContent = hasNextSlide ? (state.nextTitle || '下一页') : '已经是最后一页';
+	      nextPreviewEl.dataset.aspect = aspect;
 	      nextPreviewEl.innerHTML = state.nextSlidePreviewHtml || fallbackPreview;
 	      timerEl.textContent = elapsedText(Date.now() - (state.startedAt || Date.now()));
 	      updateRemoteButtons();

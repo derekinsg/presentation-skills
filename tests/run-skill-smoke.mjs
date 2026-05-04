@@ -821,6 +821,7 @@ test('HTML to PDF export renders a local slide-only PDF when Chrome is available
 
 test('single-file deck template preserves promised runtime features', async () => {
   const html = await readFile(repoPath('animated-html-deck/assets/single-file-deck-template.html'), 'utf8');
+  const presenterServer = await readFile(repoPath('animated-html-deck/scripts/presenter-server.mjs'), 'utf8');
   const slides = [...html.matchAll(/<section\b[^>]*class="[^"]*\bslide\b/g)];
   const notes = [...html.matchAll(/<aside class="notes">/g)];
   assert.ok(slides.length > 0, 'template should contain sample slides');
@@ -828,33 +829,38 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.match(html, /<body[^>]+data-motion-mode="static"/, 'template should default to static motion mode');
   assert.match(html, /@media print/, 'template should include print styles');
   for (const id of [
-    'prev',
-    'next',
     'cursorToggle',
     'editToggle',
-    'fontIncrease',
-    'fontDecrease',
-    'resetEdit',
     'colorToggle',
     'modeToggle',
     'templateToggle',
     'ratioToggle',
     'exportPdfToggle',
+    'pdfFallbackActions',
+    'printPdfFallback',
     'phoneToggle',
     'notesToggle',
     'notesEditor',
     'notesSave',
     'notesReset',
     'notesSaveStatus',
-    'fullscreen',
     'hideToggle'
   ]) {
     assert.ok(html.includes(`id="${id}"`), `template should include ${id}`);
   }
+  const controlsMarkup = html.match(/<nav class="controls"[\s\S]*?<\/nav>/)?.[0] || '';
+  for (const removedId of ['prev', 'next', 'fontIncrease', 'fontDecrease', 'resetEdit', 'fullscreen']) {
+    assert.doesNotMatch(controlsMarkup, new RegExp(`id="${removedId}"`), `visible controls should not include ${removedId}`);
+  }
+  assert.match(controlsMarkup, /id="cursorToggle"/, 'visible controls should include Cursor');
+  assert.match(controlsMarkup, /id="modeToggle"/, 'visible controls should include Mode');
+  assert.match(controlsMarkup, />Note<\/button>/, 'notes control should use the concise Note label');
   const liveStyles = html.slice(0, html.indexOf('@media print'));
-  assert.match(liveStyles, /\.deck\s*\{[\s\S]*?height:\s*100vh;[\s\S]*?width:\s*100vw;[\s\S]*?padding:\s*0;/, 'live deck canvas should fill the viewport without stage padding');
-  assert.match(liveStyles, /\.slides\s*\{[\s\S]*?width:\s*100vw;[\s\S]*?height:\s*100vh;[\s\S]*?max-height:\s*none;[\s\S]*?aspect-ratio:\s*auto;/, 'live slides canvas should fill the viewport without an aspect-ratio frame');
-  assert.doesNotMatch(liveStyles, /\.slides\s*\{[\s\S]*?width:\s*min\(calc\(100vw/, 'live slides should not be width-limited into a centered frame');
+  assert.match(liveStyles, /\.deck\s*\{[\s\S]*?height:\s*100vh;[\s\S]*?width:\s*100vw;[\s\S]*?display:\s*grid;[\s\S]*?place-items:\s*center;[\s\S]*?padding:\s*0;/, 'live deck stage should fill and center the true slide canvas');
+  assert.match(liveStyles, /--slide-width:\s*min\(100vw,\s*calc\(100vh \* 16 \/ 9\)\);[\s\S]*?--slide-height:\s*min\(100vh,\s*calc\(100vw \* 9 \/ 16\)\);/, '16:9 should use a real viewport-fitted canvas formula');
+  assert.match(liveStyles, /body\[data-aspect="9-16"\]\s*\{[\s\S]*?--slide-width:\s*min\(100vw,\s*calc\(100vh \* 9 \/ 16\)\);[\s\S]*?--slide-height:\s*min\(100vh,\s*calc\(100vw \* 16 \/ 9\)\);/, '9:16 should use a real phone canvas formula');
+  assert.match(liveStyles, /\.slides\s*\{[\s\S]*?width:\s*var\(--slide-width\);[\s\S]*?height:\s*var\(--slide-height\);[\s\S]*?max-height:\s*none;[\s\S]*?aspect-ratio:\s*var\(--aspect-ratio\);/, 'live slides should use the selected true aspect-ratio canvas');
+  assert.match(liveStyles, /body\[data-aspect="9-16"\]\s+\.slides\s*\{[\s\S]*?width:\s*var\(--slide-width\);[\s\S]*?height:\s*var\(--slide-height\);[\s\S]*?aspect-ratio:\s*var\(--aspect-ratio\);/, '9:16 live slides should keep the true aspect-ratio canvas');
   assert.doesNotMatch(liveStyles, /calc\(\(100vh - var\(--controls-reserve/, 'live canvas should not subtract controls height');
   assert.match(html, /<body[^>]+data-deck-id="animated-html-deck-template"/, 'template should include a stable data-deck-id');
   assert.match(html, /data-aspect="16-9"/, 'template should default to 16:9 aspect mode');
@@ -866,6 +872,9 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.match(html, /Copy command/, 'template should include a copyable publish command');
   assert.match(html, /function buildExportPdfCommand\(\)/, 'template should build a copyable PDF export command');
   assert.match(html, /export-html-to-pdf\.mjs/, 'template should point raw file PDF export to the CLI exporter');
+  assert.match(html, /Print \/ Save as PDF/, 'template should include a browser print PDF fallback');
+  assert.match(html, /window\.print\(\)/, 'template should invoke the browser print dialog for raw-file PDF fallback');
+  assert.match(html, /print-fallback/, 'template should track print fallback state');
   assert.match(html, /function showExportPdfPanel\(\)/, 'template should include served-mode PDF export behavior');
   assert.match(html, /\/export\/pdf\?session=/, 'template should call the presenter-server PDF export endpoint');
   assert.match(html, /\.viz-card/, 'template should include reusable chart card styles');
@@ -883,7 +892,7 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.match(html, /bindControl\('colorChange',\s*accentColorPicker,\s*'change'/, 'Color input should update on change');
   assert.match(html, /function bindControl\(name,\s*node,\s*eventName,\s*handler\)/, 'controls should bind through the safe helper');
   assert.match(html, /window\.__deckControlHealth\s*=\s*controlHealth/, 'template should expose deck control health');
-  for (const healthKey of ['cursor', 'edit', 'color', 'ratio', 'exportPdf', 'phone', 'notes', 'fullscreen', 'hide']) {
+  for (const healthKey of ['cursor', 'edit', 'color', 'mode', 'ratio', 'template', 'exportPdf', 'phone', 'notes', 'hide']) {
     assert.match(html, new RegExp(`${healthKey}[:\\s]`), `control health should cover ${healthKey}`);
     assert.match(html, new RegExp(`bindControl\\('${healthKey}'`), `${healthKey} should be bound through bindControl`);
   }
@@ -904,7 +913,13 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.match(html, /body:not\(\.editing\)\s+\.editable-node/, 'template should define non-editing cursor behavior for editable nodes');
   assert.match(html, /body\[data-aspect="9-16"\]\s+\.slide-body/, 'template should include dedicated 9:16 slide body layout');
   assert.match(html, /body\[data-aspect="9-16"\]\s+\.grid,[\s\S]*?\.media-split/, 'template should include dedicated 9:16 component reflow');
+  assert.match(html, /body\[data-aspect="9-16"\]\s+\.row,[\s\S]*?body\[data-aspect="9-16"\]\s+\.bar/, 'template should reflow row and bar components for 9:16');
+  assert.match(html, /body\[data-aspect="9-16"\]\s+\.media-frame,[\s\S]*?body\[data-aspect="9-16"\]\s+\.media-bleed\s*\{[\s\S]*?aspect-ratio:\s*4 \/ 3;/, 'template should compact media frames for 9:16');
+  assert.match(html, /aspect:\s*document\.body\.dataset\.aspect \|\| '16-9'/, 'sync state should publish the active aspect ratio');
   assert.match(html, /nextSlidePreviewHtml:\s*slidePreviewHtml\(nextSlide\)/, 'template should send next-slide preview HTML to the phone presenter');
+  assert.match(presenterServer, /\.preview-frame\[data-aspect="9-16"\]\s*\{[\s\S]*?aspect-ratio:\s*9 \/ 16;/, 'phone presenter preview should support a 9:16 frame');
+  assert.match(presenterServer, /const aspect = state\.aspect === '9-16' \? '9-16' : '16-9';[\s\S]*?nextPreviewEl\.dataset\.aspect = aspect;/, 'phone presenter should apply synced aspect to the next-slide preview');
+  assert.match(presenterServer, /\.preview-frame\[data-aspect="9-16"\]\s+\.slide-preview \.grid,[\s\S]*?grid-template-columns:\s*1fr;/, 'phone presenter preview should reflow 9:16 slide content');
   assert.match(html, /\.slide::before\s*\{[\s\S]*?display:\s*none;/, 'template should disable the decorative slide glow layer by default');
   assert.match(html, /body\[data-template="consulting"\]\s+\.slide\s*\{\s*background:\s*var\(--bg\);/m, 'consulting template should use a flat slide background');
   assert.doesNotMatch(html, /body\[data-template="consulting"\]\s+\.slide\s*\{[^}]*repeating-linear-gradient/, 'consulting template should not use a grid background layer');
@@ -969,6 +984,21 @@ test('single-file deck template preserves promised runtime features', async () =
     skillText,
     /POST \/export\/pdf\?session=/,
     'skill should document served-mode PDF export endpoint'
+  );
+  assert.match(
+    skillText,
+    /Print \/ Save as PDF/,
+    'skill should require browser print fallback for raw-file PDF export'
+  );
+  assert.match(
+    skillText,
+    /window\.print\(\)/,
+    'skill should document the raw-file PDF fallback implementation'
+  );
+  assert.match(
+    skillText,
+    /Do not promise unconditional automatic PDF download/,
+    'skill should avoid overpromising automatic PDF export availability'
   );
   assert.match(
     skillText,
