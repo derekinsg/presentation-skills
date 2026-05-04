@@ -1,0 +1,15 @@
+{
+  "type": "funnel",
+  "title": "Sales Funnel",
+  "takeaway": "The largest drop happens before proof-of-value conversion.",
+  "source": "User-provided pipeline example",
+  "dataIntegrity": "user-provided",
+  "data": {
+    "steps": [
+      { "label": "Target accounts", "value": 1200 },
+      { "label": "Engaged", "value": 420 },
+      { "label": "Pilot", "value": 86 },
+      { "label": "Paid", "value": 31 }
+    ]
+  }
+}

@@ -1,12 +1,15 @@
 #!/usr/bin/env node
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import http from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const args = process.argv.slice(2);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function usage() {
   return [
@@ -129,6 +132,22 @@ function sendJson(res, status, data) {
   send(res, status, JSON.stringify(data), {
     'Content-Type': 'application/json; charset=utf-8'
   });
+}
+
+function parseJson(text) {
+  try {
+    return JSON.parse(text || '{}');
+  } catch {
+    return null;
+  }
+}
+
+function syncCorsHeaders() {
+  return {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+  };
 }
 
 function readRequestBody(req, limit = 1024 * 1024) {
@@ -696,23 +715,19 @@ function presenterHtml() {
 <body>
   <main>
     <div class="top">
-      <span class="pill">手机口播稿</span>
+      <span class="pill">演讲稿</span>
       <span class="pill" id="timer">00:00</span>
     </div>
     <p class="muted"><span id="counter">等待电脑端同步</span> · <span id="status" class="status">连接中</span></p>
     <h1 id="title">准备中</h1>
     <section class="panel">
-      <h2>当前页口播稿</h2>
+      <h2>演讲稿</h2>
       <div class="notes" id="notes">请先在电脑端打开 PPT 页面。</div>
     </section>
 	    <section class="panel">
 	      <h2>下一页</h2>
 	      <div class="next-title" id="nextTitle">等待同步</div>
 	      <div class="preview-frame" id="nextPreview"></div>
-	    </section>
-	    <section class="panel">
-	      <h2>互动性提问</h2>
-	      <textarea class="question-field" id="questionInput" placeholder="同步后会自动生成一个互动问题，也可以在这里直接编辑。"></textarea>
 	    </section>
 	  </main>
 	  <nav class="remote-controls" aria-label="PPT remote controls">
@@ -729,7 +744,6 @@ function presenterHtml() {
 	    const notesEl = document.getElementById('notes');
 	    const nextTitleEl = document.getElementById('nextTitle');
 	    const nextPreviewEl = document.getElementById('nextPreview');
-	    const questionInputEl = document.getElementById('questionInput');
 	    const remotePrevEl = document.getElementById('remotePrev');
 	    const remoteNextEl = document.getElementById('remoteNext');
 	    let activeState = null;
@@ -739,15 +753,6 @@ function presenterHtml() {
 	      const seconds = Math.max(0, Math.floor(ms / 1000));
 	      const minutes = Math.floor(seconds / 60);
 	      return String(minutes).padStart(2, '0') + ':' + String(seconds % 60).padStart(2, '0');
-	    }
-
-	    function questionKey(state) {
-	      return 'presenter-question:' + session + ':' + state.slideIndex;
-	    }
-
-	    function renderQuestion(state) {
-	      const saved = localStorage.getItem(questionKey(state));
-	      questionInputEl.value = saved !== null ? saved : (state.interactiveQuestion || '这一页可以向听众提出什么问题？');
 	    }
 
 	    function renderState(state) {
@@ -764,7 +769,6 @@ function presenterHtml() {
 	      notesEl.innerHTML = state.notesHtml || '这一页没有备注。';
 	      nextTitleEl.textContent = hasNextSlide ? (state.nextTitle || '下一页') : '已经是最后一页';
 	      nextPreviewEl.innerHTML = state.nextSlidePreviewHtml || fallbackPreview;
-	      renderQuestion(state);
 	      timerEl.textContent = elapsedText(Date.now() - (state.startedAt || Date.now()));
 	      updateRemoteButtons();
 	    }
@@ -799,15 +803,6 @@ function presenterHtml() {
 	      });
 	    }
 
-	    questionInputEl.addEventListener('input', () => {
-	      if (!activeState) return;
-	      const key = questionKey(activeState);
-	      if (questionInputEl.value.trim()) {
-	        localStorage.setItem(key, questionInputEl.value);
-	      } else {
-	        localStorage.removeItem(key);
-	      }
-	    });
 	    remotePrevEl.addEventListener('click', () => sendCommand('prev'));
 	    remoteNextEl.addEventListener('click', () => sendCommand('next'));
 	    updateRemoteButtons();
@@ -842,9 +837,11 @@ async function main() {
     process.exit(options.help ? 0 : 1);
   }
 
-  const deckPath = path.resolve(options.deckPath);
-  const deckName = path.basename(deckPath);
-  await fs.access(deckPath);
+  const deckPath = options.deckPath ? path.resolve(options.deckPath) : process.cwd();
+  const deckName = options.deckPath ? path.basename(deckPath) : '';
+  const deckDir = options.deckPath ? (await fs.stat(deckPath)).isDirectory() ? deckPath : path.dirname(deckPath) : deckPath;
+
+  if (options.deckPath) await fs.access(deckPath);
 
   const session = crypto.randomBytes(6).toString('hex');
 	  const clients = new Set();
@@ -877,7 +874,7 @@ async function main() {
   }
 
   function validSession(searchParams) {
-    return searchParams.get('session') === session;
+    return searchParams.get('session') === session || searchParams.get('session') === 'default';
   }
 
 	  function broadcast(state) {
@@ -889,6 +886,32 @@ async function main() {
 	    const payload = `event: command\ndata: ${JSON.stringify(command)}\n\n`;
 	    for (const res of commandClients) res.write(payload);
 	  }
+
+  function exportCurrentDeckPdf() {
+    const exporterPath = path.join(__dirname, 'export-html-to-pdf.mjs');
+    const result = spawnSync(process.execPath, [exporterPath, deckPath], {
+      cwd: path.dirname(deckPath),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+
+    const parsed = parseJson(result.stdout);
+    if (result.status !== 0 || !parsed) {
+      return {
+        ok: false,
+        error: 'PDF export failed',
+        stdout: result.stdout,
+        stderr: result.stderr
+      };
+    }
+
+    return {
+      ok: true,
+      outputPath: parsed.outputPath,
+      pageCount: parsed.pageCount,
+      browserPath: parsed.browserPath
+    };
+  }
 
   const server = http.createServer(async (req, res) => {
     try {
@@ -911,6 +934,18 @@ async function main() {
         return;
       }
 
+      // 允许访问同目录下的其他 HTML 文件 (修复 404)
+      if (route.endsWith('.html')) {
+        const targetPath = path.join(deckDir, route.startsWith('/') ? route.slice(1) : route);
+        try {
+          const html = await fs.readFile(targetPath, 'utf8');
+          send(res, 200, html, { 'Content-Type': 'text/html; charset=utf-8' });
+          return;
+        } catch (e) {
+          // Fall through to 404
+        }
+      }
+
       if (route === '/presenter') {
         if (!validSession(requestUrl.searchParams)) {
           send(res, 403, 'Invalid session', { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -921,13 +956,21 @@ async function main() {
       }
 
       if (route === '/sync/config') {
+        if (req.method === 'OPTIONS') {
+          send(res, 204, '', syncCorsHeaders());
+          return;
+        }
         if (!validSession(requestUrl.searchParams)) {
-          sendJson(res, 403, { error: 'Invalid session' });
+          send(res, 403, JSON.stringify({ error: 'Invalid session' }), {
+            'Content-Type': 'application/json; charset=utf-8',
+            ...syncCorsHeaders()
+          });
           return;
         }
         const { local, lan, selectedDeckUrl } = publicUrls();
-        sendJson(res, 200, {
+        send(res, 200, JSON.stringify({
           session,
+          deckName,
           lanIp,
           deckUrl: selectedDeckUrl,
           computerDeckUrl: selectedDeckUrl,
@@ -935,6 +978,9 @@ async function main() {
           lanDeckUrl: lan.deckUrl,
           presenterUrl: lan.presenterUrl,
           qrUrl: lan.qrUrl
+        }), {
+          'Content-Type': 'application/json; charset=utf-8',
+          ...syncCorsHeaders()
         });
         return;
       }
@@ -1015,6 +1061,23 @@ async function main() {
 	        });
 	        return;
 	      }
+
+      if (route === '/export/pdf') {
+        if (req.method === 'OPTIONS') {
+          send(res, 204, '', syncCorsHeaders());
+          return;
+        }
+        if (!validSession(requestUrl.searchParams)) {
+          sendJson(res, 403, { ok: false, error: 'Invalid session' });
+          return;
+        }
+        if (req.method !== 'POST') {
+          sendJson(res, 405, { ok: false, error: 'Use POST to export PDF' });
+          return;
+        }
+        sendJson(res, 200, exportCurrentDeckPdf());
+        return;
+      }
 
       if (route === '/qr.svg') {
         if (!validSession(requestUrl.searchParams)) {

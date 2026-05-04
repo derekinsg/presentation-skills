@@ -1,0 +1,14 @@
+{
+  "type": "kpi-strip",
+  "title": "Traction Snapshot",
+  "takeaway": "Three operating metrics summarize the current launch momentum.",
+  "source": "User-provided CRM export",
+  "dataIntegrity": "user-provided",
+  "data": {
+    "items": [
+      { "label": "Qualified pipeline", "value": "$4.2M", "note": "Current quarter" },
+      { "label": "Pilot conversion", "value": "38%" },
+      { "label": "Median deployment", "value": "21 days" }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "yield-curve",
+  "title": "Treasury Yield Curve",
+  "takeaway": "Short rates remain anchored while the long end prices term premium.",
+  "source": "Example values for renderer testing",
+  "dataIntegrity": "illustrative",
+  "data": {
+    "points": [
+      { "label": "3M", "value": 4.9 },
+      { "label": "1Y", "value": 4.4 },
+      { "label": "2Y", "value": 4.1 },
+      { "label": "5Y", "value": 4.0 },
+      { "label": "10Y", "value": 4.3 },
+      { "label": "30Y", "value": 4.6 }
+    ]
+  }
+}

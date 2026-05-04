@@ -13,7 +13,7 @@ git status --short --ignored
 
 验收标准：
 
-- `npm test` 输出 `13 smoke checks passed.`。
+- `npm test` 输出 `15 smoke checks passed.`。
 - 根目录生成的 HTML PPT 出现在 ignored 区域，不会被提交。
 - 没有 `.env`、真实客户 PPT、API key、私有图片准备进入 git。
 
@@ -102,7 +102,7 @@ Main issue:
 
 ## 七、Beta 发布标准
 
-可以发 `v0.1.0-beta`，当满足：
+可以发 `v0.1.2-beta`，当满足：
 
 - 新 clone 后 `npm test` 全绿。
 - 干净环境里 3 个 skill 都能被 `$skill-name` 触发。

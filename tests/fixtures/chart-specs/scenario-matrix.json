@@ -1,0 +1,14 @@
+{
+  "type": "scenario-matrix",
+  "title": "Rate Scenario Matrix",
+  "takeaway": "The base case is stable, but upside rate risk changes duration posture.",
+  "source": "Illustrative strategy framework",
+  "dataIntegrity": "illustrative",
+  "data": {
+    "scenarios": [
+      { "name": "Base", "probability": "50%", "impact": "Hold neutral duration", "signal": "Inflation trend stays contained" },
+      { "name": "Higher-rate", "probability": "30%", "impact": "Shorten duration and favor reinvestment", "signal": "Inflation surprises higher" },
+      { "name": "Lower-rate", "probability": "20%", "impact": "Extend duration selectively", "signal": "Growth weakens materially" }
+    ]
+  }
+}

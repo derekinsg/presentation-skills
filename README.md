@@ -68,6 +68,7 @@ The smoke suite checks:
 - skill metadata and UI metadata
 - references to bundled assets, scripts, and documentation
 - deterministic launcher/style/image helper scripts
+- chart intelligence specs, validation, and inline rendering
 - HTML deck template contract: notes, controls, print styles, static default, and no remote runtime assets
 - local presenter server startup and URL reporting
 - public-release risk patterns such as secrets or local absolute paths
@@ -91,7 +92,7 @@ Use $speaker-polish to rewrite these slide notes in a Steve Jobs inspired produc
 
 ## Release Checklist
 
-Before cutting `v0.1.0-beta`:
+Before cutting `v0.1.2-beta`:
 
 1. Run `npm test`.
 2. Review `git status --short --ignored` and make sure generated root HTML decks, screenshots, local caches, and private materials are not staged.
@@ -102,7 +103,7 @@ Before cutting `v0.1.0-beta`:
 7. Build a release zip from tracked files:
 
 ```bash
-git archive --format zip --prefix=presentation-skills-v0.1.0-beta/ -o presentation-skills-v0.1.0-beta.zip HEAD
+git archive --format zip --prefix=presentation-skills-v0.1.2-beta/ -o presentation-skills-v0.1.2-beta.zip HEAD
 ```
 
 ## Licensing

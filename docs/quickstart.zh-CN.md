@@ -25,7 +25,7 @@ npm test
 看到类似下面的结果，说明 repo 结构、脚本、模板和发布风险扫描都通过了：
 
 ```text
-13 smoke checks passed.
+15 smoke checks passed.
 ```
 
 ## 3. 安装到 Codex 本地 Skill 目录

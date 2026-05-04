@@ -1,0 +1,16 @@
+{
+  "type": "waterfall",
+  "title": "Margin Bridge",
+  "takeaway": "Efficiency gains offset most of the expansion cost.",
+  "source": "Illustrative operating model",
+  "dataIntegrity": "illustrative",
+  "data": {
+    "steps": [
+      { "label": "Base", "value": 42 },
+      { "label": "Automation", "value": 8 },
+      { "label": "Support load", "value": -4 },
+      { "label": "Infra cost", "value": -3 },
+      { "label": "Target", "value": 43 }
+    ]
+  }
+}

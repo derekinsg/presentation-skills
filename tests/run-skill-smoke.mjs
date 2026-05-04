@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
-import { mkdtemp, readFile, readdir, realpath, stat, writeFile } from 'node:fs/promises';
+import { copyFile, mkdtemp, readFile, readdir, realpath, stat, writeFile } from 'node:fs/promises';
 import http from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
@@ -20,11 +20,17 @@ const skills = [
       'agents/openai.yaml',
       'assets/single-file-deck-template.html',
       'references/deck-generation-rubric.md',
+      'references/chart-intelligence.md',
+      'references/chart-patterns.md',
+      'references/chart-spec.schema.json',
       'references/launcher-design-rationale.md',
       'references/launcher-payload.schema.json',
       'references/launcher-wizard-spec.md',
       'scripts/image-to-data-uri.mjs',
       'scripts/extract-source-pages.mjs',
+      'scripts/export-html-to-pdf.mjs',
+      'scripts/render-chart-spec.mjs',
+      'scripts/validate-chart-spec.mjs',
       'scripts/normalize-launcher-payload.mjs',
       'scripts/presenter-server.mjs'
     ]
@@ -127,6 +133,7 @@ function extractReferencedResources(markdown) {
 function runNode(relativeScript, args = [], options = {}) {
   const result = spawnSync('node', [repoPath(relativeScript), ...args], {
     cwd: options.cwd || repoRoot,
+    env: options.env || process.env,
     input: options.input,
     encoding: 'utf8',
     timeout: options.timeout || 10000
@@ -149,6 +156,29 @@ function commandExists(command) {
     stdio: ['ignore', 'pipe', 'pipe']
   });
   return result.status === 0 && result.stdout.trim().length > 0;
+}
+
+async function findTestBrowser() {
+  if (process.env.CHROME_PATH && await fileExists(process.env.CHROME_PATH)) return process.env.CHROME_PATH;
+
+  for (const command of ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'chrome']) {
+    const result = spawnSync(process.env.SHELL || '/bin/sh', ['-lc', `command -v ${command}`], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+    if (result.status === 0 && result.stdout.trim()) return result.stdout.trim().split('\n')[0];
+  }
+
+  const macApps = [
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge'
+  ];
+  for (const browserPath of macApps) {
+    if (await fileExists(browserPath)) return browserPath;
+  }
+
+  return null;
 }
 
 function buildTinyPdf(pageCount = 2) {
@@ -223,12 +253,41 @@ function httpGet(url) {
       res.on('data', chunk => {
         body += chunk;
       });
-      res.on('end', () => resolve({ status: res.statusCode, body }));
+      res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body }));
     });
     req.on('error', reject);
     req.setTimeout(5000, () => {
       req.destroy(new Error(`Timed out fetching ${url}`));
     });
+  });
+}
+
+function httpPost(url, body = '') {
+  return new Promise((resolve, reject) => {
+    const parsed = new URL(url);
+    const req = http.request({
+      method: 'POST',
+      hostname: parsed.hostname,
+      port: parsed.port,
+      path: parsed.pathname + parsed.search,
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body)
+      }
+    }, res => {
+      let responseBody = '';
+      res.setEncoding('utf8');
+      res.on('data', chunk => {
+        responseBody += chunk;
+      });
+      res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body: responseBody }));
+    });
+    req.on('error', reject);
+    req.setTimeout(30000, () => {
+      req.destroy(new Error(`Timed out posting ${url}`));
+    });
+    req.write(body);
+    req.end();
   });
 }
 
@@ -284,11 +343,93 @@ async function startPresenterSmoke() {
     const configUrl = `${parsed.origin}/sync/config?session=${encodeURIComponent(session)}`;
     const configResponse = await httpGet(configUrl);
     assert.equal(configResponse.status, 200, 'presenter /sync/config should respond 200');
+    assert.equal(configResponse.headers['access-control-allow-origin'], '*', 'presenter /sync/config should allow raw file Launch checks');
     const config = JSON.parse(configResponse.body);
+    assert.equal(config.deckName, 'single-file-deck-template.html', 'config should include the served deck filename');
     assert.ok(config.computerDeckUrl, 'config should include computerDeckUrl');
     assert.ok(config.presenterUrl, 'config should include presenterUrl');
     assert.ok(config.qrUrl, 'config should include qrUrl');
     assert.ok(config.localDeckUrl.includes('127.0.0.1'), 'local fallback should use 127.0.0.1');
+
+    const presenterResponse = await httpGet(`${parsed.origin}/presenter?session=${encodeURIComponent(session)}`);
+    assert.equal(presenterResponse.status, 200, 'phone presenter page should respond 200');
+    assert.match(presenterResponse.body, />演讲稿</, 'phone presenter should label notes as 演讲稿');
+    assert.doesNotMatch(presenterResponse.body, /手机口播稿|当前页口播稿|互动性提问|questionInput|presenter-question/, 'phone presenter should not include old oral-script labels or interactive question UI');
+  } finally {
+    server.kill('SIGTERM');
+  }
+}
+
+async function startPresenterExportSmoke() {
+  const browserPath = await findTestBrowser();
+  const tmpRoot = await mkdtemp(path.join(os.tmpdir(), 'presenter-pdf-export-'));
+  const deckPath = path.join(tmpRoot, 'served-deck.html');
+  await copyFile(repoPath('animated-html-deck', 'assets', 'single-file-deck-template.html'), deckPath);
+
+  const server = spawn('node', [
+    repoPath('animated-html-deck', 'scripts', 'presenter-server.mjs'),
+    deckPath,
+    '--port',
+    '0',
+    '--host',
+    '127.0.0.1',
+    '--deck-host',
+    'local',
+    '--no-open'
+  ], {
+    cwd: repoRoot,
+    env: browserPath ? { ...process.env, CHROME_PATH: browserPath } : process.env,
+    stdio: ['ignore', 'pipe', 'pipe']
+  });
+
+  let stdout = '';
+  let stderr = '';
+
+  try {
+    const deckUrl = await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error(`Presenter server did not report a deck URL.\nSTDOUT:\n${stdout}\nSTDERR:\n${stderr}`));
+      }, 7000);
+
+      server.stdout.on('data', chunk => {
+        stdout += chunk.toString();
+        const match = stdout.match(/Computer PPT:\s*(http:\/\/[^\s]+)/);
+        if (match) {
+          clearTimeout(timeout);
+          resolve(match[1]);
+        }
+      });
+
+      server.stderr.on('data', chunk => {
+        stderr += chunk.toString();
+      });
+
+      server.on('exit', code => {
+        clearTimeout(timeout);
+        reject(new Error(`Presenter server exited early with code ${code}.\nSTDOUT:\n${stdout}\nSTDERR:\n${stderr}`));
+      });
+    });
+
+    const parsed = new URL(deckUrl);
+    const badSession = await httpPost(`${parsed.origin}/export/pdf?session=bad`);
+    assert.equal(badSession.status, 403, 'export endpoint should reject invalid session');
+    assert.match(badSession.body, /Invalid session/, 'invalid export session should explain failure');
+
+    if (!browserPath) {
+      console.log('skip - presenter PDF export requires Chrome/Chromium');
+      return;
+    }
+
+    const session = parsed.searchParams.get('session');
+    const exportResponse = await httpPost(`${parsed.origin}/export/pdf?session=${encodeURIComponent(session)}`);
+    assert.equal(exportResponse.status, 200, 'export endpoint should respond 200 for valid session');
+    const exportResult = JSON.parse(exportResponse.body);
+    assert.equal(exportResult.ok, true, 'export endpoint should report success');
+    assert.equal(path.basename(exportResult.outputPath), 'served-deck.pdf', 'export endpoint should write a PDF beside the deck');
+    assert.ok(exportResult.pageCount > 0, 'export endpoint should report page count');
+    assert.ok(await fileExists(exportResult.outputPath), 'server-exported PDF should exist');
+    const pdfBytes = await readFile(exportResult.outputPath);
+    assert.equal(pdfBytes.subarray(0, 4).toString('utf8'), '%PDF', 'server-exported file should be a PDF');
   } finally {
     server.kill('SIGTERM');
   }
@@ -471,6 +612,54 @@ test('style resolver returns deterministic theme packages', async () => {
   assert.equal(stripe.sourceStyleId, 'stripe');
 });
 
+test('chart intelligence validates and renders core chart specs', async () => {
+  const schema = JSON.parse(await readFile(repoPath('animated-html-deck/references/chart-spec.schema.json'), 'utf8'));
+  assert.equal(schema.title, 'Animated HTML Deck Chart Spec');
+  assert.ok(schema.properties.type.enum.includes('kpi-strip'), 'chart schema should include kpi-strip');
+  assert.ok(schema.properties.type.enum.includes('heatmap'), 'chart schema should include heatmap');
+
+  const chartDir = repoPath('tests/fixtures/chart-specs');
+  const fixtureNames = (await readdir(chartDir)).filter(name => name.endsWith('.json')).sort();
+  assert.ok(fixtureNames.length >= 8, 'chart fixtures should cover the core chart types');
+
+  const renderedTypes = new Set();
+  for (const fixtureName of fixtureNames) {
+    const fixturePath = path.join(chartDir, fixtureName);
+    const validation = parseJsonOutput(runNode('animated-html-deck/scripts/validate-chart-spec.mjs', [fixturePath]), fixtureName);
+    assert.equal(validation.ok, true, `${fixtureName} should validate`);
+    renderedTypes.add(validation.type);
+
+    const rendered = runNode('animated-html-deck/scripts/render-chart-spec.mjs', [fixturePath]).stdout;
+    assert.match(rendered, /class="viz-card"/, `${fixtureName} should render a viz-card`);
+    assert.match(rendered, /data-chart-type="/, `${fixtureName} should include data-chart-type`);
+    assert.match(rendered, /data-chart-spec='/, `${fixtureName} should include data-chart-spec`);
+    assert.match(rendered, /chart-title/, `${fixtureName} should render a chart title`);
+    assert.match(rendered, /chart-takeaway/, `${fixtureName} should render a takeaway`);
+    assert.doesNotMatch(rendered, /\b(?:src|href)=["']https?:\/\//i, `${fixtureName} should not link remote assets`);
+    assert.doesNotMatch(rendered, /(?:unpkg|jsdelivr|fonts\.googleapis|cdn\.)/i, `${fixtureName} should not depend on public CDNs`);
+  }
+
+  for (const type of ['kpi-strip', 'timeline', 'quadrant', 'scenario-matrix', 'yield-curve', 'funnel', 'waterfall', 'heatmap']) {
+    assert.ok(renderedTypes.has(type), `chart fixtures should include ${type}`);
+  }
+
+  const invalid = runNode(
+    'animated-html-deck/scripts/validate-chart-spec.mjs',
+    [],
+    {
+      input: JSON.stringify({
+        type: 'kpi-strip',
+        title: 'Bad remote chart',
+        takeaway: 'Remote references should fail.',
+        data: { items: [{ label: 'A', value: '1' }, { label: 'B', value: '2' }] },
+        source: 'https://example.com/data.csv'
+      }),
+      expectFailure: true
+    }
+  );
+  assert.match(invalid.stderr, /remote URLs/, 'validator should reject remote references');
+});
+
 test('image-to-data-uri handles success and clear failures', async () => {
   const tmp = await mkdtemp(path.join(os.tmpdir(), 'presentation-skill-'));
   const pngPath = path.join(tmp, 'pixel.png');
@@ -558,6 +747,78 @@ test('source page extraction gives actionable PPT/PPTX conversion failures', asy
   );
 });
 
+test('HTML to PDF export handles source selection and browser failures clearly', async () => {
+  const emptyRoot = await mkdtemp(path.join(os.tmpdir(), 'html-pdf-empty-'));
+  const noSource = runNode('animated-html-deck/scripts/export-html-to-pdf.mjs', [], {
+    cwd: emptyRoot,
+    expectFailure: true
+  });
+  assert.match(noSource.stderr, /No HTML deck found/, 'empty root should explain missing HTML deck');
+
+  const multiRoot = await mkdtemp(path.join(os.tmpdir(), 'html-pdf-multi-'));
+  await writeFile(path.join(multiRoot, 'a.html'), '<!doctype html><section class="slide"></section>');
+  await writeFile(path.join(multiRoot, 'b.html'), '<!doctype html><section class="slide"></section>');
+  const multiple = runNode('animated-html-deck/scripts/export-html-to-pdf.mjs', [], {
+    cwd: multiRoot,
+    expectFailure: true
+  });
+  assert.match(multiple.stderr, /Multiple HTML decks found/, 'multiple root HTML decks should ask for explicit path');
+  assert.match(multiple.stderr, /a\.html/, 'multiple HTML message should list candidates');
+  assert.match(multiple.stderr, /b\.html/, 'multiple HTML message should list candidates');
+
+  const invalidInput = path.join(emptyRoot, 'not-html.txt');
+  await writeFile(invalidInput, 'not html');
+  const unsupported = runNode('animated-html-deck/scripts/export-html-to-pdf.mjs', [invalidInput], {
+    cwd: emptyRoot,
+    expectFailure: true
+  });
+  assert.match(unsupported.stderr, /Unsupported input type/, 'unsupported input type should be explained');
+
+  const htmlPath = path.join(emptyRoot, 'deck.html');
+  await writeFile(htmlPath, '<!doctype html><section class="slide"></section>');
+  const noBrowser = runNode('animated-html-deck/scripts/export-html-to-pdf.mjs', [htmlPath], {
+    cwd: emptyRoot,
+    env: {
+      ...process.env,
+      CHROME_PATH: path.join(emptyRoot, 'missing-chrome')
+    },
+    expectFailure: true
+  });
+  assert.match(noBrowser.stderr, /CHROME_PATH is set/, 'invalid CHROME_PATH should fail clearly');
+});
+
+test('HTML to PDF export renders a local slide-only PDF when Chrome is available', async () => {
+  const browserPath = await findTestBrowser();
+  if (!browserPath) {
+    console.log('skip - HTML to PDF export requires Chrome/Chromium');
+    return;
+  }
+
+  const tmpRoot = await mkdtemp(path.join(os.tmpdir(), 'html-pdf-export-'));
+  const sourcePath = path.join(tmpRoot, 'deck.html');
+  await copyFile(repoPath('animated-html-deck/assets/single-file-deck-template.html'), sourcePath);
+
+  const result = parseJsonOutput(runNode('animated-html-deck/scripts/export-html-to-pdf.mjs', [sourcePath], {
+    cwd: tmpRoot,
+    env: {
+      ...process.env,
+      CHROME_PATH: browserPath
+    },
+    timeout: 30000
+  }), 'HTML PDF export');
+
+  const outputPath = path.join(tmpRoot, 'deck.pdf');
+  assert.equal(await realpath(result.sourcePath), await realpath(sourcePath));
+  assert.equal(await realpath(result.outputPath), await realpath(outputPath));
+  assert.equal(await realpath(result.browserPath), await realpath(browserPath));
+  assert.ok(result.pageCount > 0, 'export should report at least one slide');
+  assert.ok(await fileExists(outputPath), 'exported PDF should exist');
+
+  const pdfBytes = await readFile(outputPath);
+  assert.equal(pdfBytes.subarray(0, 4).toString('utf8'), '%PDF', 'exported file should be a PDF');
+  assert.ok(pdfBytes.length > 1024, 'exported PDF should be non-empty');
+});
+
 test('single-file deck template preserves promised runtime features', async () => {
   const html = await readFile(repoPath('animated-html-deck/assets/single-file-deck-template.html'), 'utf8');
   const slides = [...html.matchAll(/<section\b[^>]*class="[^"]*\bslide\b/g)];
@@ -574,25 +835,72 @@ test('single-file deck template preserves promised runtime features', async () =
     'fontIncrease',
     'fontDecrease',
     'resetEdit',
-    'colorButton',
+    'colorToggle',
     'modeToggle',
     'templateToggle',
     'ratioToggle',
-    'publishToggle',
+    'exportPdfToggle',
     'phoneToggle',
     'notesToggle',
-    'fullscreen'
+    'notesEditor',
+    'notesSave',
+    'notesReset',
+    'notesSaveStatus',
+    'fullscreen',
+    'hideToggle'
   ]) {
     assert.ok(html.includes(`id="${id}"`), `template should include ${id}`);
   }
+  const liveStyles = html.slice(0, html.indexOf('@media print'));
+  assert.match(liveStyles, /\.deck\s*\{[\s\S]*?height:\s*100vh;[\s\S]*?width:\s*100vw;[\s\S]*?padding:\s*0;/, 'live deck canvas should fill the viewport without stage padding');
+  assert.match(liveStyles, /\.slides\s*\{[\s\S]*?width:\s*100vw;[\s\S]*?height:\s*100vh;[\s\S]*?max-height:\s*none;[\s\S]*?aspect-ratio:\s*auto;/, 'live slides canvas should fill the viewport without an aspect-ratio frame');
+  assert.doesNotMatch(liveStyles, /\.slides\s*\{[\s\S]*?width:\s*min\(calc\(100vw/, 'live slides should not be width-limited into a centered frame');
+  assert.doesNotMatch(liveStyles, /calc\(\(100vh - var\(--controls-reserve/, 'live canvas should not subtract controls height');
+  assert.match(html, /<body[^>]+data-deck-id="animated-html-deck-template"/, 'template should include a stable data-deck-id');
   assert.match(html, /data-aspect="16-9"/, 'template should default to 16:9 aspect mode');
   assert.match(html, /body\[data-aspect="9-16"\]/, 'template should include 9:16 aspect styling');
   assert.match(html, /@page deck-phone/, 'template should include 9:16 print page support');
-  assert.match(html, /Publish\/IP/, 'template should include an IP publish control');
+  assert.doesNotMatch(html, /id="publishToggle"/, 'template should not include a separate IP publish control');
+  assert.match(html, /Export PDF/, 'template should include an Export PDF control');
+  assert.match(html, /Phone \/ IP/, 'template should expose raw-file IP publish help through the Phone panel');
   assert.match(html, /Copy command/, 'template should include a copyable publish command');
+  assert.match(html, /function buildExportPdfCommand\(\)/, 'template should build a copyable PDF export command');
+  assert.match(html, /export-html-to-pdf\.mjs/, 'template should point raw file PDF export to the CLI exporter');
+  assert.match(html, /function showExportPdfPanel\(\)/, 'template should include served-mode PDF export behavior');
+  assert.match(html, /\/export\/pdf\?session=/, 'template should call the presenter-server PDF export endpoint');
+  assert.match(html, /\.viz-card/, 'template should include reusable chart card styles');
+  assert.match(html, /\.chart-title/, 'template should include reusable chart title styles');
+  assert.match(html, /data-chart-type="kpi-strip"/, 'template should include a sample structured chart');
+  assert.match(html, /data-chart-spec='/, 'template should preserve chart specs in data-chart-spec');
+  assert.match(html, /body\[data-aspect="9-16"\]\s+\.viz-kpi-strip/, 'template should reflow chart components for 9:16');
   assert.match(html, /function setCursorMode\(\)/, 'template should include an explicit cursor mode reset function');
-  assert.match(html, /cursorToggle\.addEventListener\('click',\s*setCursorMode\)/, 'Cursor should call the reset function directly');
+  assert.match(html, /bindControl\('cursor',\s*cursorToggle,\s*'click',\s*setCursorMode\)/, 'Cursor should call the reset function directly');
   assert.match(html, /selection\.removeAllRanges/, 'Cursor mode should clear text selection ranges');
+  assert.match(html, /querySelectorAll\('\.editable-node\.is-selected, \.editable-node\.is-dragging'\)/, 'Cursor mode should clear residual selected edit nodes');
+  assert.match(html, /id="colorToggle"[\s\S]*for="accentColorPicker"|for="accentColorPicker"[\s\S]*id="colorToggle"/, 'Color should be a native label trigger for the color input');
+  assert.match(html, /document\.getElementById\('colorToggle'\)\s*\|\|\s*document\.getElementById\('colorButton'\)/, 'Color should use colorToggle while keeping legacy colorButton fallback');
+  assert.match(html, /bindControl\('colorInput',\s*accentColorPicker,\s*'input'/, 'Color input should update on input');
+  assert.match(html, /bindControl\('colorChange',\s*accentColorPicker,\s*'change'/, 'Color input should update on change');
+  assert.match(html, /function bindControl\(name,\s*node,\s*eventName,\s*handler\)/, 'controls should bind through the safe helper');
+  assert.match(html, /window\.__deckControlHealth\s*=\s*controlHealth/, 'template should expose deck control health');
+  for (const healthKey of ['cursor', 'edit', 'color', 'ratio', 'exportPdf', 'phone', 'notes', 'fullscreen', 'hide']) {
+    assert.match(html, new RegExp(`${healthKey}[:\\s]`), `control health should cover ${healthKey}`);
+    assert.match(html, new RegExp(`bindControl\\('${healthKey}'`), `${healthKey} should be bound through bindControl`);
+  }
+  assert.match(html, /controlsHidden:/, 'control health should expose hidden controls state');
+  assert.match(html, /function toggleControlsHidden\(\)/, 'template should include a hide/show controls toggle');
+  assert.match(html, /document\.addEventListener\('click'[\s\S]*forward\(\);[\s\S]*\}\);/, 'template should advance on slide clicks');
+  assert.match(html, /function notesStorageKey\(slideIndex = index\)/, 'template should compute stable per-slide notes storage keys');
+  assert.match(html, /animated-html-deck-notes:' \+ deckId \+ ':' \+ slideIndex/, 'notes storage should use deck id and slide index');
+  assert.match(html, /function restoreSavedNotes\(\)/, 'template should restore locally saved speaker notes');
+  assert.match(html, /localStorage\.setItem\(notesStorageKey\(index\), notesEditor\.value\)/, 'saving notes should persist plain text in localStorage');
+  assert.match(html, /localStorage\.removeItem\(notesStorageKey\(index\)\)/, 'resetting notes should clear localStorage for the slide');
+  assert.match(html, /function saveCurrentNotes\(\)[\s\S]*publishSyncState\(\)/, 'saving notes should republish sync state');
+  assert.match(html, /function resetCurrentNotes\(\)[\s\S]*publishSyncState\(\)/, 'resetting notes should republish sync state');
+  assert.match(html, /notesHtml:\s*notes \? notes\.innerHTML : 'No notes for this slide\.'/ , 'sync state should read current notes HTML');
+  assert.match(html, /const activeNotesEditor[\s\S]*if \(activeNotesEditor\) return;/, 'notes editor typing should not trigger deck keyboard shortcuts');
+  assert.doesNotMatch(html, /<div class="logo-lockup"><span class="brand-mark">AD<\/span><span>Animated HTML Deck<\/span><\/div>/, 'template opening slide should not include the default logo pill');
+  assert.doesNotMatch(html, /'\.slide \.logo-lockup span'/, 'logo lockup text should not be editable by default');
   assert.match(html, /body:not\(\.editing\)\s+\.editable-node/, 'template should define non-editing cursor behavior for editable nodes');
   assert.match(html, /body\[data-aspect="9-16"\]\s+\.slide-body/, 'template should include dedicated 9:16 slide body layout');
   assert.match(html, /body\[data-aspect="9-16"\]\s+\.grid,[\s\S]*?\.media-split/, 'template should include dedicated 9:16 component reflow');
@@ -607,11 +915,119 @@ test('single-file deck template preserves promised runtime features', async () =
   assert.doesNotMatch(html, /(?:unpkg|jsdelivr|fonts\.googleapis|cdn\.)/i, 'template should not depend on public CDNs');
 
   const skillText = await readFile(repoPath('animated-html-deck/SKILL.md'), 'utf8');
-  assert.match(skillText, /Use flat backgrounds by default/, 'skill should require flat backgrounds by default');
+  assert.match(
+    skillText,
+    /Use flat backgrounds by default|Aesthetics First/,
+    'skill should include explicit visual design guidance'
+  );
+  assert.match(
+    skillText,
+    /Control Runtime Contract/,
+    'skill should document the control runtime contract'
+  );
+  assert.match(
+    skillText,
+    /Fullscreen Canvas Contract/,
+    'skill should document the fullscreen canvas contract'
+  );
+  assert.match(
+    skillText,
+    /100vw` and `100vh/,
+    'skill should require the live canvas to fill the viewport'
+  );
+  assert.match(
+    skillText,
+    /Speaker Notes Editing Contract/,
+    'skill should document editable speaker notes'
+  );
+  assert.match(
+    skillText,
+    /data-deck-id/,
+    'skill should require stable deck ids for notes persistence'
+  );
+  assert.match(
+    skillText,
+    /animated-html-deck-notes:\$\{deckId\}:\$\{slideIndex\}/,
+    'skill should require notes storage keys based on deck id and slide index'
+  );
+  assert.match(
+    skillText,
+    /colorToggle/,
+    'skill should require the canonical colorToggle control'
+  );
+  assert.match(
+    skillText,
+    /window\.__deckControlHealth/,
+    'skill should require runtime control health'
+  );
+  assert.match(
+    skillText,
+    /exportPdfToggle/,
+    'skill should require the Export PDF control id'
+  );
+  assert.match(
+    skillText,
+    /POST \/export\/pdf\?session=/,
+    'skill should document served-mode PDF export endpoint'
+  );
+  assert.match(
+    skillText,
+    /Go Live \/ Phone Sync Contract/,
+    'skill should document the Go Live / Phone Sync contract'
+  );
+  assert.match(
+    skillText,
+    /Chart Intelligence Protocol/,
+    'skill should document the chart intelligence protocol'
+  );
+  assert.match(
+    skillText,
+    /chartSpec|chart spec/,
+    'skill should require normalized chart specs'
+  );
+  assert.match(
+    skillText,
+    /Do not hard-code `localhost:3000`/,
+    'skill should forbid hard-coded localhost:3000 launch targets'
+  );
+  assert.match(
+    skillText,
+    /\/sync\/config\?session=default/,
+    'skill should require presenter-server config discovery'
+  );
+  assert.match(
+    skillText,
+    /response\.ok/,
+    'skill should require response.ok before considering the server online'
+  );
+  assert.match(
+    skillText,
+    /config\.deckName/,
+    'skill should require deckName validation before redirecting'
+  );
+  assert.match(
+    skillText,
+    /config\.localDeckUrl/,
+    'skill should require localDeckUrl redirects'
+  );
+  assert.match(
+    skillText,
+    /\/sync\/state/,
+    'skill should require served-mode slide state publishing'
+  );
+  assert.match(
+    skillText,
+    /\/sync\/commands/,
+    'skill should require phone command sync'
+  );
 });
 
 test('presenter server starts and reports deck, phone, and QR URLs', async () => {
   await startPresenterSmoke();
+});
+
+test('presenter server exposes local PDF export endpoint', async () => {
+  await startPresenterExportSmoke();
 });
 
 test('public release risk scan has no obvious secrets or local machine paths', async () => {
@@ -644,7 +1060,7 @@ test('public release risk scan has no obvious secrets or local machine paths', a
 
 test('agent simulation prompt fixture covers positive, edge, and negative cases', async () => {
   const fixture = JSON.parse(await readFile(repoPath('tests/fixtures/agent-simulation-prompts.json'), 'utf8'));
-  assert.equal(fixture.version, '0.1.1-beta');
+  assert.equal(fixture.version, '0.1.2-beta');
   assert.ok(Array.isArray(fixture.prompts));
   assert.ok(fixture.prompts.length >= 10, 'fixture should include at least 10 prompts');
 

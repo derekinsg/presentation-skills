@@ -1,0 +1,15 @@
+{
+  "type": "timeline",
+  "title": "Product Rollout Timeline",
+  "takeaway": "The rollout moves from proof to repeatability before scaling.",
+  "source": "Illustrative launch plan",
+  "dataIntegrity": "illustrative",
+  "data": {
+    "events": [
+      { "date": "Q1", "label": "Pilot with design partners" },
+      { "date": "Q2", "label": "Release workflow automation" },
+      { "date": "Q3", "label": "Scale GTM playbook" },
+      { "date": "Q4", "label": "Expand enterprise controls" }
+    ]
+  }
+}

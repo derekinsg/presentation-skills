@@ -12,6 +12,7 @@ Use this rubric to translate a user brief into a polished single-file HTML prese
 - If the user references a real website or brand-inspired direction, resolve it through the sibling `style-polish` skill before you write slide HTML.
 - For company-grade decks, identify company/product name, logo availability, brand color, confidentiality needs, source/date labels, and the built-in template to use.
 - Identify available local images, their role, and whether they should be logos, screenshots, diagrams, cover media, or supporting visuals.
+- Create a slide-level visual plan: `none`, `chart`, `diagram`, or `hybrid`.
 - Decide what must be visible on slides versus moved into speaker notes.
 - If content is thin, expand with logical structure and clearly framed assumptions; do not fabricate proof.
 
@@ -62,12 +63,14 @@ If the user names a brand-inspired style, map it to the closest built-in templat
 
 - Choose 2-4 theme colors plus neutral text/background colors.
 - Use system fonts and CSS variables.
+- Use chart intelligence for analytical, report, pitch, product, and teaching decks: choose a chart/diagram pattern before writing visual slide content.
 - Default decks are static: keep `data-motion-mode="static"` and do not add `data-motion` or `.fragment` unless the user explicitly requests animation, advanced motion, product-launch feel, or similar.
 - When motion is requested, set `data-motion-mode="animated"` and use `hero-reveal` for title moments, `mask-wipe` for labels, `media-parallax` for images, `card-stack` for cards, `metric-count` for numbers, `chart-draw` for charts, `process-trace` for process layouts, and `stagger-rise` for supporting copy.
 - Make requested transitions 520-960ms with subtle depth and easing. Serious decks should use fewer fragments, not weaker craft.
 - Avoid animation that changes layout after text is read.
 - Keep `prefers-reduced-motion` support for animated decks.
 - Build charts and diagrams from HTML/CSS when possible; keep labels readable and legends simple.
+- Render chart specs inline with `.viz-card`, `data-chart-type`, and `data-chart-spec`; never depend on remote chart libraries.
 - Use slide layouts that match content, not repeated generic cards.
 
 ## Image And Media Rules
@@ -109,6 +112,7 @@ If the user names a brand-inspired style, map it to the closest built-in templat
 - Default static decks contain no `data-motion` or `.fragment`; animated decks use multiple presets sequenced by narrative priority, not a single generic fade.
 - Edit mode can modify slide text, adjust size, drag selected text, reset edits, and change accent color; Cursor exits editing and clears selected text.
 - Ratio mode can switch between true 16:9 and 9:16 slide canvases, with matching print page sizing.
+- Live browser mode uses a true fullscreen canvas: `.deck` and `.slides` fill the viewport and controls overlay the slide instead of shrinking it into a framed stage.
 - If phone presenter support is included, it is optional: the deck still works from `file://`, and same-Wi-Fi sync is activated only by the local presenter server.
 - Phone presenter QR codes must point to the computer's LAN IP, not `localhost` or `127.0.0.1`.
 - If a source website style is used, the final deck must still contain only one resolved style, not the full 70-style catalog.

@@ -1,0 +1,22 @@
+{
+  "type": "heatmap",
+  "title": "Risk Heatmap",
+  "takeaway": "Execution and data quality risks need the strongest mitigation.",
+  "source": "Assumption workshop matrix",
+  "dataIntegrity": "assumption",
+  "data": {
+    "xLabels": ["Low", "Medium", "High"],
+    "yLabels": ["Market", "Execution", "Data"],
+    "cells": [
+      { "x": 0, "y": 0, "value": 2, "label": "2" },
+      { "x": 1, "y": 0, "value": 4, "label": "4" },
+      { "x": 2, "y": 0, "value": 5, "label": "5" },
+      { "x": 0, "y": 1, "value": 3, "label": "3" },
+      { "x": 1, "y": 1, "value": 7, "label": "7" },
+      { "x": 2, "y": 1, "value": 9, "label": "9" },
+      { "x": 0, "y": 2, "value": 4, "label": "4" },
+      { "x": 1, "y": 2, "value": 6, "label": "6" },
+      { "x": 2, "y": 2, "value": 8, "label": "8" }
+    ]
+  }
+}

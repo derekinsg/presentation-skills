@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "animated-html-deck.chart-spec.schema.json",
+  "title": "Animated HTML Deck Chart Spec",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["type", "title", "takeaway", "data"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "kpi-strip",
+        "timeline",
+        "quadrant",
+        "scenario-matrix",
+        "yield-curve",
+        "funnel",
+        "waterfall",
+        "heatmap"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "takeaway": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
+    "dataIntegrity": {
+      "type": "string",
+      "enum": ["sourced", "user-provided", "assumption", "illustrative"]
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

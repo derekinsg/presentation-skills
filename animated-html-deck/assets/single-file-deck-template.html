@@ -186,28 +186,31 @@
     }
 
     .deck {
-      min-height: 100%;
+      height: 100vh;
+      min-height: 100vh;
       width: 100vw;
       overflow: hidden;
-      display: grid;
-      place-items: center;
-      padding: 18px 18px var(--controls-reserve);
+      display: block;
+      padding: 0;
+      background: var(--bg);
     }
 
     .slides {
       position: relative;
-      width: min(calc(100vw - 36px), calc((100vh - var(--controls-reserve) - 36px) * (16 / 9)));
-      height: auto;
-      aspect-ratio: var(--aspect-ratio);
+      width: 100vw;
+      height: 100vh;
+      max-height: none;
+      aspect-ratio: auto;
       overflow: hidden;
       perspective: 1600px;
       box-shadow: none;
-      background: transparent;
+      background: var(--bg);
     }
 
     body[data-aspect="9-16"] .slides {
-      width: min(calc(100vw - 36px), 420px);
-      max-height: calc(100vh - var(--controls-reserve) - 56px);
+      width: 100vw;
+      height: 100vh;
+      max-height: none;
     }
 
     body[data-aspect="9-16"] .slide {
@@ -247,7 +250,7 @@
       display: grid;
       grid-template-rows: minmax(0, 1fr);
       gap: clamp(14px, 2vw, 24px);
-      padding: var(--slide-pad-y) var(--slide-pad-x);
+      padding: var(--slide-pad-y) var(--slide-pad-x) max(var(--slide-pad-y), calc(var(--controls-reserve) + 20px));
       overflow: hidden;
       opacity: 0;
       pointer-events: none;
@@ -735,6 +738,235 @@
       transition: none;
     }
 
+    .viz-card {
+      display: grid;
+      gap: 14px;
+      width: min(860px, 100%);
+      padding: clamp(18px, 2.6vw, 30px);
+      border: 1px solid color-mix(in srgb, var(--line) 84%, transparent);
+      border-radius: calc(var(--radius) + 10px);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--panel) 94%, transparent), color-mix(in srgb, var(--panel-soft) 62%, transparent));
+      box-shadow: 0 18px 44px rgba(15, 23, 42, .08);
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    .chart-title {
+      font-size: clamp(1rem, 1.5vw, 1.35rem);
+      font-weight: 850;
+      letter-spacing: .01em;
+    }
+
+    .chart-takeaway {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: clamp(.9rem, 1.2vw, 1.05rem);
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .chart-meta,
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 760;
+    }
+
+    .chart-source,
+    .chart-note,
+    .chart-callout {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 5px 8px;
+      border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--panel) 78%, transparent);
+    }
+
+    .chart-callout {
+      color: var(--accent);
+      border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+      background: color-mix(in srgb, var(--accent) 9%, var(--panel));
+    }
+
+    .viz-kpi-strip,
+    .viz-scenarios {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .viz-kpi,
+    .viz-scenario,
+    .viz-timeline-item {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+      border-radius: calc(var(--radius) + 2px);
+      background: color-mix(in srgb, var(--panel) 86%, transparent);
+    }
+
+    .viz-kpi strong {
+      font-size: clamp(1.8rem, 3.7vw, 3.4rem);
+      line-height: .95;
+      letter-spacing: 0;
+      color: var(--accent);
+    }
+
+    .viz-kpi span,
+    .viz-scenario strong,
+    .viz-timeline-item strong {
+      font-weight: 850;
+    }
+
+    .viz-kpi small,
+    .viz-scenario small,
+    .viz-timeline-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: .84rem;
+      font-weight: 650;
+    }
+
+    .viz-svg {
+      width: 100%;
+      height: auto;
+      min-height: 250px;
+      overflow: visible;
+      color: var(--ink);
+    }
+
+    .viz-plot {
+      fill: color-mix(in srgb, var(--panel-soft) 72%, transparent);
+      stroke: var(--line);
+      stroke-width: 1;
+      rx: 16;
+    }
+
+    .viz-axis {
+      stroke: color-mix(in srgb, var(--muted) 34%, transparent);
+      stroke-width: 1;
+    }
+
+    .viz-line {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .viz-dot {
+      fill: var(--accent);
+      stroke: var(--panel);
+      stroke-width: 3;
+    }
+
+    .viz-svg text,
+    .viz-axis-label {
+      fill: var(--muted);
+      font-size: 13px;
+      font-weight: 760;
+      font-family: inherit;
+    }
+
+    .viz-timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .viz-index {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 850;
+    }
+
+    .viz-funnel,
+    .viz-waterfall,
+    .viz-heatmap {
+      display: grid;
+      gap: 10px;
+    }
+
+    .viz-funnel-step {
+      display: grid;
+      grid-template-columns: minmax(120px, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      width: var(--w);
+      min-width: 46%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-weight: 820;
+    }
+
+    .viz-waterfall {
+      grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+      align-items: end;
+      min-height: 230px;
+      padding-top: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .viz-waterfall-bar {
+      display: grid;
+      align-content: end;
+      justify-items: center;
+      gap: 6px;
+      height: var(--h);
+      min-height: 34px;
+      padding: 10px 8px;
+      border-radius: 14px 14px 0 0;
+      color: #fff;
+      background: var(--accent);
+      font-weight: 820;
+    }
+
+    .viz-waterfall-bar.negative {
+      background: color-mix(in srgb, #ef4444 84%, var(--accent));
+    }
+
+    .viz-heat-head,
+    .viz-heat-row {
+      display: grid;
+      grid-template-columns: 90px repeat(var(--heat-cols, 3), 1fr);
+      gap: 8px;
+      align-items: center;
+    }
+
+    .viz-heat-head span,
+    .viz-heat-row > span {
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 780;
+    }
+
+    .viz-heat-cell {
+      display: grid;
+      place-items: center;
+      min-height: 54px;
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--accent) calc(var(--i) * 78%), var(--panel-soft));
+      color: var(--ink);
+      font-weight: 850;
+    }
+
     body[data-motion-mode="animated"] .bar span:nth-child(2)::before {
       width: 0;
       transition: width 880ms var(--ease);
@@ -887,7 +1119,24 @@
       justify-content: flex-end;
     }
 
-    button {
+    .controls.controls-hidden {
+      left: auto;
+      grid-template-columns: auto;
+      grid-template-areas: "right";
+    }
+
+    .controls.controls-hidden .control-group.primary,
+    .controls.controls-hidden .progress,
+    .controls.controls-hidden .counter,
+    .controls.controls-hidden .control-group.secondary > :not(#hideToggle) {
+      display: none !important;
+    }
+
+    button,
+    .control-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex: 0 0 auto;
       min-width: 42px;
       height: 38px;
@@ -900,9 +1149,11 @@
       font-weight: 760;
       cursor: pointer;
       box-shadow: 0 8px 24px rgba(23, 32, 51, .1);
+      user-select: none;
     }
 
-    button:hover { border-color: var(--accent); }
+    button:hover,
+    .control-label:hover { border-color: var(--accent); }
     button:disabled {
       cursor: not-allowed;
       opacity: .45;
@@ -960,16 +1211,64 @@
     .notes-panel {
       top: 18px;
       right: 18px;
-      width: min(390px, calc(100vw - 36px));
+      width: min(460px, calc(100vw - 36px));
       max-height: calc(100vh - 96px);
       overflow: auto;
     }
 
-    .notes-panel.open { display: block; }
+    .notes-panel.open {
+      display: grid;
+      gap: 12px;
+    }
 
-    .notes-panel strong {
-      display: block;
-      margin-bottom: 8px;
+    .notes-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .notes-panel strong,
+    .notes-title {
+      font-weight: 850;
+    }
+
+    .notes-save-status {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .notes-editor {
+      width: 100%;
+      min-height: min(42vh, 360px);
+      resize: vertical;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-soft);
+      color: var(--ink);
+      font: inherit;
+      font-size: .96rem;
+      line-height: 1.55;
+      outline: none;
+    }
+
+    .notes-editor:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+
+    .notes-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .notes-actions button {
+      height: 34px;
+      font-size: .85rem;
     }
 
     .notes { display: none; }
@@ -1120,9 +1419,16 @@
 
     body[data-aspect="9-16"] .panel,
     body[data-aspect="9-16"] .step,
-    body[data-aspect="9-16"] .callout {
+    body[data-aspect="9-16"] .callout,
+    body[data-aspect="9-16"] .viz-card {
       min-height: auto;
       padding: clamp(14px, 3.4vw, 20px);
+    }
+
+    body[data-aspect="9-16"] .viz-kpi-strip,
+    body[data-aspect="9-16"] .viz-scenarios,
+    body[data-aspect="9-16"] .viz-timeline {
+      grid-template-columns: 1fr;
     }
 
     body[data-aspect="9-16"] .media-frame,
@@ -1133,17 +1439,18 @@
 
     @media (max-width: 760px) {
       .deck {
-        padding: 10px 10px var(--controls-reserve);
+        padding: 0;
       }
 
       .slides,
       body[data-aspect="9-16"] .slides {
-        width: min(calc(100vw - 20px), 380px);
-        max-height: calc(100vh - var(--controls-reserve) - 56px);
+        width: 100vw;
+        height: 100vh;
+        max-height: none;
       }
 
       .slide {
-        padding: 24px 20px 92px;
+        padding: 24px 20px max(92px, calc(var(--controls-reserve) + 18px));
         overflow-y: auto;
       }
 
@@ -1291,12 +1598,11 @@
     }
   </style>
 </head>
-<body data-template="apple" data-style-source="apple" data-style-family="product-launch" data-motion-mode="static" data-aspect="16-9" data-presenter-server="animated-html-deck/scripts/presenter-server.mjs">
+<body data-deck-id="animated-html-deck-template" data-template="apple" data-style-source="apple" data-style-family="product-launch" data-motion-mode="static" data-aspect="16-9" data-presenter-server="animated-html-deck/scripts/presenter-server.mjs">
   <main class="deck" aria-live="polite">
     <div class="slides" id="slides">
       <section class="slide active" data-title="Opening">
         <div class="slide-body">
-          <div class="logo-lockup"><span class="brand-mark">AD</span><span>Animated HTML Deck</span></div>
           <p class="kicker">Template slide: opening</p>
           <h1>Replace this with the deck title</h1>
           <p class="lead">Use this first slide for the core promise, thesis, or opening contrast.</p>
@@ -1382,11 +1688,16 @@
             <div class="media-stack">
               <h2>Use media as proof, not decoration</h2>
               <p class="lead">Screenshots, diagrams, and charts should answer one question and keep the story moving.</p>
-              <div class="chart">
-                <div class="bar"><span>Signal A</span><span style="--value: 82%"></span><strong>82</strong></div>
-                <div class="bar"><span>Signal B</span><span style="--value: 64%"></span><strong>64</strong></div>
-                <div class="bar"><span>Signal C</span><span style="--value: 46%"></span><strong>46</strong></div>
-              </div>
+              <figure class="viz-card" data-chart-type="kpi-strip" data-chart-spec='{"type":"kpi-strip","title":"Evidence signals","takeaway":"Use structured visuals when a slide needs proof, not longer bullets.","dataIntegrity":"illustrative","data":{"items":[{"label":"Signal A","value":"82"},{"label":"Signal B","value":"64"},{"label":"Signal C","value":"46"}]}}'>
+                <div class="chart-title">Evidence signals</div>
+                <div class="chart-takeaway">Use structured visuals when a slide needs proof, not longer bullets.</div>
+                <div class="viz-kpi-strip">
+                  <div class="viz-kpi"><strong>82</strong><span>Signal A</span><small>Replace with sourced data.</small></div>
+                  <div class="viz-kpi"><strong>64</strong><span>Signal B</span><small>Keep labels short.</small></div>
+                  <div class="viz-kpi"><strong>46</strong><span>Signal C</span><small>Mark assumptions clearly.</small></div>
+                </div>
+                <div class="chart-meta"><span class="chart-note">Illustrative chart spec embedded inline</span></div>
+              </figure>
             </div>
             <figure class="media-frame">
               <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDc2MCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeDI9IjEiIHkxPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZjdmYmZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZGNlY2ZmIi8+PC9saW5lYXJHcmFkaWVudD48bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwIiB4Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMDA2NmNjIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMjdkMGExIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNzYwIiByeD0iNDQiIGZpbGw9InVybCgjZykiLz48cmVjdCB4PSI4NCIgeT0iODIiIHdpZHRoPSIxMDMyIiBoZWlnaHQ9IjU5NiIgcng9IjMyIiBmaWxsPSIjZmZmIiBzdHJva2U9IiNkNmRmZWMiIHN0cm9rZS13aWR0aD0iNCIvPjxyZWN0IHg9IjEyNiIgeT0iMTMwIiB3aWR0aD0iOTQ4IiBoZWlnaHQ9IjcyIiByeD0iMjAiIGZpbGw9IiMxMTE4MjciLz48Y2lyY2xlIGN4PSIxNzAiIGN5PSIxNjYiIHI9IjEyIiBmaWxsPSIjZmY1ZjU3Ii8+PGNpcmNsZSBjeD0iMjA4IiBjeT0iMTY2IiByPSIxMiIgZmlsbD0iI2ZmYmQyZSIvPjxjaXJjbGUgY3g9IjI0NiIgY3k9IjE2NiIgcj0iMTIiIGZpbGw9IiMyOGM4NDAiLz48cmVjdCB4PSIxNTIiIHk9IjI1NCIgd2lkdGg9IjM0NCIgaGVpZ2h0PSIyMzYiIHJ4PSIyOCIgZmlsbD0iI2VlZjVmZiIvPjxyZWN0IHg9IjU0OCIgeT0iMjU0IiB3aWR0aD0iNTAwIiBoZWlnaHQ9IjU0IiByeD0iMTgiIGZpbGw9IiNkYmVhZmUiLz48cmVjdCB4PSI1NDgiIHk9IjM0MCIgd2lkdGg9IjQyMCIgaGVpZ2h0PSIzMiIgcng9IjE2IiBmaWxsPSIjYjhkN2ZmIi8+PHJlY3QgeD0iNTQ4IiB5PSI0MDAiIHdpZHRoPSI0NzAiIGhlaWdodD0iMzIiIHJ4PSIxNiIgZmlsbD0iI2UyZThmMCIvPjxyZWN0IHg9IjU0OCIgeT0iNDYwIiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjMyIiByeD0iMTYiIGZpbGw9IiNlMmU4ZjAiLz48cGF0aCBkPSJNMTkyIDQyMmM3Mi05OCAxMzYtMTI4IDIxNi02MiAyNCAyMCA0MiAyNCA2MiAxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2EpIiBzdHJva2Utd2lkdGg9IjIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cmVjdCB4PSIxNTIiIHk9IjUzOCIgd2lkdGg9Ijg5NiIgaGVpZ2h0PSI2NCIgcng9IjIyIiBmaWxsPSJ1cmwoI2EpIiBvcGFjaXR5PSIuOTIiLz48L3N2Zz4=" alt="Illustrative product screenshot placeholder">
@@ -1419,25 +1730,36 @@
         <button type="button" id="fontIncrease" aria-label="Increase selected text size" disabled>A+</button>
         <button type="button" id="fontDecrease" aria-label="Decrease selected text size" disabled>A-</button>
         <button type="button" id="resetEdit" aria-label="Reset selected text edits" disabled>Reset</button>
-        <button type="button" id="colorButton" aria-label="Change accent color">Color</button>
+        <label id="colorToggle" class="control-label color-button" for="accentColorPicker" role="button" tabindex="0" aria-label="Change accent color">Color</label>
       </div>
       <div class="control-group secondary">
         <button type="button" id="modeToggle" class="mode-button" aria-label="Toggle presentation or recording mode">Mode: Talk</button>
         <button type="button" id="templateToggle" class="template-button" aria-label="Switch template style">Template: Apple</button>
         <button type="button" id="ratioToggle" aria-label="Toggle slide aspect ratio">Ratio: 16:9</button>
-        <button type="button" id="publishToggle" aria-label="Show IP publish command">Publish/IP</button>
-        <button type="button" id="phoneToggle" aria-label="Show phone presenter QR code">Phone</button>
+        <button type="button" id="exportPdfToggle" aria-label="Export this deck to PDF">Export PDF</button>
+        <button type="button" id="phoneToggle" aria-label="Show phone or IP presenter setup">Phone</button>
         <button type="button" id="notesToggle" aria-label="Toggle speaker notes">Notes</button>
         <button type="button" id="fullscreen" aria-label="Toggle fullscreen">Full</button>
+        <button type="button" id="hideToggle" aria-label="Hide presentation controls" aria-pressed="false">Hide</button>
         <span class="counter" id="counter">1 / 6</span>
       </div>
       <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
     </nav>
 
-    <aside class="notes-panel" id="notesPanel" aria-label="Speaker notes"></aside>
+    <aside class="notes-panel" id="notesPanel" aria-label="Speaker notes">
+      <header class="notes-panel-header">
+        <strong id="notesTitle" class="notes-title">Speaker notes</strong>
+        <span id="notesSaveStatus" class="notes-save-status">Original</span>
+      </header>
+      <textarea id="notesEditor" class="notes-editor" aria-label="Edit speaker notes"></textarea>
+      <div class="notes-actions">
+        <button type="button" id="notesSave">Save</button>
+        <button type="button" id="notesReset">Reset</button>
+      </div>
+    </aside>
     <aside class="phone-panel" id="phonePanel" aria-label="Phone presenter setup">
       <header>
-        <h2>Phone presenter</h2>
+        <h2 id="phonePanelTitle">Phone presenter</h2>
         <button type="button" class="close-panel" id="phoneClose" aria-label="Close phone presenter panel">x</button>
       </header>
       <img id="phoneQr" alt="Phone presenter QR code">
@@ -1467,6 +1789,11 @@
       const progressBar = document.getElementById('progressBar');
       const counter = document.getElementById('counter');
       const notesPanel = document.getElementById('notesPanel');
+      const notesTitle = document.getElementById('notesTitle');
+      const notesEditor = document.getElementById('notesEditor');
+      const notesSave = document.getElementById('notesSave');
+      const notesReset = document.getElementById('notesReset');
+      const notesSaveStatus = document.getElementById('notesSaveStatus');
       const prev = document.getElementById('prev');
       const next = document.getElementById('next');
       const modeToggle = document.getElementById('modeToggle');
@@ -1476,22 +1803,25 @@
       const fontIncrease = document.getElementById('fontIncrease');
       const fontDecrease = document.getElementById('fontDecrease');
       const resetEdit = document.getElementById('resetEdit');
-      const colorButton = document.getElementById('colorButton');
+      const colorToggle = document.getElementById('colorToggle') || document.getElementById('colorButton');
       const accentColorPicker = document.getElementById('accentColorPicker');
       const editHint = document.getElementById('editHint');
       const phoneToggle = document.getElementById('phoneToggle');
       const phonePanel = document.getElementById('phonePanel');
+      const phonePanelTitle = document.getElementById('phonePanelTitle');
       const phoneClose = document.getElementById('phoneClose');
       const phoneQr = document.getElementById('phoneQr');
       const phoneStatus = document.getElementById('phoneStatus');
       const phoneUrl = document.getElementById('phoneUrl');
-      const publishToggle = document.getElementById('publishToggle');
+      const exportPdfToggle = document.getElementById('exportPdfToggle');
       const publishCommand = document.getElementById('publishCommand');
       const publishCommandText = document.getElementById('publishCommandText');
       const copyPublishCommand = document.getElementById('copyPublishCommand');
       const ratioToggle = document.getElementById('ratioToggle');
       const notesToggle = document.getElementById('notesToggle');
       const fullscreen = document.getElementById('fullscreen');
+      const controls = document.querySelector('.controls');
+      const hideToggle = document.getElementById('hideToggle');
 
       const templates = [
         { id: 'apple', label: 'Apple', accent: '#0066cc', family: 'product-launch', source: 'apple' },
@@ -1508,6 +1838,8 @@
       let isEditing = false;
       let selectedEditable = null;
       let dragState = null;
+      let exportPdfStatus = 'idle';
+      let panelCommandMode = 'publish';
       const startedAt = Date.now();
       const syncSession = new URLSearchParams(window.location.search).get('session');
       const syncEnabled = Boolean(syncSession && /^https?:$/.test(window.location.protocol));
@@ -1516,6 +1848,67 @@
       const handledCommandIds = new Set();
       const resolvedThemeNode = document.getElementById('resolvedTheme');
       const aspectStorageKey = 'animated-html-deck-aspect:' + window.location.pathname;
+      const deckId = document.body.dataset.deckId || (document.title || window.location.pathname || 'deck').replace(/[^\w.-]+/g, '-').replace(/^-|-$/g, '') || 'deck';
+      document.body.dataset.deckId = deckId;
+      const requiredControls = {
+        prev,
+        next,
+        cursor: cursorToggle,
+        edit: editToggle,
+        fontIncrease,
+        fontDecrease,
+        reset: resetEdit,
+        color: colorToggle,
+        colorInput: accentColorPicker,
+        mode: modeToggle,
+        template: templateToggle,
+        ratio: ratioToggle,
+        exportPdf: exportPdfToggle,
+        phone: phoneToggle,
+        notes: notesToggle,
+        hide: hideToggle,
+        notesEditor,
+        notesSave,
+        notesReset,
+        fullscreen
+      };
+      const controlHealth = {
+        required: {},
+        bound: {},
+        state: {}
+      };
+      Object.keys(requiredControls).forEach(name => {
+        controlHealth.required[name] = Boolean(requiredControls[name]);
+      });
+      window.__deckControlHealth = controlHealth;
+
+      function updateControlHealth() {
+        controlHealth.state = {
+          editing: isEditing,
+          hasSelection: Boolean(selectedEditable),
+          cursorActive: !isEditing,
+          color: accentColorPicker ? accentColorPicker.value : null,
+          hasCustomAccent: document.body.classList.contains('has-custom-accent'),
+          aspect: document.body.dataset.aspect || '16-9',
+          mode,
+          exportPdf: exportPdfStatus,
+          phoneOpen: phonePanel ? phonePanel.classList.contains('open') : false,
+          notesOpen: notesPanel ? notesPanel.classList.contains('open') : false,
+          controlsHidden: controls ? controls.classList.contains('controls-hidden') : false,
+          notesDirty: notesEditor ? notesEditor.dataset.dirty === 'true' : false,
+          fullscreen: Boolean(document.fullscreenElement)
+        };
+        return controlHealth;
+      }
+
+      function bindControl(name, node, eventName, handler) {
+        if (!node) {
+          console.warn('[deck controls] Missing control:', name);
+          return;
+        }
+        node.addEventListener(eventName, handler);
+        controlHealth.bound[name] = true;
+      }
 
       function shellQuote(value) {
         return '"' + String(value).replace(/(["\\$`])/g, '\\$1') + '"';
@@ -1533,18 +1926,83 @@
         return 'node ' + shellQuote(serverPath) + ' ' + shellQuote(currentDeckPath()) + ' --port 4173 --deck-host lan';
       }
 
+      function buildExportPdfCommand() {
+        const exportPath = document.body.dataset.pdfExporter || 'animated-html-deck/scripts/export-html-to-pdf.mjs';
+        return 'node ' + shellQuote(exportPath) + ' ' + shellQuote(currentDeckPath());
+      }
+
       function updatePublishCommand() {
         publishCommandText.textContent = buildPublishCommand();
       }
 
       function showPublishHelp() {
         phonePanel.classList.add('open');
+        panelCommandMode = 'publish';
+        if (phonePanelTitle) phonePanelTitle.textContent = 'Phone / IP';
         phoneQr.hidden = true;
         publishCommand.hidden = false;
         phoneUrl.removeAttribute('href');
         phoneUrl.textContent = 'Run this command to open the IP/LAN deck';
         phoneStatus.textContent = 'This file is open in offline mode. Start the local presenter server, then use the Computer PPT URL and scan the Phone QR from the LAN page.';
         updatePublishCommand();
+      }
+
+      function updateExportPdfCommand() {
+        publishCommandText.textContent = buildExportPdfCommand();
+      }
+
+      function showExportPdfFallback(message) {
+        phonePanel.classList.add('open');
+        panelCommandMode = 'exportPdf';
+        if (phonePanelTitle) phonePanelTitle.textContent = 'Export PDF';
+        phoneQr.hidden = true;
+        publishCommand.hidden = false;
+        phoneUrl.removeAttribute('href');
+        phoneUrl.textContent = 'Run this command to save a local PDF';
+        phoneStatus.textContent = message || 'This file is open in offline mode. Browser JavaScript cannot run local export commands, so copy this command into a terminal.';
+        updateExportPdfCommand();
+        exportPdfStatus = 'command';
+        updateControlHealth();
+      }
+
+      function showExportPdfPanel() {
+        phonePanel.classList.add('open');
+        if (phonePanelTitle) phonePanelTitle.textContent = 'Export PDF';
+        phoneQr.hidden = true;
+        phoneUrl.removeAttribute('href');
+
+        if (!syncEnabled) {
+          showExportPdfFallback();
+          return;
+        }
+
+        exportPdfStatus = 'exporting';
+        publishCommand.hidden = true;
+        phoneUrl.textContent = 'Exporting...';
+        phoneStatus.textContent = 'Exporting this deck to a slide-only PDF through the local presenter server.';
+        updateControlHealth();
+
+        fetch('/export/pdf?session=' + encodeURIComponent(syncSession), { method: 'POST' })
+          .then(response => response.json().then(data => ({ ok: response.ok, data })).catch(() => ({ ok: response.ok, data: {} })))
+          .then(result => {
+            if (!result.ok || !result.data || result.data.ok !== true) {
+              const error = result.data && (result.data.error || result.data.stderr) ? (result.data.error || result.data.stderr) : 'PDF export failed.';
+              showExportPdfFallback(error + ' Copy the command below to retry from a terminal.');
+              exportPdfStatus = 'error';
+              updateControlHealth();
+              return;
+            }
+            exportPdfStatus = 'saved';
+            publishCommand.hidden = true;
+            phoneUrl.textContent = result.data.outputPath || 'PDF saved locally';
+            phoneStatus.textContent = 'PDF saved locally. The HTML deck remains the editable source file.';
+            updateControlHealth();
+          })
+          .catch(() => {
+            showExportPdfFallback('Unable to reach the local presenter server export endpoint. Copy the command below to export from a terminal.');
+            exportPdfStatus = 'error';
+            updateControlHealth();
+          });
       }
 
       function setAspect(nextAspect, persist = true) {
@@ -1555,6 +2013,7 @@
         if (persist) {
           try { localStorage.setItem(aspectStorageKey, aspect); } catch (error) {}
         }
+        updateControlHealth();
       }
 
       function cycleAspect() {
@@ -1701,9 +2160,94 @@
         return slides[index].dataset.title || 'Current slide';
       }
 
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function notesTextToHtml(text) {
+        const normalized = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        if (!normalized.trim()) return '';
+        return normalized
+          .split(/\n{2,}/)
+          .map(block => '<p>' + escapeHtml(block.trim()).replace(/\n/g, '<br>') + '</p>')
+          .join('');
+      }
+
+      function notesHtmlToText(html) {
+        const scratch = document.createElement('div');
+        scratch.innerHTML = html || '';
+        return scratch.innerText.replace(/\u00a0/g, ' ').trim();
+      }
+
+      function notesStorageKey(slideIndex = index) {
+        return 'animated-html-deck-notes:' + deckId + ':' + slideIndex;
+      }
+
+      function ensureNotesElement(slide) {
+        let notes = slide.querySelector('.notes');
+        if (!notes) {
+          notes = document.createElement('aside');
+          notes.className = 'notes';
+          slide.appendChild(notes);
+        }
+        if (!Object.prototype.hasOwnProperty.call(notes.dataset, 'originalHtml')) {
+          notes.dataset.originalHtml = notes.innerHTML;
+        }
+        return notes;
+      }
+
+      function restoreSavedNotes() {
+        slides.forEach((slide, slideIndex) => {
+          const notes = ensureNotesElement(slide);
+          try {
+            const saved = localStorage.getItem(notesStorageKey(slideIndex));
+            if (saved !== null) notes.innerHTML = notesTextToHtml(saved);
+          } catch (error) {}
+        });
+      }
+
+      function setNotesStatus(text) {
+        if (notesSaveStatus) notesSaveStatus.textContent = text;
+      }
+
       function updateNotes() {
-        const notes = slides[index].querySelector('.notes');
-        notesPanel.innerHTML = '<strong>' + currentTitle() + '</strong><div>' + (notes ? notes.innerHTML : 'No notes for this slide.') + '</div>';
+        const notes = ensureNotesElement(slides[index]);
+        const saved = (() => {
+          try { return localStorage.getItem(notesStorageKey(index)) !== null; } catch (error) { return false; }
+        })();
+        if (notesTitle) notesTitle.textContent = currentTitle();
+        if (notesEditor && document.activeElement !== notesEditor) {
+          notesEditor.value = notesHtmlToText(notes.innerHTML);
+          notesEditor.dataset.dirty = 'false';
+        }
+        setNotesStatus(saved ? 'Saved locally' : 'Original');
+        updateControlHealth();
+      }
+
+      function saveCurrentNotes() {
+        if (!notesEditor) return;
+        const notes = ensureNotesElement(slides[index]);
+        notes.innerHTML = notesTextToHtml(notesEditor.value);
+        try { localStorage.setItem(notesStorageKey(index), notesEditor.value); } catch (error) {}
+        notesEditor.dataset.dirty = 'false';
+        setNotesStatus('Saved');
+        syncPresenter();
+        publishSyncState();
+        updateControlHealth();
+      }
+
+      function resetCurrentNotes() {
+        const notes = ensureNotesElement(slides[index]);
+        notes.innerHTML = notes.dataset.originalHtml || '';
+        try { localStorage.removeItem(notesStorageKey(index)); } catch (error) {}
+        updateNotes();
+        syncPresenter();
+        publishSyncState();
       }
 
       function elapsedText() {
@@ -1769,6 +2313,8 @@
 
       function showPhonePanel() {
         phonePanel.classList.add('open');
+        if (phonePanelTitle) phonePanelTitle.textContent = 'Phone presenter';
+        updateControlHealth();
         if (!syncEnabled) {
           showPublishHelp();
           return;
@@ -1801,6 +2347,20 @@
         } else {
           showPhonePanel();
         }
+        updateControlHealth();
+      }
+
+      function setControlsHidden(hidden) {
+        if (!controls || !hideToggle) return;
+        controls.classList.toggle('controls-hidden', hidden);
+        hideToggle.textContent = hidden ? 'Show' : 'Hide';
+        hideToggle.setAttribute('aria-label', hidden ? 'Show presentation controls' : 'Hide presentation controls');
+        hideToggle.setAttribute('aria-pressed', String(hidden));
+        updateControlHealth();
+      }
+
+      function toggleControlsHidden() {
+        setControlsHidden(!(controls && controls.classList.contains('controls-hidden')));
       }
 
       function buildPresenterHtml() {
@@ -1846,6 +2406,7 @@
           notesPanel.classList.remove('open');
           openPresenter();
         }
+        updateControlHealth();
       }
 
       function cycleMode() {
@@ -1869,6 +2430,7 @@
         document.documentElement.style.setProperty('--user-accent', pair.accent);
         document.documentElement.style.setProperty('--user-accent-2', pair.accent2);
         accentColorPicker.value = pair.accent;
+        updateControlHealth();
       }
 
       function applyTemplate(nextIndex) {
@@ -1883,6 +2445,7 @@
         document.documentElement.style.removeProperty('--user-accent-2');
         accentColorPicker.value = template.accent;
         templateToggle.textContent = 'Template: ' + template.label;
+        updateControlHealth();
       }
 
       function cycleTemplate() {
@@ -1911,7 +2474,6 @@
           '.slide .badge',
           '.slide figcaption',
           '.slide .image-caption',
-          '.slide .logo-lockup span',
         ].join(',');
       }
 
@@ -1954,6 +2516,7 @@
         cursorToggle.classList.toggle('active', !isEditing);
         cursorToggle.setAttribute('aria-pressed', String(!isEditing));
         updateEditHint();
+        updateControlHealth();
       }
 
       function selectEditable(node) {
@@ -2004,6 +2567,10 @@
         dragState = null;
         collectEditableNodes().forEach(node => {
           node.contentEditable = 'false';
+          node.classList.remove('is-selected', 'is-dragging');
+          node.blur();
+        });
+        document.querySelectorAll('.editable-node.is-selected, .editable-node.is-dragging').forEach(node => {
           node.classList.remove('is-selected', 'is-dragging');
           node.blur();
         });
@@ -2070,6 +2637,7 @@
         updateNotes();
         syncPresenter();
         publishSyncState();
+        updateControlHealth();
       }
 
       function goTo(nextIndex) {
@@ -2121,6 +2689,8 @@
 
       document.addEventListener('keydown', (event) => {
         const activeEditable = event.target && event.target.closest && event.target.closest('.editable-node');
+        const activeNotesEditor = event.target && event.target.closest && event.target.closest('#notesEditor');
+        if (activeNotesEditor) return;
         if (event.key === 'Escape' && isEditing) {
           event.preventDefault();
           setEditing(false);
@@ -2159,7 +2729,9 @@
         }
         if (event.key.toLowerCase() === 'n' && mode === 'presentation') {
           event.preventDefault();
+          updateNotes();
           notesPanel.classList.toggle('open');
+          updateControlHealth();
         }
       });
 
@@ -2192,21 +2764,51 @@
         clearEditableSelection();
       });
 
-      prev.addEventListener('click', backward);
-      next.addEventListener('click', forward);
-      modeToggle.addEventListener('click', cycleMode);
-      templateToggle.addEventListener('click', cycleTemplate);
-      cursorToggle.addEventListener('click', setCursorMode);
-      editToggle.addEventListener('click', () => setEditing(!isEditing));
-      fontIncrease.addEventListener('click', () => changeSelectedFontSize(4));
-      fontDecrease.addEventListener('click', () => changeSelectedFontSize(-4));
-      resetEdit.addEventListener('click', resetSelectedEdit);
-      colorButton.addEventListener('click', () => accentColorPicker.click());
-      accentColorPicker.addEventListener('input', event => setAccentColor(event.target.value));
-      ratioToggle.addEventListener('click', cycleAspect);
-      publishToggle.addEventListener('click', showPublishHelp);
-      copyPublishCommand.addEventListener('click', () => {
-        updatePublishCommand();
+      document.addEventListener('click', (event) => {
+        if (isEditing || event.defaultPrevented || event.button !== 0) return;
+        const target = event.target;
+        if (!target || !target.closest) return;
+        if (!target.closest('.slide')) return;
+        if (target.closest('.controls, .notes-panel, .phone-panel, .edit-hint')) return;
+        if (target.closest('button, a, input, textarea, select, label, [role="button"], [contenteditable="true"]')) return;
+        forward();
+      });
+
+      function openColorPicker() {
+        if (colorToggle && colorToggle.tagName !== 'LABEL' && accentColorPicker) {
+          accentColorPicker.click();
+        }
+        updateControlHealth();
+      }
+
+      function openColorPickerFromKeyboard(event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        if (accentColorPicker) accentColorPicker.click();
+        updateControlHealth();
+      }
+
+      bindControl('prev', prev, 'click', backward);
+      bindControl('next', next, 'click', forward);
+      bindControl('mode', modeToggle, 'click', cycleMode);
+      bindControl('template', templateToggle, 'click', cycleTemplate);
+      bindControl('cursor', cursorToggle, 'click', setCursorMode);
+      bindControl('edit', editToggle, 'click', () => setEditing(!isEditing));
+      bindControl('fontIncrease', fontIncrease, 'click', () => changeSelectedFontSize(4));
+      bindControl('fontDecrease', fontDecrease, 'click', () => changeSelectedFontSize(-4));
+      bindControl('reset', resetEdit, 'click', resetSelectedEdit);
+      bindControl('color', colorToggle, 'click', openColorPicker);
+      bindControl('colorKeyboard', colorToggle, 'keydown', openColorPickerFromKeyboard);
+      bindControl('colorInput', accentColorPicker, 'input', event => setAccentColor(event.target.value));
+      bindControl('colorChange', accentColorPicker, 'change', event => setAccentColor(event.target.value));
+      bindControl('ratio', ratioToggle, 'click', cycleAspect);
+      bindControl('exportPdf', exportPdfToggle, 'click', showExportPdfPanel);
+      bindControl('copyPublishCommand', copyPublishCommand, 'click', () => {
+        if (panelCommandMode === 'exportPdf') {
+          updateExportPdfCommand();
+        } else {
+          updatePublishCommand();
+        }
         const command = publishCommandText.textContent;
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(command).then(() => {
@@ -2215,26 +2817,42 @@
           }).catch(() => {});
         }
       });
-      phoneToggle.addEventListener('click', togglePhonePanel);
-      phoneClose.addEventListener('click', () => phonePanel.classList.remove('open'));
-      notesToggle.addEventListener('click', () => {
-        if (mode !== 'presentation') return;
-        notesPanel.classList.toggle('open');
+      bindControl('phone', phoneToggle, 'click', togglePhonePanel);
+      bindControl('hide', hideToggle, 'click', toggleControlsHidden);
+      bindControl('phoneClose', phoneClose, 'click', () => {
+        phonePanel.classList.remove('open');
+        updateControlHealth();
       });
-      fullscreen.addEventListener('click', () => {
+      bindControl('notesEditorInput', notesEditor, 'input', () => {
+        notesEditor.dataset.dirty = 'true';
+        setNotesStatus('Unsaved');
+        updateControlHealth();
+      });
+      bindControl('notesSave', notesSave, 'click', saveCurrentNotes);
+      bindControl('notesReset', notesReset, 'click', resetCurrentNotes);
+      bindControl('notes', notesToggle, 'click', () => {
+        if (mode !== 'presentation') return;
+        updateNotes();
+        notesPanel.classList.toggle('open');
+        updateControlHealth();
+      });
+      bindControl('fullscreen', fullscreen, 'click', () => {
         phonePanel.classList.remove('open');
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
         } else {
           document.exitFullscreen && document.exitFullscreen();
         }
+        setTimeout(updateControlHealth, 0);
       });
+      document.addEventListener('fullscreenchange', updateControlHealth);
 
       setInterval(syncPresenter, 1000);
       collectEditableNodes();
       applyMotionOrders();
       startCommandSync();
       restoreAspect();
+      restoreSavedNotes();
       const initialTheme = parseResolvedTheme();
       if (initialTheme) {
         applyResolvedTheme(initialTheme);
